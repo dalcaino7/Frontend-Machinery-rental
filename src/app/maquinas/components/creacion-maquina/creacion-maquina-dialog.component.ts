@@ -150,7 +150,6 @@ export class CreacionMaquinaDialogComponent implements OnInit {
     }
   }
  
-
   validaOperacion() {
     
     if (this.stateMainMaquina.modeDialog == 'add') {
@@ -191,7 +190,7 @@ export class CreacionMaquinaDialogComponent implements OnInit {
     this.maq.maq_Tcm_Id.tcm_Id        = this.maquinaForm.value['selTipoCobroArriendoMaq'];
     this.maq.maq_Estado               = 'activo';
 
-    this.maqService.createMaquina(this.maq).subscribe((resp) => {
+    this.maqService.createMaquina(this.maq).subscribe(() => {
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -271,6 +270,9 @@ export class CreacionMaquinaDialogComponent implements OnInit {
       this.titulo = 'Nueva Maquinaria';
       this.nombreMaquina = '';
       this.nombreBoton = 'Guardar';
+      this.listTipoMaquinas();
+      this.listEstadoMaquina();
+      this.listTipoCobroMaquina();
     }
     if (this.data.modeDialog == 'mod') {
       this.titulo = 'Modificación de Maquinaria';

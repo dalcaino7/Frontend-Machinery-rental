@@ -26,14 +26,14 @@ export class VerMaquinaDialogComponent implements OnInit {
   }
 
   showCliente(){        
-    this.actRou.params.subscribe( () => {
+    //this.actRou.params.subscribe( () => {
       if(this.idMaq.idMaquinaDialog){    
         this.maqServ.getMaquina(this.idMaq.idMaquinaDialog).subscribe(
           (maq) => {            
             this.maquina = maq}
         )
       }
-    })
+    //})
   }
 
   closeDialog(){

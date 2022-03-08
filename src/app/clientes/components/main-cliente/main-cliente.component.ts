@@ -158,7 +158,7 @@ export class ClienteComponent implements AfterViewInit {
         this.cliService.getCliente(this.cliente.cli_Id).subscribe((cli) => {
           this.cliente = cli;
           this.cliente.cli_Estado = 'Inactivo';
-          this.cliService.updateCliente(this.cliente).subscribe((rs) => {
+          this.cliService.updateCliente(this.cliente).subscribe(() => {
             Swal.fire({
               title: 'Eliminado!',
               text: 'El cliente ha sido eliminado.',

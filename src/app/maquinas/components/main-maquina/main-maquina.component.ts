@@ -17,6 +17,7 @@ import { CreacionMaquinaDialogComponent } from '../creacion-maquina/creacion-maq
 import { VerMaquinaDialogComponent } from './ver-maquina/ver-maquina-dialog.component';
 import { MaquinaService } from '../../services/maquina.service';
 import { Maquina } from '../../models/maquina';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-main-maquina',
@@ -101,9 +102,9 @@ export class MainMaquinaComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
     } else {
       /* FILTRO DE BUSQUEDA DE ESTADO EN TABLA */
-      let filteredData = _.filter(this.listMaquinasTabla, (item) => {
+      let filteredData = _.filter(this.listMaquinasTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
         this.selectedValueEstado;
-        return item.ema_Id.ema_Descripcion.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
+        return item.maq_Ema_Id.ema_Descripcion.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
       });
       /* MUESTRA TABLA FILTRADA */
       this.dataSource.data = filteredData;
@@ -152,6 +153,38 @@ export class MainMaquinaComponent implements AfterViewInit {
   
       
     }
+  }
+
+  deleteMaquina(id: number) {
+    Swal.fire({
+      title: '¿Estás Seguro de eliminar esta maquinaria?',
+      text: 'No podrás revertirlo...',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.maquina.maq_Id = id;
+        this.MaqService.getMaquina(this.maquina.maq_Id).subscribe((maq) => {
+          this.maquina = maq;
+          this.maquina.maq_Estado = 'Inactivo';
+          this.MaqService.updateMaquina(this.maquina).subscribe(() => {
+            Swal.fire({
+              title: 'Eliminado!',
+              text: 'La Maquina ha sido eliminada.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1800,
+            });
+            setInterval(function () {
+              location.reload();
+            }, 2000); //actualiza la pagina a los 2seg
+          });
+        });
+      }
+    });
   }
 
   viewCliente(id: number) {
