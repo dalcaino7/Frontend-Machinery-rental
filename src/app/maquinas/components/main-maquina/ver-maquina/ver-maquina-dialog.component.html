@@ -1,0 +1,224 @@
+<div class="container scrollbar">
+
+    <div class="container">
+        <div class="row cabecera">
+
+            <div class="col-md-6 mt-3 p-2" align="left" style="height: 50px;">
+                <h3 class="mat-h1"><b>Vista General de Maquinaria</b></h3>
+            </div>
+
+        </div>
+    </div>
+
+    <!--CARD BASICO-->
+    <div class="card" id="card-maq">
+
+        <div class="card-body">
+
+            <div class="row ">
+                <div class="col-md-4 " align="left">
+
+                    <h2>Básico</h2>
+                    <p>Información del producto</p>
+
+
+                </div>
+                <div class="col-md-8" align="left" id="col-data-content">
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Nombre: </mat-label>
+                            <mat-label>{{maquina.maq_Nombre}}</mat-label>
+                        </div>
+                        <div class="col-md-8">
+                            <mat-label>Descripción: </mat-label>
+                            <mat-label>{{maquina.maq_Descripcion}}</mat-label>
+                        </div>
+
+                        <!--  <div class="col-md-3">Foto</div> -->
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Tipo Máquina: </mat-label>
+                            <mat-label>{{maquina.maq_Tma_Id.tma_Descripcion}}</mat-label>
+
+                        </div>
+                        <div class="col-md-5">
+                            <mat-label>Marca: </mat-label>
+                            <mat-label>{{maquina.maq_Marca}}</mat-label>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-label>Modelo: </mat-label>
+                            <mat-label>{{maquina.maq_Modelo}}</mat-label>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Año: </mat-label>
+                            <mat-label>{{maquina.maq_Anio}}</mat-label>
+                        </div>
+                        <div class="col-md-5">
+                            <mat-label>Combustible: </mat-label>
+                            <mat-label>{{maquina.maq_Combustible}}</mat-label>
+
+                        </div>
+
+                        <div class="col-md-3" align="left">
+                            <mat-label>Cilindro de Gas: </mat-label>
+                            <mat-label>{{maquina.maq_CilindroGas}}</mat-label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <!--CARD INVENTARIO-->
+    <div class="card" id="card-maq">
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-4">
+
+                    <h2>Inventario</h2>
+                    <p>Información de control de maquinaria</p>
+
+                </div>
+                <div class="col-md-8" align="left">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Codigo: </mat-label>
+                            <mat-label>{{maquina.maq_Codigo}}</mat-label>
+                        </div>
+                        <div class="col-md-5">
+                            <mat-label>N° Motor: </mat-label>
+                            <mat-label>{{maquina.maq_NumMotorSerie}}</mat-label>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-label>Patente: </mat-label>
+                            <mat-label>{{maquina.maq_Patente}}</mat-label>
+                        </div>
+
+                        <!--  <div class="col-md-3">Foto</div> -->
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Estado Máquina: </mat-label>
+                            <mat-label>{{maquina.maq_Ema_Id.ema_Descripcion}}</mat-label>
+
+                        </div>
+                        <div class="col-md-8">
+                            <mat-label>Fecha adquisición: </mat-label>
+                            <mat-label>{{maquina.maq_FechaAdquisicion | date: 'dd/MM/yyyy'}}</mat-label>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4" *ngIf="maquina.maq_TipoUltKmHm ==='Km'">
+                            <mat-label>Km. Actual: </mat-label>
+                            <mat-label>{{maquina.maq_UltKmHm | FormatoNumeroMoneda}} Km</mat-label>
+                        </div>
+                        <div class="col-md-4" *ngIf="maquina.maq_TipoUltKmHm ==='Hora'">
+                            <mat-label>Hm. Actual: </mat-label>
+                            <mat-label>{{maquina.maq_UltKmHm | FormatoNumeroMoneda}} Hm</mat-label>
+                        </div>
+
+                        <div class="col-md-8">
+                            <mat-label>Mantención: </mat-label>
+                            <mat-label>A los {{maquina.maq_LimiteMantencion | FormatoNumeroMoneda}} {{maquina.maq_TiempoMantencion}} </mat-label>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion !== 'Fecha'">
+                            <mat-label>Renovación: </mat-label>
+                            <mat-label>A los {{ maquina.maq_ValorRenovacion | FormatoNumeroMoneda }} {{maquina.maq_MedidaRenovacion }}</mat-label>
+
+                        </div>
+                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion === 'Fecha'">
+                            <mat-label>Renovación: </mat-label>
+                            <mat-label>{{ maquina.maq_FechaRenovacion | date: 'dd/MM/yyyy'}} </mat-label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <!--CARD TARIFA-->
+    <div class="card" id="card-maq">
+
+        <div class="card-body">
+
+            <div class="row" id="fila-busqueda-ot">
+                <div class="col-md-4" id="card-titulo" align="left">
+
+                    <h2>Tarifas</h2>
+                    <p>Información de costos y cobros</p>
+
+
+                </div>
+                <div class="col-md-8" align="left">
+
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <mat-label>Precio Compra: </mat-label>
+                            <mat-label> {{ maquina.maq_PrecioCompra | FormatoNumeroMoneda : 'moneda'}}</mat-label>
+                        </div>
+                        <div class="col-md-8">
+                            <mat-label>Precio Venta: </mat-label>
+                            <mat-label> {{ maquina.maq_PrecioVenta | FormatoNumeroMoneda: 'moneda'}}</mat-label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Precio Arriendo: </mat-label>
+                            <mat-label>{{ maquina.maq_ValorArriendo | FormatoNumeroMoneda: 'moneda'}} por {{maquina.maq_Tcm_Id.tcm_Descripcion}}</mat-label>
+                        </div>
+                        <div class="col-md-8">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>{{maquina.maq_ValorMinArriendo | FormatoNumeroMoneda}} {{maquina.maq_Tcm_Id.tcm_Descripcion}}</mat-label>
+                            <!--  <mat-label>  A los 300.000 Kms </mat-label>
+                            <mat-label>  A los 15.000 Hrs</mat-label>
+ -->
+                        </div>
+
+                    </div>
+                    <br><br>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" align="right">
+        <div class="row">
+            <div class="col-md-10"> <button mat-raised-button color="primary" class="btn-formulario-cabecera" (click)="closeDialog()">Aceptar</button>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

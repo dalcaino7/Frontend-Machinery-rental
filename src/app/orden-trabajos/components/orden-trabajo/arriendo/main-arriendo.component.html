@@ -1,0 +1,141 @@
+<div class="container">
+
+
+
+    <div class="container">
+        <div class="row cabecera">
+            <div class="col-md-6 mt-3 p-2" align="left" style="height: 10px;">
+                <h1 class="mat-h1">Lista de Arriendos</h1>
+            </div>
+            <div class="col-md-6 mt-4 pb-2" align="right" style="height: 10px;">
+                <button mat-raised-button color="primary" class="btn-nuevo-arriendo" routerLink="/nuevoarriendo">Nuevo arriendo</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-1" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Estado</mat-label>
+                        <mat-select [(ngModel)]="selectedValue" name="state">
+                            <mat-option *ngFor="let state of estados" [value]="state.value">
+                                {{state.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-7" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>N°/ Cliente/ Máquina</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ingrese un rango de fechas</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date">
+                            <input matEndDate placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button mat-mini-fab color="primary" aria-label="descarga">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="mat-elevation-z2">
+                <div class="table-responsive">
+
+                    <mat-table [dataSource]="dataSource" matSort class="tabla-mat">
+
+                        !-- Position Column -->
+                        <ng-container matColumnDef="ot">
+                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo"> {{element.ot}} </a></mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="cliente">
+                            <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cliente}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="comuna">
+                            <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.comuna}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="maquina">
+                            <mat-header-cell *matHeaderCellDef> Maquina </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.maquina}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <button type="button" class="btn badge" [ngClass]="{
+                                    'tbl-estado-naranja' : element.estado == 'Adeudada',
+                                    'tbl-estado-azul' : element.estado == 'En Terreno',
+                                    'tbl-estado-rojo' : element.estado == 'Sin Retorno',
+                                    'tbl-estado-verde' : element.estado == 'Finalizada',
+                                    'tbl-estado-gris' : element.estado == 'Anulada'
+                                }">
+                                    {{ element.estado }}
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <button type="button" class="btn  " routerLink="/detallearriendo">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <button type="button" class="btn  ">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="finalizar()">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="anular()">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let element; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+</div>

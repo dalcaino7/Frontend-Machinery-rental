@@ -1,0 +1,148 @@
+body::-webkit-scrollbar {
+    width: 10px;
+    /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background: #eeededab;
+    /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(180, 181, 182, 0.671);
+    /* color of the scroll thumb */
+    border-radius: 12px;
+    /* roundness of the scroll thumb */
+    /*     border: 1px solid rgba(255, 255, 255, 0.582);
+ */
+    /* creates padding around scroll thumb */
+}
+
+
+/* Works on Firefox */
+
+
+/* * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(49, 33, 45);
+}
+ */
+
+
+/* Works on Chrome, Edge, and Safari */
+
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #dbdbdb;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #5e616b;
+    border-radius: 15px;
+    /*     border: 1px solid #595f70;
+ */
+}
+
+body {
+    scrollbar-width: thin;
+    /* "auto" or "thin" */
+    scrollbar-color: #5e616b #dbdbdb;
+    /* scroll thumb and track */
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.custom-dialog-container-big .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 1116px;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.custom-dialog-container-big-2 .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 1116px;
+    height: 577px;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.custom-dialog-container-big-landscape .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 1116px;
+    height: 525px;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.custom-dialog-container-big-landscape-2 .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 1116px;
+    height: 466px;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.custom-dialog-container-medium .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 800px;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.custom-dialog-container-little .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 650px;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}

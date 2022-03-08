@@ -1,0 +1,54 @@
+<div class="grid-container">
+    <h1 class="mat-h1">Dashboard</h1>
+    <mat-grid-list cols="1" rowHeight="350px">
+        <mat-grid-tile>
+            <mat-card class="dashboard-card col-md-12">
+                <mat-card-header>
+                    <mat-card-title>
+                        Movimiento mensual
+                        <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+                        <mat-menu #menu="matMenu" xPosition="before">
+                            <button mat-menu-item>Expand</button>
+                            <button mat-menu-item>Remove</button>
+                        </mat-menu>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <img class="chart-cards" src="./assets/cards.png" routerLink="/dashboard" id="btnLeft" />
+
+                </mat-card-content>
+            </mat-card>
+
+        </mat-grid-tile>
+
+
+    </mat-grid-list>
+
+    <mat-grid-list cols="2" rowHeight="350px">
+        <mat-grid-tile>
+            <mat-card class="dashboard-card col-md-12">
+                <mat-card-header>
+                    <mat-card-title>
+                        Movimiento mensual
+                        <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+                        <mat-menu #menu="matMenu" xPosition="before">
+                            <button mat-menu-item>Expand</button>
+                            <button mat-menu-item>Remove</button>
+                        </mat-menu>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <img class="chart" src="./assets/grafico.png" routerLink="/dashboard" id="btnLeft" />
+
+                </mat-card-content>
+            </mat-card>
+
+        </mat-grid-tile>
+
+
+    </mat-grid-list>
+</div>

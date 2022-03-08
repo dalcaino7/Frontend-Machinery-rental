@@ -1,0 +1,82 @@
+<div class="card" id="card-cliente">
+
+    <form (submit)="setDetalleArriendo()" [formGroup]="DetalleArriendoForm">
+        <div class="card-header">
+
+            <div class="row ">
+                <div class="col-md-6 mt-1" align="left">
+                    <h2 class="mat-h3">Registro de detalle de Arriendo</h2>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row" id="fila-busqueda-cliente">
+                <div class="col-md-3" align="left">
+                    <mat-label>
+                        <h3><b>0013 | Grua 02</b></h3>
+                    </mat-label>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="row" id="fila-tabla-cliente">
+                <div class="table table-responsive">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-form-field appearance="outline" style="max-width: 100%;">
+
+                                    <input matInput [matDatepicker]="picker" formControlName="txtFechaDetArr">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="inicio">
+                            <mat-header-cell *matHeaderCellDef> Inicio </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                323.2
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="termino">
+                            <mat-header-cell *matHeaderCellDef> Término </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-form-field appearance="outline" style="max-width: 100%;">
+                                    <input matInput formControlName="txtTerminoDetArr">
+                                </mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="total">
+                            <mat-header-cell *matHeaderCellDef> Total Día </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                6.7
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumnsDetArriendo"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsDetArriendo;"></mat-row>
+                    </mat-table>
+                </div>
+            </div>
+
+            <div class="row text-xs-right">
+                <span> <b>Total:</b> 16.7 </span>
+            </div>
+
+
+
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </div>
+    </form>
+</div>

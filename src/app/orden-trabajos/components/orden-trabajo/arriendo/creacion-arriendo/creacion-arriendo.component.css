@@ -1,0 +1,288 @@
+.container {
+    max-width: 98%;
+    padding-bottom: 3%;
+}
+
+.card {
+    float: 30px;
+    border: 0;
+    border-radius: 8px;
+    /* bottom: 85px; */
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0px 0px 5px #747474;
+}
+
+.card-header {
+    background-color: rgb(45 59 80);
+    height: 50px;
+}
+
+.footer {
+    bottom: 100%;
+}
+
+.card-body {
+    display: block;
+}
+
+#boton-finalizar {
+    padding-right: 25px;
+    height: 10px;
+}
+
+#boton-header-div {
+    padding-right: 25px;
+    height: 10px;
+}
+
+#card-ot {
+    height: 125px;
+}
+
+#card-cliente {
+    height: 522px;
+}
+
+#fila-busqueda-ot {
+    max-width: 80%;
+    /*Da la separacion entre input */
+}
+
+#fila-busqueda-cliente {
+    max-width: 80%;
+}
+
+#fila-tabla-cliente {
+    padding-bottom: 10px;
+}
+
+#fila-contacto {
+    max-width: 80%;
+    padding-top: 10px;
+}
+
+#fila-ubicacion {
+    max-width: 80%;
+}
+
+mat-slide-toggle {
+    position: absolute;
+    left: 780px;
+}
+
+.mat-table {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: rgb(248, 252, 255);
+}
+
+.mat-h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    /* font-size: 20px; */
+}
+
+.mat-h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 1pt;
+    color: white;
+}
+
+mat-header-cell {
+    font-weight: bold;
+    font-size: 15px;
+    color: rgb(63, 63, 63);
+}
+
+mat-cell {
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+}
+
+mat-row {
+    background-color: rgba(202, 231, 255, 0.233);
+}
+
+.tbl-estado-azul {
+    background-color: rgb(25, 143, 253);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-naranja {
+    background-color: rgb(189, 123, 0);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-rojo {
+    background-color: rgb(143, 14, 14);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-verde {
+    background-color: rgb(96, 148, 0);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-gris {
+    background-color: rgb(133, 133, 133);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-eliminar {
+    color: rgb(0, 0, 0);
+    border: none;
+}
+
+.btn-formulario-cabecera {
+    left: 36px;
+    width: 110px;
+    height: 25px;
+    align-content: center;
+    line-height: 22px;
+    /*     background-color: #005fff;
+ */
+}
+
+.btn-formulario-footer {
+    left: 13px;
+    width: 110px;
+    height: 25px;
+    line-height: 22px;
+}
+
+.btn-formulario {
+    left: 12px;
+    width: 110px;
+    height: 25px;
+    align-content: center;
+    line-height: 22px;
+    background-color: rgb(255 110 0);
+}
+
+
+/*redimension de columnas de tabla*/
+
+.mat-column-rut {
+    flex: 0 0 220px;
+}
+
+.mat-column-nombre {
+    flex: 0 0 350px;
+}
+
+.mat-column-comuna {
+    flex: 0 0 300px;
+}
+
+.mat-column-deleteAction {
+    flex: 0 0 215px;
+    padding-left: 10px;
+}
+
+
+/*DISMINUIR TAMAÑO DE CAMPOS */
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px !important;
+}
+
+::ng-deep .mat-form-field-label-wrapper {
+    top: -1.5em;
+}
+
+
+/*cambio color mat-slide-toggle*/
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+    background-color: #92c5f5;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+    background-color: #4178df;
+}
+
+
+/*************PAGINA RESPONSIVA******************/
+
+@media (min-width: 2000px) {
+    .card {
+        bottom: 190px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 100%;
+        padding-bottom: 10%;
+    }
+    .card {
+        bottom: 5px;
+    }
+    #card-ot {
+        height: 250px;
+    }
+    #card-cliente {
+        height: 845px;
+    }
+    #card-maquinaria {
+        height: 620px;
+    }
+    .btn-formulario-cabecera {
+        left: 25px;
+        width: 110px;
+        height: 25px;
+        align-content: center;
+        line-height: 22px;
+    }
+    .btn-formulario-footer {
+        left: 14px;
+        width: 110px;
+        height: 25px;
+        align-content: center;
+        line-height: 22px;
+    }
+    .btn-formulario {
+        bottom: 52px;
+    }
+    .mat-table {
+        margin: 1 auto;
+        text-align: left;
+        display: table;
+        width: 850px;
+        table-layout: fixed;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    /*redimension de columnas de tabla*/
+    .mat-column-rut {
+        flex: 0 0 150px;
+    }
+    .mat-column-nombre {
+        flex: 0 0 250px;
+    }
+    .mat-column-comuna {
+        flex: 0 0 200px;
+    }
+    .mat-column-deleteAction {
+        flex: 0 0 100px;
+        padding-left: 10px;
+    }
+    mat-slide-toggle {
+        position: inherit;
+    }
+}

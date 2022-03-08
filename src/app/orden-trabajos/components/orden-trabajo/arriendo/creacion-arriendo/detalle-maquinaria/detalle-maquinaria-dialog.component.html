@@ -1,0 +1,168 @@
+<div class="card" id="card-cliente">
+
+    <form (submit)="setDetalleMaquinaria()" [formGroup]="maquinaDetalleForm">
+        <div class="card-header">
+
+            <div class="row ">
+                <div class="col-md-6 mt-1" align="left">
+                    <h1 class="mat-h2">Detalle de Maquinaria</h1>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row" id="fila-busqueda-cliente">
+                <div class="col-md-3" align="left">
+                    <mat-label><b>0013 | Grua 02</b></mat-label>
+                </div>
+            </div>
+            <div class="row" id="fila-tabla-cliente">
+                <div class="table table-responsive">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+                        <ng-container matColumnDef="operario">
+                            <mat-header-cell *matHeaderCellDef> Operario </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- formControlName="txtOperarioDetMaqOt" -->
+                                <mat-form-field appearance="outline">
+                                    <input type="text" placeholder="Seleccione" matInput [formControl]="txtOperarioDetMaqOt" [matAutocomplete]="auto">
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                        <mat-option *ngFor="let operariosList of filteredOptions | async" [value]="operariosList">
+                                            {{operariosList}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="valor">
+                            <mat-header-cell *matHeaderCellDef> Valor mínimo </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-form-field><input matInput value="{{element.valor}}" formControlName="txtValorMinimoDetMaqOt"></mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="precio">
+                            <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-form-field><input matInput value="{{element.precio}}" formControlName="txtPrecioDetMaqOt"></mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="implemento">
+                            <mat-header-cell *matHeaderCellDef> Implemento </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <mat-form-field appearance="outline">
+
+                                    <mat-select multiple formControlName="selImplementoDetMaqOt">
+
+                                        <mat-option *ngFor="let i of implementos" [value]="implementos">{{i}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="combustible">
+                            <mat-header-cell *matHeaderCellDef> Combustible </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="selCombustibleDetMaqOt">
+                                        <mat-option *ngFor="let c of combustible" [value]="c.value">
+                                            {{c.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef> Acción </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> <button type="button" class="btn  tbl-eliminar " (click)="deleteCliente()">
+                        <mat-icon>remove_circle</mat-icon>
+                    </button> </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumnsDetMaquinaria"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsDetMaquinaria;"></mat-row>
+                    </mat-table>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-checkbox formControlName="checkTrasladoDetOt" color="primary">Traslado</mat-checkbox>
+                </div>
+                <div class="col-md-3">
+                    <mat-checkbox formControlName="checkCilindroDetOt" color="primary">Cilindro de Gas</mat-checkbox>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+            <br>
+            <h3><b>* Datos de contacto</b></h3>
+            <div class="row" id="fila-contacto">
+                <div class="col-md-3" align="left">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nombre contacto</mat-label>
+                        <input matInput formControlName="txtNombreContactoDetOt">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3" align="left">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Teléfono contacto</mat-label>
+                        <input matInput formControlName="txtTelefonoContactoDetOt">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6" align="left">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email contacto</mat-label>
+                        <input matInput placeholder="nombre@mail.com" formControlName="txtEmailContactoDetOt">
+                        <mat-error *ngIf="email.invalid"></mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <h3><b>* Ubicación del trabajo</b></h3>
+            <div class="row" id="fila-ubicacion">
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Región</mat-label>
+                        <mat-select formControlName="selRegionDetOt">
+                            <mat-option *ngFor="let rg of region" [value]="rg.value">
+                                {{rg.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Comuna</mat-label>
+                        <mat-select formControlName="selComunaDetOt">
+                            <mat-option *ngFor="let cmn of comuna" [value]="cmn.value">
+                                {{cmn.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" style="width: 300px;">
+                        <mat-label>Dirección</mat-label>
+                        <input matInput formControlName="txtDireccionDetOt">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </div>
+    </form>
+</div>

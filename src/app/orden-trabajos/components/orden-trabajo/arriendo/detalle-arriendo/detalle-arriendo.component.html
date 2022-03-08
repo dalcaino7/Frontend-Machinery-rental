@@ -1,0 +1,113 @@
+<div class="container">
+    <form (submit)="procesarOt()" [formGroup]="otForm">
+
+        <div class="container">
+            <div class="row cabecera">
+                <div class="col-md-12">
+                </div>
+
+            </div>
+        </div>
+
+        <!--CARD MAQUINARIA-->
+        <div class="card" id="card-maquinaria">
+            <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-10 mt-1" align="left">
+                        <h1 class="mat-h2">Detalle de arriendo </h1>
+                    </div>
+                    <div class="col-md-2 mt-1 " align="left">
+                        <button mat-raised-button color="primary" class="btn-formulario-cabecera" routerLink="/">Registrar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+
+
+                <div class="row" id="fila-busqueda-cliente">
+                    <div class="col-md-3" align="left">
+                        <mat-label>
+                            <h3><b>Municipalidad de Paine</b></h3>
+                        </mat-label>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row" id="fila-tabla-cliente">
+                    <div class="table-responsive">
+                        <mat-table [dataSource]="dataSourceMaquinaria" class="mat-elevation-z0">
+
+                            <ng-container matColumnDef="codigo">
+                                <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.codigo }} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="categoria">
+                                <mat-header-cell *matHeaderCellDef> Categoria </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.categoria}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="precio">
+                                <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tipoCobro">
+                                <mat-header-cell *matHeaderCellDef> Tipo cobro </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.tipoCobro}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell *matHeaderCellDef> Añadir detalle </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="openDialog()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="displayedColumnsMaquinaria"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumnsMaquinaria;"></mat-row>
+                        </mat-table>
+                    </div>
+                </div>
+                <br>
+                <div class="parent-container">
+                    <div class="row row-cols-2 row-cols-md-6">
+                        <div class="col-md-7" align="right">
+                            <h3><b>SUB TOTAL:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 210.745</b></h3>
+                            </mat-label>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <h3><b>IVA:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 35.100</b></h3>
+                            </mat-label>
+                        </div>
+
+                        <div class="col-md-1" align="right">
+                            <h3><b>TOTAL:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 245.845</b></h3>
+                            </mat-label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

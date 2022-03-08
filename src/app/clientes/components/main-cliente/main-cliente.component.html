@@ -1,0 +1,157 @@
+<div class="container">
+
+    <div class="container">
+        <div class="row cabecera">
+            <div class="col-md-6 mt-3 p-2" align="left" style="height: 10px;">
+                <h1 class="mat-h1">Lista de Clientes</h1>
+            </div>
+            <div class="col-md-6 mt-4 pb-2" align="right" style="height: 10px;">
+                <button mat-raised-button color="primary" class="btn-nuevo" (click)="addCliente()">Nuevo Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3" align="left">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Región</mat-label>
+                        <mat-select [(ngModel)]="selectedValueRegion" name="region" (selectionChange)="regionFilter($any($event))">
+                            <mat-option value="Todos" (click)="estadoSelectorComuna = true">Todos</mat-option>
+                            <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre" (click)="estadoSelectorComuna = false">
+                                {{rgn.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-1" align="left">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Comuna</mat-label>
+                        <mat-select [(ngModel)]="selectedValueComuna" name="comuna" (selectionChange)="comunaFilter($any($event))" [disabled]="estadoSelectorComuna">
+                            <mat-option value="Todos">Todos</mat-option>
+                            <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
+                                {{cmn.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-7" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Rut/ nombre cliente</mat-label>
+                        <input matInput (keyup)="nombreRutFilter($any($event.target).value)">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-1" align="right">
+                    <button mat-mini-fab color="primary" aria-label="descarga">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="mat-elevation-z2">
+                <div class="table-responsive">
+
+                    <mat-table #tablaView [dataSource]="dataSource" matSort class="tabla-mat">
+
+                        !-- Position Column -->
+                        <ng-container matColumnDef="rut">
+                            <mat-header-cell *matHeaderCellDef> Rut </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> <a routerLink="/main-cliente" (click)="viewCliente(element.cli_Id)"> {{element.cli_Rut}} </a></mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cli_Nombre}} {{element.cli_Apellidos}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="region">
+                            <mat-header-cell *matHeaderCellDef> Región </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cli_Region}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="comuna">
+                            <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cli_Comuna}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estadoArriendo">
+                            <mat-header-cell *matHeaderCellDef> Arriendo </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <button type="button" class="btn badge" [ngClass]="{
+                                    'tbl-estado-azul' : element.cli_Estado_Arriendo == 'Progreso',
+                                    'tbl-estado-naranja' : element.cli_Estado_Arriendo == 'Pl. Extendido',
+                                    'tbl-estado-rojo' : element.cli_Estado_Arriendo == 'Vencido',
+                                    'tbl-estado-gris' : element.cli_Estado_Arriendo == 'Sin Registro'
+                                   
+                                }">
+                                    {{ element.cli_Estado_Arriendo }}
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estadoMaquina">
+                            <mat-header-cell *matHeaderCellDef> Máquinaria </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <button type="button" class="btn badge" [ngClass]="{
+                                    'tbl-estado-azul' : element.cli_Estado_Maquinaria == 'En Terreno',
+                                    'tbl-estado-rojo' : element.cli_Estado_Maquinaria == 'Sin Retorno',
+                                    'tbl-estado-gris' : element.cli_Estado_Maquinaria == 'Sin Registro'
+
+                                }">
+                                    {{ element.cli_Estado_Maquinaria }}
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="estadoPago">
+                            <mat-header-cell *matHeaderCellDef> Pagos </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <button type="button" class="btn badge" [ngClass]="{
+                                    'tbl-estado-naranja' : element.cli_Estado_Pago == 'Adeudado',
+                                    'tbl-estado-azul' : element.cli_Estado_Pago == 'Pendiente',
+                                    'tbl-estado-gris' : element.cli_Estado_Pago == 'Sin Registro'
+
+                                }">
+                                    {{ element.cli_Estado_Pago }}
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- <button type="button" class="btn  " routerLink="/detallearriendo">
+                                    <mat-icon>add</mat-icon>
+                                </button> -->
+                                <button type="button" class="btn " (click)="viewCliente(element.cli_Id)">
+                                    <mat-icon>open_in_new</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="updateCliente(element.cli_Id)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="deleteCliente(element.cli_Id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let element; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

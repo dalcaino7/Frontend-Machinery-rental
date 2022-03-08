@@ -1,0 +1,21 @@
+/*redimension de columnas OT y CLIENTE de la tabla*/
+
+.mat-column-fecha {
+    flex: 0 0 175px;
+}
+
+.mat-column-inicio {
+    flex: 0 0 120px;
+}
+
+.mat-column-termino {
+    flex: 0 0 150px;
+    /*     padding-left: 10px;
+ */
+}
+
+.mat-column-total {
+    flex: 0 0 100px;
+    /*   padding-left: 10px;
+ */
+}

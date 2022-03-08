@@ -1,0 +1,325 @@
+<div class="container">
+    <form (submit)="procesarOt()" [formGroup]="otForm">
+
+        <div class="container">
+            <div class="row cabecera">
+                <div class="col-md-6 mt-3 p-2" align="left" style="height: 10px;">
+                    <h3 class="mat-h1">NUEVO ARRIENDO</h3>
+                </div>
+                <div class="col-md-6 mt-4 pb-2" id="boton-finalizar" align="right">
+                    <button mat-raised-button color="primary" class="btn-formulario-cabecera" routerLink="/nuevoarriendo">Finalizar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!--CARD ORDEN DE TRABAJO-->
+        <div class="card" id="card-ot">
+            <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-12" align="left">
+                        <h2 class="mat-h2">Orden de trabajo</h2>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row" id="fila-busqueda-ot">
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>N° Orden</mat-label>
+                            <input matInput formControlName="txtNumeroOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3 " align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Referencia</mat-label>
+                            <input matInput formControlName="txtReferenciaOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6 " align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ingrese una fecha</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="txtFechaOt">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--CARD CLIENTE-->
+        <div class="card" id="card-cliente">
+            <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-6 mt-1" align="left">
+                        <h1 class="mat-h2">Cliente</h1>
+                    </div>
+                    <div class="col-md-6 mt-1 " id="boton-header-div" align="right">
+                        <button mat-raised-button color="primary" class="btn-formulario" routerLink="/cliente">Añadir</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="fila-busqueda-cliente">
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Rut</mat-label>
+                            <input matInput formControlName="txtRutClienteOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-9" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="txtNombreClienteOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3" align="right">
+
+                    </div>
+
+                </div>
+
+                <div class="row" id="fila-tabla-cliente">
+                    <div class="table-responsive">
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+                            <ng-container matColumnDef="rut">
+                                <mat-header-cell *matHeaderCellDef> Rut </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.rut}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="comuna">
+                                <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.comuna}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="deleteAction">
+                                <mat-header-cell *matHeaderCellDef> Remover </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> <button type="button" class="btn badge tbl-eliminar " (click)="deleteCliente()">
+                            <mat-icon>remove_circle</mat-icon>
+                        </button> </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="displayedColumnsCliente"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumnsCliente;"></mat-row>
+                        </mat-table>
+
+
+                    </div>
+                </div>
+                <br>
+                <h3><b>* Datos de contacto</b></h3>
+                <div class="row" id="fila-contacto">
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nombre contacto</mat-label>
+                            <input matInput formControlName="txtNombreContactoClienteOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Teléfono contacto</mat-label>
+                            <input matInput formControlName="txtTelefonoContactoClienteOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Email contacto</mat-label>
+                            <input matInput placeholder="nombre@mail.com" formControlName="txtEmailContactoClienteOt">
+                            <mat-error *ngIf=""></mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <br>
+                <mat-divider></mat-divider>
+                <br>
+                <h3><b>* Ubicación del trabajo</b></h3>
+
+
+
+                <div class="row" id="fila-ubicacion">
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Región</mat-label>
+                            <mat-select formControlName="txtRegionContactoClienteOt">
+                                <mat-option *ngFor="let rg of region" [value]="rg.value">
+                                    {{rg.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Comuna</mat-label>
+                            <mat-select formControlName="txtComunaContactoClienteOt">
+                                <mat-option *ngFor="let cmn of comuna" [value]="cmn.value">
+                                    {{cmn.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: 300px;">
+                            <mat-label>Dirección</mat-label>
+                            <input matInput formControlName="txtDireccionContactoClienteOt">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- <div class="col-md-3 ">
+                        <mat-slide-toggle formControlName="toggle_localizacion">Ingresar geolocalización</mat-slide-toggle>
+                    </div> -->
+                </div>
+                <!--
+                <<ng-container *ngIf="toggle_mostrarMapa; then muestra"></ng-container>
+
+                    <ng-template #muestra>
+                        <div class="row">
+                            <p>Form Group Status: {{formUbicacion.status}}</p> <br>
+
+                              <google-map width="750px" height="450px" [center]="center" [zoom]="zoom">
+                                <map-marker [position]="marker.position"></map-marker>
+                            </google-map>
+                        </div>
+                    </ng-template>-->
+            </div>
+        </div>
+
+
+        <!--CARD MAQUINARIA-->
+        <div class="card" id="card-maquinaria">
+            <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-6 mt-1" align="left">
+                        <h1 class="mat-h2">Maquinaria</h1>
+                    </div>
+                    <div class="col-md-6 mt-1 " id="boton-header-div" align="right">
+                        <button mat-raised-button color="primary" class="btn-formulario" routerLink="/main-maquina">Añadir</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="fila-busqueda-cliente">
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Código</mat-label>
+                            <input matInput formControlName="txtCodigoMaquinaOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3" align="left">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nombre maquinaria</mat-label>
+                            <input matInput formControlName="txtNombreMaquinaOt">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3" align="left">
+                        <button mat-mini-fab color="primary" aria-label="descarga">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    </div>
+
+                </div>
+
+                <div class="row" id="fila-tabla-cliente">
+                    <div class="table-responsive">
+                        <mat-table [dataSource]="dataSourceMaquinaria" class="mat-elevation-z0">
+
+                            <ng-container matColumnDef="codigo">
+                                <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.codigo }} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="valorMinimo">
+                                <mat-header-cell *matHeaderCellDef> Valor mínimo </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.valorMinimo}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="precio">
+                                <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tipoCobro">
+                                <mat-header-cell *matHeaderCellDef> Tipo cobro </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.tipoCobro}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="openDialog('detalle')">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="deleteCliente()">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="displayedColumnsMaquinaria"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumnsMaquinaria;"></mat-row>
+                        </mat-table>
+                    </div>
+                </div>
+                <!--  <br>
+                <div class="parent-container">
+                    <div class="row row-cols-2 row-cols-md-6">
+                        <div class="col-md-7" align="right">
+                            <h3><b>SUB TOTAL:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 210.745</b></h3>
+                            </mat-label>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <h3><b>IVA:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 35.100</b></h3>
+                            </mat-label>
+                        </div>
+
+                        <div class="col-md-1" align="right">
+                            <h3><b>TOTAL:</b></h3>
+                        </div>
+                        <div class="col-md-1" align="right">
+                            <mat-label>
+                                <h3><b>$ 245.845</b></h3>
+                            </mat-label>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="row ">
+
+            <div class="col-md-12" id="boton-finalizar" align="right">
+                <button mat-raised-button color="primary" class="btn-formulario-footer">Finalizar</button>
+            </div>
+        </div>
+
+
+
+
+
+
+    </form>
+</div>

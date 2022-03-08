@@ -1,0 +1,185 @@
+<div class="container scrollbar">
+    <form [formGroup]="clienteForm" (ngSubmit)="validaOperacion()">
+        <div class="container">
+            <div class="row cabecera">
+                <div class="col-md-6 mt-3 p-2" align="left" style="height: 50px;">
+                    <h3 class="mat-h1"><b>{{titulo}}</b></h3>
+                </div>
+                <!-- <div class="col-md-6 mt-4 pb-2" id="boton-finalizar" align="right">
+                    <button mat-raised-button color="primary" class="btn-formulario-cabecera" routerLink="/main-maquina">Guardar</button>
+                </div> -->
+            </div>
+        </div>
+
+        <!--CARD BASICO-->
+        <div class="card" id="card-maq">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 " align="left">
+                        <h2>Básico</h2>
+                        <p>Información del cliente</p>
+                    </div>
+                    <div class="col-md-8" align="left">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Rut</mat-label>
+                                    <input matInput formControlName="txtRutCli" [(ngModel)]="this.cli.cli_Rut">
+                                </mat-form-field>
+                            </div>
+                            <span class="form-text text-danger" id="validate_Rut" *ngIf="validaciones('txtRutCli')">
+                                Rut Inválido
+                            </span>
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline" style="width: 269px;">
+                                    <mat-label>Razón Social</mat-label>
+                                    <input matInput formControlName="txtRazonSocialCli" [(ngModel)]="cli.cli_RazonSocial">
+                                </mat-form-field>
+                            </div>
+
+                            <!--  <div class="col-md-3">Foto</div> -->
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4" align="left">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="txtNombreCli" [(ngModel)]="cli.cli_Nombre">
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Nombre" *ngIf="validaciones('txtNombreCli')">
+                                   Requerido, mín. 2 caracteres
+                                </span>
+                            </div>
+
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline" style="width: 269px;">
+                                    <mat-label>Apellidos</mat-label>
+                                    <input matInput formControlName="txtApellidosCli" [(ngModel)]="cli.cli_Apellidos">
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Apellidos" *ngIf="validaciones('txtApellidosCli')">
+                                    Requerido, mín. 2 caracteres
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row" align="left">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline" style="width: 500px;">
+                                    <mat-label>Observación</mat-label>
+                                    <input matInput formControlName="txtObservacionCli" [(ngModel)]="cli.cli_Observacion">
+
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!--CARD CONTACTO-->
+        <div class="card" id="card-maq">
+
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <h2>Contacto</h2>
+                        <p>Ubicación y contacto del cliente</p>
+
+                    </div>
+                    <div class="col-md-8" align="left">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input matInput formControlName="txtTelefonoCli" [(ngModel)]="cli.cli_Telefono">
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Telefono" *ngIf="validaciones('txtTelefonoCli')">
+                                    Requerido, solo números
+                                </span>
+                            </div>
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline" style="width: 330px;">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="txtEmailCli" [(ngModel)]="cli.cli_Email">
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Email" *ngIf="validaciones('txtEmailCli')">
+                                    Email inválido
+                                </span>
+                            </div>
+                            <!--  <div class="col-md-3">Foto</div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>País</mat-label>
+                                    <mat-select formControlName="selPaisCli" [(ngModel)]="cli.cli_Pais">
+                                        <mat-option *ngFor="let pais of paises" [value]="pais.viewValue">
+                                            {{pais.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Pais" *ngIf="validaciones('selPaisCli')">
+                                    País es requerido
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Región</mat-label>
+                                    <mat-select formControlName="selRegionCli" [(ngModel)]="cli.cli_Region" (selectionChange)="regionFilter($any($event))">
+                                        <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre">
+                                            {{rgn.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Region" *ngIf="validaciones('selRegionCli')">
+                                    Región es requerida
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Comuna</mat-label>
+                                    <mat-select formControlName="selComunaCli" [(ngModel)]="cli.cli_Comuna">
+                                        <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
+                                            {{cmn.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Comuna" *ngIf="validaciones('selComunaCli')">
+                                    Comuna es requerida
+                                </span>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" style="width: 431px;">
+                                    <mat-label>Dirección</mat-label>
+                                    <input matInput formControlName="txtDireccionCli" [(ngModel)]="cli.cli_Direccion">
+                                </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Direccion" *ngIf="validaciones('txtDireccionCli')">
+                                    Dirección es requerida
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-footer" align="right">
+            <div class="row">
+                <div class="col-md-10"> <button mat-raised-button color="primary" type="button" class="btn-formulario-cabecera" (click)="closeDialog()">Cancelar</button>
+                </div>
+                <div class="col-md-2"> <button mat-raised-button color="primary" type="submit" class="btn-formulario-cabecera" [disabled]="clienteForm.invalid">{{nombreBoton}}</button>
+                </div>
+            </div>
+
+            <span>cli.cli_Region: {{cli.cli_Region.nombre}}</span>
+        </div>
+    </form>
+</div>

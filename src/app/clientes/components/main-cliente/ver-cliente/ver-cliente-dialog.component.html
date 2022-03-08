@@ -1,0 +1,142 @@
+<div class="container scrollbar">
+
+    <div class="container">
+        <div class="row cabecera">
+
+            <div class="col-md-6 mt-3 p-2" align="left" style="height: 50px;">
+                <h3 class="mat-h1"><b>Vista General de Cliente</b></h3>
+            </div>
+            <!-- <div class="col-md-6 mt-4 pb-2" id="boton-finalizar" align="right">
+                    <button mat-raised-button color="primary" class="btn-formulario-cabecera" routerLink="/main-maquina">Guardar</button>
+                </div> -->
+        </div>
+    </div>
+
+    <!--CARD BASICO-->
+    <div class="card" id="card-maq">
+        <div class="card-body">
+            <div class="row ">
+                <div class="col-md-4 " align="left">
+
+                    <h2>Básico</h2>
+                    <p>Información del cliente</p>
+                </div>
+                <div class="col-md-8" align="left" id="col-data-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-label>Rut: </mat-label>
+                            <mat-label>{{cliente.cli_Rut}}</mat-label>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-label>Nombre: </mat-label>
+                            <mat-label>{{cliente.cli_Nombre}} {{cliente.cli_Apellidos}}</mat-label>
+                        </div>
+                        <!--  <div class="col-md-3">Foto</div> -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-label>Razon social: </mat-label>
+                            <mat-label>{{cliente.cli_RazonSocial}}</mat-label>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-label>Observación: </mat-label>
+                            <mat-label>{{cliente.cli_Observacion}}</mat-label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <!--CARD INVENTARIO-->
+    <div class="card" id="card-maq">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Contacto</h2>
+                    <p>Ubicación y contacto del cliente</p>
+                </div>
+                <div class="col-md-8" align="left">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-label>Teléfono: </mat-label>
+                            <mat-label>{{cliente.cli_Telefono}}</mat-label>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-label>Email: </mat-label>
+                            <mat-label>{{cliente.cli_Email}}</mat-label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-label>Región: </mat-label>
+                            <mat-label>{{cliente.cli_Region}}</mat-label>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-label>Comuna: </mat-label>
+                            <mat-label>{{cliente.cli_Comuna}}</mat-label>
+                        </div>
+                        <!--  <div class="col-md-3">Foto</div> -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-label>Dirección: </mat-label>
+                            <mat-label>{{cliente.cli_Direccion}}</mat-label>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-label>Pais: </mat-label>
+                            <mat-label>{{cliente.cli_Pais}}</mat-label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <!--CARD TARIFA-->
+    <div class="card" id="card-maq">
+
+        <div class="card-body">
+
+            <div class="row" id="fila-busqueda-ot">
+                <div class="col-md-4" id="card-titulo" align="left">
+
+                    <h2>Órdenes de trabajo</h2>
+
+
+                </div>
+                <div class="col-md-8" align="left">
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-label>Estado Arriendo: </mat-label>
+                            <mat-label>{{cliente.cli_Estado_Arriendo}}</mat-label>
+
+                        </div>
+                        <div class="col-md-4">
+                            <mat-label>Estado Maquinaria: </mat-label>
+                            <mat-label>{{cliente.cli_Estado_Maquinaria}}</mat-label>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-label>Estado Pagos: </mat-label>
+                            <mat-label>{{cliente.cli_Estado_Pago}}</mat-label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" align="right">
+        <div class="row">
+            <div class="col-md-10"> <button mat-raised-button color="primary" class="btn-formulario-cabecera" (click)="closeDialog()">Aceptar</button>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

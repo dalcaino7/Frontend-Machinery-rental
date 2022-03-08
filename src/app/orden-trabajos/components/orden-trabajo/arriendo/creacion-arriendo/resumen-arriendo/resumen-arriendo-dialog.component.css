@@ -1,0 +1,46 @@
+.card-body {
+    width: 388%;
+    height: 433px;
+    margin-left: 3%;
+    padding-top: 14px;
+}
+
+.card-footer {
+    padding-left: 87%;
+}
+
+.borderless td,
+.borderless th {
+    border: none;
+}
+
+.scrollbar {
+    height: 404px;
+    overflow-y: scroll;
+    padding-right: 21px;
+}
+
+table td {
+    border: 1px solid #000;
+    text-align: left;
+    padding: 0%;
+    /*     padding: 5px;
+ */
+    /* Alto de las celdas */
+    /*     height: 70px;
+ */
+}
+
+.icon-row-maq {
+    width: 0%;
+    padding-left: 0px;
+}
+
+#table-cliente {
+    width: 95%;
+}
+
+#table-maquina {
+    width: 82%;
+    margin-left: 23px;
+}

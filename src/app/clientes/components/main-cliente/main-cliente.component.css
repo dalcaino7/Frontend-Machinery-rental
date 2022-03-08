@@ -1,0 +1,168 @@
+.container {
+    max-width: 100%;
+    padding-bottom: 10%;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    bottom: 85px;
+}
+
+.card-header {
+    background-color: rgb(255, 255, 255);
+}
+
+.mat-table {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.mat-h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+mat-header-cell {
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+
+mat-cell {
+    font-size: 14px;
+    color: rgb(63, 63, 63);
+}
+
+.tbl-estado-azul {
+    background-color: rgb(0, 121, 235);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-naranja {
+    background-color: rgb(189, 123, 0);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-rojo {
+    background-color: rgb(143, 14, 14);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-verde {
+    background-color: rgb(96, 148, 0);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-estado-gris {
+    background-color: rgb(133, 133, 133);
+    border-radius: 7px;
+    color: white;
+    border: none;
+    font-size: 12px;
+}
+
+.tbl-accion {
+    border-radius: 7px;
+    color: rgb(0, 0, 0);
+    border: none;
+}
+
+.btn-nuevo {
+    left: 12px;
+    width: 150px;
+    height: 25px;
+    align-content: center;
+    line-height: 22px;
+}
+
+
+/*redimension de columnas OT y CLIENTE de la tabla*/
+
+.mat-column-ot {
+    flex: 0 0 110px;
+}
+
+.mat-column-cliente {
+    flex: 0 0 250px;
+}
+
+.mat-column-estado {
+    flex: 0 0 150px;
+    padding-left: 10px;
+}
+
+.mat-column-accion {
+    /*  flex: 0 0 100px; */
+    padding-right: 100px;
+}
+
+
+/*DISMINUIR TAMAÑO DE CAMPOS */
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px !important;
+}
+
+::ng-deep .mat-form-field-label-wrapper {
+    top: -1.5em;
+}
+
+
+/*TABLA RESPONSIVA*/
+
+@media (min-width: 2000px) {
+    .card {
+        bottom: 190px;
+    }
+}
+
+@media (max-width: 992px) {
+    .card {
+        bottom: 5px;
+    }
+    .mat-table {
+        margin: 1 auto;
+        text-align: left;
+        display: table;
+        width: 850px;
+        table-layout: fixed;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    .mat-column-ot {
+        flex: 0 0 90px;
+    }
+    .mat-column-cliente {
+        flex: 0 0 200px;
+    }
+    .mat-column-comuna {
+        flex: 0 0 120px;
+    }
+    .mat-column-maquina {
+        flex: 0 0 120px;
+    }
+    .mat-column-estado {
+        flex: 0 0 100px;
+    }
+    .mat-column-fecha {
+        flex: 0 0 100px;
+    }
+    .mat-column-accion {
+        flex: 0 0 100px;
+    }
+}
+
+
+/*REDIMENSIONAR TAMAÑO DE COLUMNAS DE TABLA*/

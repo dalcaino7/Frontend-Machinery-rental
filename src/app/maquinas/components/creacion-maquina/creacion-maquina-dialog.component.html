@@ -1,0 +1,351 @@
+<div class="container scrollbar">
+    <form [formGroup]="maquinaForm" (ngSubmit)="validaOperacion()">
+
+        <div class="container">
+            <div class="row cabecera">
+
+                <div class="col-md-6 mt-3 p-2" align="left" style="height: 50px;">
+                    <h3 class="mat-h1"><b>{{titulo}}</b></h3>
+                </div>
+                <!-- <div class="col-md-6 mt-4 pb-2" id="boton-finalizar" align="right">
+                    <button mat-raised-button color="primary" class="btn-formulario-cabecera" routerLink="/main-maquina">Guardar</button>
+                </div> -->
+            </div>
+        </div>
+
+
+        <!--CARD BASICO-->
+        <div class="card" id="card-maq">
+
+            <div class="card-body">
+
+                <div class="row ">
+                    <div class="col-md-4 " align="left">
+
+                        <h2>Básico</h2>
+                        <p>Información del producto</p>
+
+
+                    </div>
+                    <div class="col-md-8" align="right">
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="txtNombreMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Descripción</mat-label>
+                                    <input matInput formControlName="txtDescripcionMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tipo Máquina</mat-label>
+                                    <!--                                <mat-select formControlName="selTipoMaq" [value]="this.maq.tma_Id.tma_Descripcion"> -->
+                                    <mat-select formControlName="selTipoMaq">
+                                        <mat-option *ngFor="let tm of tipoMaquinaSelect" [value]="tm.tma_Id">
+                                            {{tm.tma_Descripcion}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <!--  <div class="col-md-3">Foto</div> -->
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Marca</mat-label>
+                                    <input matInput formControlName="txtMarcaMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Modelo</mat-label>
+                                    <input matInput formControlName="txtModeloMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Año</mat-label>
+                                    <input matInput formControlName="txtAnioMaq">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Combustible</mat-label>
+                                    <mat-select formControlName="selCombustibleMaq">
+                                        <mat-option *ngFor="let comb of combustible" [value]="comb.value">
+                                            {{comb.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4 " align="center">
+                                <mat-slide-toggle formControlName="toogCilindroMaq" [checked]="maq.maq_CilindroGas === 'SI' ? true : false" (change)="setValueToggle( $event )">Con Cilindro de gas</mat-slide-toggle>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!--CARD INVENTARIO-->
+        <div class="card" id="card-maq">
+
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <h2>Inventario</h2>
+                        <p>Información para control de las máquinas</p>
+
+
+                    </div>
+                    <div class="col-md-8" align="right">
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Codigo</mat-label>
+                                    <input matInput formControlName="txtCodigoMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>N° Motor</mat-label>
+                                    <input matInput formControlName="txtMotorMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Estado Máquina</mat-label>
+                                    <mat-select formControlName="selEstadoMaq">
+                                        <mat-option *ngFor="let est of estadoMaquinaSelect" [value]="est.ema_Id">
+                                            {{est.ema_Descripcion}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!--  <div class="col-md-3">Foto</div> -->
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Patente</mat-label>
+                                    <input matInput formControlName="txtPatenteMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Límite Mantención</mat-label>
+                                    <input matInput formControlName="txtLimMantencionMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="arrow-right-mantencion">
+                                <mat-icon>swap_horiz</mat-icon>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Medida Mantención</mat-label>
+                                    <mat-select formControlName="selMedidaMantencionMaq">
+                                        <mat-option *ngFor="let md of medida" [value]="md.value">
+                                            {{md.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8" *ngIf="this.maq.maq_MedidaRenovacion !== 'Fecha'">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Valor Renovación</mat-label>
+                                    <input matInput formControlName="txtValorRenovacionMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-8" *ngIf="this.maq.maq_MedidaRenovacion === 'Fecha'">
+                                <mat-form-field appearance="outline" id="col-fecha-renovacion">
+                                    <mat-label>Fecha Renovación</mat-label>
+                                    <input matInput [matDatepicker]="FechaPicker" formControlName="dateFechaRenovacionMaq">
+                                    <mat-datepicker-toggle matSuffix [for]="FechaPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #FechaPicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="arrow-right-renovacion">
+                                <mat-icon>swap_horiz</mat-icon>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tipo Renovación</mat-label>
+                                    <mat-select formControlName="selTipoRenovacionMaq">
+                                        <mat-option *ngFor="let tr of renovacion" [value]="tr.value" (click)="validateShowFechaRenovacion( tr.viewValue )">
+                                            {{tr.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <!--CARD TARIFA-->
+        <div class="card" id="card-maq">
+            <!-- <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-12" align="left">
+                        <h2 class="mat-h2">Orden de trabajo</h2>
+                    </div>
+
+                </div>
+            </div> -->
+            <div class="card-body">
+
+                <div class="row" id="fila-busqueda-ot">
+                    <div class="col-md-4" id="card-titulo" align="left">
+
+                        <h2>Tarifas</h2>
+                        <p>Registro de costos y cobros</p>
+
+
+                    </div>
+                    <div class="col-md-8" align="right">
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" id="col-4-fields">
+                                    <mat-label>Fecha adquisición</mat-label>
+                                    <input matInput [matDatepicker]="FechaPicker" formControlName="dateFechaAdqMaq">
+                                    <mat-datepicker-toggle matSuffix [for]="FechaPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #FechaPicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Precio Compra</mat-label>
+                                    <input matInput formControlName="txtPrecioCompraMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Precio Venta</mat-label>
+                                    <input matInput formControlName="txtPrecioVentaMaq">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Precio Arriendo</mat-label>
+                                    <input matInput formControlName="txtPrecioArriendoMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="arrow-right-precio-arr">
+                                <mat-icon>swap_horiz</mat-icon>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Tipo Cobro Arriendo</mat-label>
+                                    <mat-select formControlName="selTipoCobroArriendoMaq">
+                                        <mat-option *ngFor="let tcm of tipoCobroMaquinaSelect" [value]="tcm.tcm_Id">
+                                            {{tcm.tcm_Descripcion}}
+                                        </mat-option>
+                                    </mat-select>
+
+                                </mat-form-field>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Valor Mínimo Arriendo</mat-label>
+                                    <input matInput formControlName="txtValorMinimoMaq">
+                                </mat-form-field>
+
+                            </div>
+                            <div class="arrow-right-valor-min">
+                                <mat-icon>swap_horiz</mat-icon>
+                            </div>
+                            <div class="col-md-4 ">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Tipo Valor Mínimo</mat-label>
+                                    <mat-select formControlName="selTipoValorMinimoMaq">
+                                        <mat-option *ngFor="let tvm of tipoValorMinimo" [value]="tvm.viewValue">
+                                            {{tvm.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Último Registro</mat-label>
+                                    <input matInput formControlName="txtUltimoRegistroMaq">
+                                </mat-form-field>
+                            </div>
+                            <div class="arrow-right-ultimo-reg">
+                                <mat-icon>swap_horiz</mat-icon>
+                            </div>
+                            <div class="col-md-4 ">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Tipo Registro</mat-label>
+
+                                    <mat-select formControlName="selTipoRegistroMaq">
+                                        <mat-option *ngFor="let trm of tipoRegistro" [value]="trm.value">
+                                            {{trm.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" align="right">
+            <div class="row">
+                <div class="col-md-10"> <button mat-raised-button type="button" color="primary" class="btn-formulario-cabecera" (click)="closeDialog()">Cancelar</button>
+                </div>
+                <div class="col-md-2"> <button mat-raised-button type="submit" color="primary" class="btn-formulario-cabecera" [disabled]="maquinaForm.invalid">{{nombreBoton}}</button>
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+</div>

@@ -1,0 +1,129 @@
+<div class="container">
+
+    <div class="container">
+        <div class="row cabecera">
+            <div class="col-md-6 mt-3 p-2" align="left" style="height: 10px;">
+                <h1 class="mat-h1">Lista de Maquinarias</h1>
+            </div>
+            <div class="col-md-6 mt-4 pb-2" align="right" style="height: 10px;">
+                <button mat-raised-button color="primary" class="btn-nuevo-arriendo" (click)="addMaquina()">Nueva Máquina</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-1" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Estado</mat-label>
+                        <mat-select [(ngModel)]="selectedValueEstado" name="estado" (selectionChange)="regionFilter($any($event))">
+                            <mat-option value="Todos">Todos</mat-option>
+                            <mat-option *ngFor="let state of estados" [value]="state.value">
+                                {{state.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-10" align="right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Código/ Nombre / Marca</mat-label>
+                        <input matInput (keyup)="nombreRutFilter($any($event.target).value)">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-1" align="right">
+                    <button mat-mini-fab color="primary" aria-label="descarga">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="mat-elevation-z2">
+                <div class="table-responsive">
+
+                    <mat-table [dataSource]="dataSource" matSort class="tabla-mat">
+
+                        !-- Position Column -->
+                        <ng-container matColumnDef="codigo">
+                            <mat-header-cell *matHeaderCellDef> Codigo </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> <a routerLink="/main-maquina" (click)="viewCliente(element.maq_Id)"> {{element.maq_Codigo}} </a></mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.maq_Nombre}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="marca">
+                            <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.maq_Marca}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="tipoCobro">
+                            <mat-header-cell *matHeaderCellDef> Tipo cobro </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.maq_Tcm_Id.tcm_Descripcion}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <button type="button" class="btn badge" [ngClass]="{
+                                    'tbl-estado-naranja' : element.maq_Ema_Id.ema_Descripcion == 'Disponible',
+                                    'tbl-estado-azul' : element.maq_Ema_Id.ema_Descripcion == 'Arrendada',
+                                    'tbl-estado-rojo' : element.maq_Ema_Id.ema_Descripcion == 'Mantención',
+                                    'tbl-estado-verde' : element.maq_Ema_Id.ema_Descripcion == 'Reparación',
+                                    'tbl-estado-gris' : element.maq_Ema_Id.ema_Descripcion == 'Baja',
+                                    'tbl-estado-purpura' : element.maq_Ema_Id.ema_Descripcion == 'Vendida'
+
+                                }">
+                                    {{ element.maq_Ema_Id.ema_Descripcion }}
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mantencion">
+                            <mat-header-cell *matHeaderCellDef> Mantención </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> Cada {{element.maq_LimiteMantencion | FormatoNumeroMoneda}} {{element.maq_TiempoMantencion}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- <button type="button" class="btn  " routerLink="/detallearriendo">
+                                    <mat-icon>add</mat-icon>
+                                </button> -->
+                                <button type="button" class="btn  " (click)="viewCliente(element.maq_Id)">
+                                    <mat-icon>open_in_new</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="updateMaquina(element.maq_Id)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button type="button" class="btn  " (click)="eliminar()">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let element; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+</div>

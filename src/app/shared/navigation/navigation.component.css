@@ -1,0 +1,112 @@
+.sidenav {
+    /*RECUADRO DEL MENU VERTICAL*/
+    width: 270px;
+    background-color: #0f172a;
+}
+
+.sidenav .mat-toolbar {
+    /*titulo y cabecera del sidenav */
+    background-color: #0f172a;
+    color: rgb(255, 255, 255) !important;
+    font-size: 0.8rem;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.acordeon {
+    background-color: #0f172a;
+    box-shadow: none !important;
+    font-family: 'Ubuntu', sans-serif;
+    color: rgb(172, 174, 185);
+    font-size: 0.9rem;
+    right: 8px;
+}
+
+.color_cierre_expansion:hover {
+    /*soluciona error en color de fondo del acordeon al contraerlo en modo responsive */
+    background-color: #0f172a !important;
+}
+
+::ng-deep .color_cierre_expansion .mat-expansion-indicator:after {
+    /*CAMBIA COLOR DE FLECHA DEL ACORDEON*/
+    color: rgb(172, 174, 185);
+}
+
+.logo {
+    width: 250px;
+}
+
+#btnLeft:active {
+    transform: scale(0.95);
+    overflow: hidden;
+}
+
+.is-active {
+    /*al activarse una opcion del menu*/
+    color: #ffffff !important;
+    background-color: #2c3344 !important;
+    border-radius: 5px;
+    max-width: 90%;
+    left: 10px;
+}
+
+.titulo_menu {
+    /*TITULOS MENU (CONSULTAS)*/
+    color: #9ba5ff;
+    margin-left: 17px;
+    font-family: 'Ubuntu', sans-serif;
+    margin-top: 50px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.mat-list-item {
+    /*LISTADO DE MENU */
+    font-family: 'Ubuntu', sans-serif;
+    color: rgb(172, 174, 185);
+    font-size: 0.9rem;
+}
+
+.mat-sidenav-container {
+    /*FONDO DEL CONTENEDOR PRINCIPAL*/
+    background-color: #f1f5f9;
+    max-width: 100%;
+}
+
+mat-icon {
+    margin-right: 14px;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+}
+
+.name {
+    /*NOMBRE USUARIO*/
+    font-family: 'Ubuntu', sans-serif;
+    margin-top: 10px;
+    margin-bottom: 1px;
+    font-weight: normal;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+.designation {
+    /*USU_TITULO USUARIO*/
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.8rem;
+    color: rgb(172, 174, 185);
+    text-align: center;
+}
+
+
+/*color de barra horizontal superior*/
+
+.mat-elevation-z4 {
+    background-color: #ffffff;
+}
