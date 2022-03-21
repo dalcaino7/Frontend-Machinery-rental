@@ -71,12 +71,24 @@ export class MainMaquinaComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.MaqService.getListMaquinas().subscribe((maq: Maquina[]) => {
       this.listMaquinasTabla = maq;
+      for(let i=0; i < this.listMaquinasTabla.length; i++ ){
+
+        if(this.listMaquinasTabla[i].maq_LimiteMantencion === null ){
+          this.listMaquinasTabla[i].maq_LimiteMantencion = '';
+        }
+        if(this.listMaquinasTabla[i].maq_ValorRenovacion === null  ){
+          this.listMaquinasTabla[i].maq_ValorRenovacion = '';
+        }
+        if(this.listMaquinasTabla[i].maq_ValorMinArriendo === null){
+          this.listMaquinasTabla[i].maq_ValorMinArriendo = '';
+        }
+        if(this.listMaquinasTabla[i].maq_UltKmHm === null ){
+          this.listMaquinasTabla[i].maq_UltKmHm = '';
+        }
+      }
       this.dataSource.data = maq;
     });
 
-
-
-   // this.filtroBusquedaTable();
   }
 
   updateMaquina(id: number) {

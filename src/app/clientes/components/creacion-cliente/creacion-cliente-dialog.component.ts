@@ -28,6 +28,7 @@ import * as _ from 'lodash'; //paquete para el manejo de matrices
   templateUrl: './creacion-cliente-dialog.component.html',
   styleUrls: ['./creacion-cliente-dialog.component.css'],
 })
+
 export class CreacionClienteDialogComponent implements OnInit {
   selectedValueRegion: string = ''; //guarda el nombre de la region
   selectedValueComuna: string = ''; // guarda el nombre de la comuna

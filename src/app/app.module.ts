@@ -94,8 +94,7 @@ export const MY_FORMATS = {
     VerClienteDialogComponent,
     CreacionClienteDialogComponent,
     SearchFilterTablePipe,
-    FormatoNumeroMonedaPipe,
-    
+    FormatoNumeroMonedaPipe    
   ],
   imports: [
     BrowserModule,

@@ -25,12 +25,28 @@ export class VerMaquinaDialogComponent implements OnInit {
     this.showCliente();
   }
 
+
   showCliente(){        
     //this.actRou.params.subscribe( () => {
       if(this.idMaq.idMaquinaDialog){    
         this.maqServ.getMaquina(this.idMaq.idMaquinaDialog).subscribe(
           (maq) => {            
-            this.maquina = maq}
+            this.maquina = maq
+
+            if(this.maquina.maq_LimiteMantencion === null ){
+              this.maquina.maq_LimiteMantencion = '0';
+            }
+            if(this.maquina.maq_ValorRenovacion === null ){
+              this.maquina.maq_ValorRenovacion = '0';
+            }
+            if(this.maquina.maq_ValorMinArriendo === null ){
+              this.maquina.maq_ValorMinArriendo = '0';
+            }
+            if(this.maquina.maq_UltKmHm === null ){
+              this.maquina.maq_UltKmHm = '0';
+            }
+
+          }
         )
       }
     //})

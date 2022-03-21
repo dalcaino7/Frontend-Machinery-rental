@@ -33,25 +33,35 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Nombre</mat-label>
-                                    <input matInput formControlName="txtNombreMaq">
+                                    <input matInput formControlName="txtNombreMaq" maxlength="30">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Nombre" *ngIf="validatorsForm('txtNombreMaq')">
+                                    Requerido, mín. 2 caracteres
+                                 </span>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Descripción</mat-label>
-                                    <input matInput formControlName="txtDescripcionMaq">
+                                    <input matInput formControlName="txtDescripcionMaq" maxlength="30">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Descripcion" *ngIf="validatorsForm('txtDescripcionMaq')">
+                                    Requerido
+                                 </span>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Tipo Máquina</mat-label>
                                     <!--                                <mat-select formControlName="selTipoMaq" [value]="this.maq.tma_Id.tma_Descripcion"> -->
-                                    <mat-select formControlName="selTipoMaq">
+                                    <mat-select formControlName="selTipoMaq" required="true">
                                         <mat-option *ngFor="let tm of tipoMaquinaSelect" [value]="tm.tma_Id">
                                             {{tm.tma_Descripcion}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_TipoMaquina" *ngIf="validatorsForm('selTipoMaq')">
+                                    Requerido
+                                </span>
+
                             </div>
                             <!--  <div class="col-md-3">Foto</div> -->
 
@@ -60,21 +70,30 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Marca</mat-label>
-                                    <input matInput formControlName="txtMarcaMaq">
+                                    <input matInput formControlName="txtMarcaMaq" maxlength="30">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Marca" *ngIf="validatorsForm('txtMarcaMaq')">
+                                    Requerido
+                                 </span>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Modelo</mat-label>
-                                    <input matInput formControlName="txtModeloMaq">
+                                    <input matInput formControlName="txtModeloMaq" maxlength="30">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Modelo" *ngIf="validatorsForm('txtModeloMaq')">
+                                    Requerido
+                                 </span>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Año</mat-label>
-                                    <input matInput formControlName="txtAnioMaq">
+                                    <input matInput formControlName="txtAnioMaq" maxlength="4" (keypress)="($event.charCode >= 48 && $event.charCode <= 57)">
                                 </mat-form-field>
                             </div>
+                            <span class="form-text text-danger" id="validate_Anio" *ngIf="validatorsForm('txtAnioMaq')">
+                                Año inválido
+                            </span>
 
                         </div>
 
@@ -88,6 +107,7 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+
                             </div>
 
                             <div class="col-md-4 " align="center">
@@ -121,24 +141,31 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Codigo</mat-label>
-                                    <input matInput formControlName="txtCodigoMaq">
+                                    <input matInput formControlName="txtCodigoMaq" maxlength="20">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_Codigo" *ngIf="validatorsForm('txtCodigoMaq')">
+                                    Requerido
+                                 </span>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>N° Motor</mat-label>
-                                    <input matInput formControlName="txtMotorMaq">
+                                    <input matInput formControlName="txtMotorMaq" maxlength="50">
                                 </mat-form-field>
+
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Estado Máquina</mat-label>
-                                    <mat-select formControlName="selEstadoMaq">
+                                    <mat-select formControlName="selEstadoMaq" required="true">
                                         <mat-option *ngFor="let est of estadoMaquinaSelect" [value]="est.ema_Id">
                                             {{est.ema_Descripcion}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_EstadoMaquina" *ngIf="validatorsForm('selEstadoMaq')">
+                                    Requerido
+                                </span>
                             </div>
 
                             <!--  <div class="col-md-3">Foto</div> -->
@@ -148,14 +175,16 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Patente</mat-label>
-                                    <input matInput formControlName="txtPatenteMaq">
+                                    <input matInput formControlName="txtPatenteMaq" maxlength="30">
                                 </mat-form-field>
+
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Límite Mantención</mat-label>
-                                    <input matInput formControlName="txtLimMantencionMaq">
+                                    <input matInput formControlName="txtLimMantencionMaq" name="mantencion" maxlength="10" (keydown)="EnabledSelector($event, 'txtLimMantencionMaq', 'selMedidaMantencionMaq')" (keypress)="filterFloat($event, maquinaForm.controls.txtLimMantencionMaq, 'selMedidaMantencionMaq')">
                                 </mat-form-field>
+
                             </div>
                             <div class="arrow-right-mantencion">
                                 <mat-icon>swap_horiz</mat-icon>
@@ -163,20 +192,26 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Medida Mantención</mat-label>
-                                    <mat-select formControlName="selMedidaMantencionMaq">
+                                    <mat-select formControlName="selMedidaMantencionMaq" required="true">
+                                        <!-- [disabled]="this.maquinaForm.value['txtLimMantencionMaq'] === ''" -->
                                         <mat-option *ngFor="let md of medida" [value]="md.value">
                                             {{md.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_MedidaMantencion" *ngIf="validatorsSelectForm('selMedidaMantencionMaq')">
+                                    Requerido
+                                </span>
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-8" *ngIf="this.maq.maq_MedidaRenovacion !== 'Fecha'">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Valor Renovación</mat-label>
-                                    <input matInput formControlName="txtValorRenovacionMaq">
+                                    <input matInput formControlName="txtValorRenovacionMaq" maxlength="10" (keydown)="EnabledSelector($event, 'txtValorRenovacionMaq', 'selTipoRenovacionMaq')" (keypress)="filterFloat($event, maquinaForm.controls.txtValorRenovacionMaq, 'selTipoRenovacionMaq')">
                                 </mat-form-field>
+
                             </div>
                             <div class="col-md-8" *ngIf="this.maq.maq_MedidaRenovacion === 'Fecha'">
                                 <mat-form-field appearance="outline" id="col-fecha-renovacion">
@@ -185,6 +220,7 @@
                                     <mat-datepicker-toggle matSuffix [for]="FechaPicker"></mat-datepicker-toggle>
                                     <mat-datepicker #FechaPicker></mat-datepicker>
                                 </mat-form-field>
+
                             </div>
                             <div class="arrow-right-renovacion">
                                 <mat-icon>swap_horiz</mat-icon>
@@ -198,6 +234,9 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_TipoRenovacion" *ngIf="validatorsSelectForm('selTipoRenovacionMaq')">
+                                    Requerido
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -242,14 +281,16 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Precio Compra</mat-label>
-                                    <input matInput formControlName="txtPrecioCompraMaq">
+                                    <input matInput formControlName="txtPrecioCompraMaq" maxlength="9" (keypress)="($event.charCode >= 48 && $event.charCode <= 57)">
                                 </mat-form-field>
+
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Precio Venta</mat-label>
-                                    <input matInput formControlName="txtPrecioVentaMaq">
+                                    <input matInput formControlName="txtPrecioVentaMaq" maxlength="9" (keypress)="($event.charCode >= 48 && $event.charCode <= 57)">
                                 </mat-form-field>
+
                             </div>
 
                         </div>
@@ -257,33 +298,34 @@
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Precio Arriendo</mat-label>
-                                    <input matInput formControlName="txtPrecioArriendoMaq">
+                                    <input matInput formControlName="txtPrecioArriendoMaq" maxlength="10" (keydown)="EnabledSelector($event, 'txtPrecioArriendoMaq', 'selTipoCobroArriendoMaq')" (keypress)="filterFloat($event, maquinaForm.controls.txtPrecioArriendoMaq, 'selTipoCobroArriendoMaq')">
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_PrecioArriendo" *ngIf="validatorsForm('txtPrecioArriendoMaq')">
+                                    Requerido, no puede ser 0
+                                 </span>
                             </div>
                             <div class="arrow-right-precio-arr">
                                 <mat-icon>swap_horiz</mat-icon>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
-
                                     <mat-label>Tipo Cobro Arriendo</mat-label>
-                                    <mat-select formControlName="selTipoCobroArriendoMaq">
+                                    <mat-select formControlName="selTipoCobroArriendoMaq" required="true">
                                         <mat-option *ngFor="let tcm of tipoCobroMaquinaSelect" [value]="tcm.tcm_Id">
                                             {{tcm.tcm_Descripcion}}
                                         </mat-option>
                                     </mat-select>
-
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_TipoCobroArriendo" *ngIf="validatorsSelectForm('selTipoCobroArriendoMaq')">
+                                    Requerido
+                                </span>
                             </div>
-
-
                         </div>
-
                         <div class="row">
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Valor Mínimo Arriendo</mat-label>
-                                    <input matInput formControlName="txtValorMinimoMaq">
+                                    <input matInput formControlName="txtValorMinimoMaq" maxlength="10" (keydown)="EnabledSelector($event, 'txtValorMinimoMaq', 'selTipoValorMinimoMaq')" (keypress)="filterFloat($event, maquinaForm.controls.txtValorMinimoMaq, 'selTipoValorMinimoMaq')">
                                 </mat-form-field>
 
                             </div>
@@ -294,13 +336,15 @@
                                 <mat-form-field appearance="outline">
 
                                     <mat-label>Tipo Valor Mínimo</mat-label>
-                                    <mat-select formControlName="selTipoValorMinimoMaq">
+                                    <mat-select formControlName="selTipoValorMinimoMaq" required="true">
                                         <mat-option *ngFor="let tvm of tipoValorMinimo" [value]="tvm.viewValue">
                                             {{tvm.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-
+                                <span class="form-text text-danger" id="validate_TipoValMinArriendo" *ngIf="validatorsSelectForm('selTipoValorMinimoMaq')">
+                                    Requerido
+                                </span>
 
                             </div>
                         </div>
@@ -310,8 +354,9 @@
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Último Registro</mat-label>
-                                    <input matInput formControlName="txtUltimoRegistroMaq">
+                                    <input matInput formControlName="txtUltimoRegistroMaq" maxlength="10" (keydown)="EnabledSelector($event, 'txtUltimoRegistroMaq', 'selTipoRegistroMaq')" (keypress)="filterFloat($event, maquinaForm.controls.txtUltimoRegistroMaq, 'selTipoRegistroMaq')">
                                 </mat-form-field>
+
                             </div>
                             <div class="arrow-right-ultimo-reg">
                                 <mat-icon>swap_horiz</mat-icon>
@@ -321,12 +366,15 @@
 
                                     <mat-label>Tipo Registro</mat-label>
 
-                                    <mat-select formControlName="selTipoRegistroMaq">
+                                    <mat-select formControlName="selTipoRegistroMaq" required="true">
                                         <mat-option *ngFor="let trm of tipoRegistro" [value]="trm.value">
                                             {{trm.viewValue}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
+                                <span class="form-text text-danger" id="validate_TipoRegistro" *ngIf="validatorsSelectForm('selTipoRegistroMaq')">
+                                    Requerido
+                                </span>
 
                             </div>
                         </div>
@@ -340,7 +388,7 @@
             <div class="row">
                 <div class="col-md-10"> <button mat-raised-button type="button" color="primary" class="btn-formulario-cabecera" (click)="closeDialog()">Cancelar</button>
                 </div>
-                <div class="col-md-2"> <button mat-raised-button type="submit" color="primary" class="btn-formulario-cabecera" [disabled]="maquinaForm.invalid">{{nombreBoton}}</button>
+                <div class="col-md-2"> <button mat-raised-button type="submit" color="primary" class="btn-formulario-cabecera">{{nombreBoton}}</button>
                 </div>
             </div>
 
