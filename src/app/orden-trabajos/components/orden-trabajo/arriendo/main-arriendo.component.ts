@@ -10,6 +10,9 @@ import {
   FormControl,
 } from '@angular/forms';
 import { ResumenArriendoDialogComponent } from './creacion-arriendo/resumen-arriendo/resumen-arriendo-dialog.component';
+import { OrdenTrabajoService } from '../../../services/orden-trabajo.service';
+import { OrdenTrabajo } from '../../../models/orden-trabajo';
+import * as _ from 'lodash'; //paquete para el manejo de matrices
 
 @Component({
   selector: 'app-arriendo',
@@ -17,16 +20,22 @@ import { ResumenArriendoDialogComponent } from './creacion-arriendo/resumen-arri
   styleUrls: ['./main-arriendo.component.css'],
 })
 export class ArriendoComponent implements AfterViewInit {
+  selectedValueEstado: string = '';
+
   selectedValue: string = '';
   selectedCar: string = '';
+  ordenT: OrdenTrabajo = new OrdenTrabajo();
+  ordenTs: OrdenTrabajo[] = [];
+
+  listOtTabla: any = []; //contiene la lista de ot de la tabla
 
   estados: EstadoArriendos[] = [
-    { value: 'todos-0', viewValue: 'Todos' },
-    { value: 'en-terreno-1', viewValue: 'En Terreno' },
-    { value: 'sin-retorno-2', viewValue: 'Sin Retorno' },
-    { value: 'adeudado-3', viewValue: 'Adeudado' },
-    { value: 'finalizada-4', viewValue: 'Finalizada' },
-    { value: 'anulada-5', viewValue: 'Anulada' },
+    { value: 'Todos', viewValue: 'Todos' },
+    { value: 'Iniciada', viewValue: 'Iniciada' },
+    { value: 'En Progreso', viewValue: 'En Progreso' },
+    { value: 'Vencida', viewValue: 'Vencida' },
+    { value: 'Finalizada', viewValue: 'Finalizada' },
+    { value: 'Anulada', viewValue: 'Anulada' },
   ];
 
   displayedColumns: string[] = [
@@ -38,18 +47,75 @@ export class ArriendoComponent implements AfterViewInit {
     'fecha',
     'accion',
   ];
-  dataSource = new MatTableDataSource<arriendo>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<OrdenTrabajo>(this.ordenTs);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSortModule) sort!: MatSortModule;
 
   constructor(
     private formDetalleMaqOt: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public OtService: OrdenTrabajoService
   ) {}
 
   ngAfterViewInit() {
+    this.listArriendo();
+  }
+
+  listArriendo(){
     this.dataSource.paginator = this.paginator;
+    this.OtService.getListOt().subscribe((ot: OrdenTrabajo[]) => {
+      this.listOtTabla = ot;
+
+      console.log(this.listOtTabla);
+      
+      /* for(let i=0; i < this.listOtTabla.length; i++ ){
+        console.log(ot);
+
+        if(this.listOtTabla[i].maq_LimiteMantencion === null ){
+          this.listOtTabla[i].maq_LimiteMantencion = '';
+        }
+        if(this.listOtTabla[i].maq_ValorRenovacion === null  ){
+          this.listOtTabla[i].maq_ValorRenovacion = '';
+        }
+        if(this.listOtTabla[i].maq_ValorMinArriendo === null){
+          this.listOtTabla[i].maq_ValorMinArriendo = '';
+        }
+        if(this.listOtTabla[i].maq_UltKmHm === null ){
+          this.listOtTabla[i].maq_UltKmHm = '';
+        }
+      } */
+      this.dataSource.data = ot;
+    });
+
+  }
+ 
+  
+  estadoFilter($event: any) {
+    if ($event.value.toLowerCase() === 'todos') {
+      let filteredData = _.filter(this.listOtTabla, (item) => {
+        return item;
+      });
+      this.dataSource.data = filteredData;
+    } else {
+      /* FILTRO DE BUSQUEDA DE ESTADO EN TABLA */
+      let filteredData = _.filter(this.listOtTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
+        this.selectedValueEstado;
+        return item.otr_Estado.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
+      });
+      /* MUESTRA TABLA FILTRADA */
+      this.dataSource.data = filteredData;
+    }
+  }
+
+  /* Se guarda el filtro ingresado por cada evento onKey */
+  otClienteMaquinaFilter(filterValue: string) {
+    /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
+    filterValue = filterValue
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   applyFilter(filterValue: string) {
@@ -76,6 +142,8 @@ export class ArriendoComponent implements AfterViewInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  
 }
 
 interface EstadoArriendos {
@@ -83,7 +151,7 @@ interface EstadoArriendos {
   viewValue: string;
 }
 
-export interface arriendo {
+/* export interface arriendo {
   ot: number;
   cliente: string;
   comuna: string;
@@ -265,4 +333,4 @@ const ELEMENT_DATA: arriendo[] = [
     fecha: '02/11/2021',
     accion: 'Eliminar',
   },
-];
+]; */

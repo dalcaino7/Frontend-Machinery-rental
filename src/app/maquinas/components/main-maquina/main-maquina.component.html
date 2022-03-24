@@ -5,8 +5,11 @@
             <div class="col-md-6 mt-3 p-2" align="left" style="height: 10px;">
                 <h1 class="mat-h1">Lista de Maquinarias</h1>
             </div>
-            <div class="col-md-6 mt-4 pb-2" align="right" style="height: 10px;">
-                <button mat-raised-button color="primary" class="btn-nuevo-arriendo" (click)="addMaquina()">Nueva Máquina</button>
+            <div class="col-md-4 mt-4 pb-2" align="right" style="height: 10px;">
+                <button mat-raised-button class="btn-superior"> <!-- <mat-icon>settings</mat-icon>  --> Configuraciones</button>
+            </div>
+            <div class="col-md-2 mt-4 pb-2" align="right" style="height: 10px;">
+                <button mat-raised-button color="primary" class="btn-superior" (click)="addMaquina()">Nueva Máquina</button>
             </div>
         </div>
     </div>
@@ -18,7 +21,7 @@
                 <div class="col-md-1" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>Estado</mat-label>
-                        <mat-select [(ngModel)]="selectedValueEstado" name="estado" (selectionChange)="regionFilter($any($event))">
+                        <mat-select [(ngModel)]="selectedValueEstado" name="estado" (selectionChange)="estadoFilter($any($event))">
                             <mat-option value="Todos">Todos</mat-option>
                             <mat-option *ngFor="let state of estados" [value]="state.value">
                                 {{state.viewValue}}

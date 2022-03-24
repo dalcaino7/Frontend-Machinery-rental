@@ -14,6 +14,8 @@ import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DetalleMaquinariaDialogComponent } from './detalle-maquinaria/detalle-maquinaria-dialog.component';
 import { ResumenArriendoDialogComponent } from './resumen-arriendo/resumen-arriendo-dialog.component';
+import { CreacionClienteDialogComponent } from '../../../../../clientes/components/creacion-cliente/creacion-cliente-dialog.component';
+import { CreacionMaquinaDialogComponent } from '../../../../../maquinas/components/creacion-maquina/creacion-maquina-dialog.component';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -79,6 +81,8 @@ export class CreacionArriendoComponent implements OnInit {
       tercerCtrl: ['', Validators.required],
     });
   }
+
+  
 
   onFormSubmit() {
     alert(JSON.stringify(this.formUbicacion.value, null, 2));
@@ -163,7 +167,27 @@ export class CreacionArriendoComponent implements OnInit {
     });
   }
 
+  addCliente() {
+    
+      const dialogRef = this.dialog.open(CreacionClienteDialogComponent, {
+        panelClass: 'custom-dialog-container-big-2',
+        data: { modeDialog: 'add'},
+      });
+    
+  }
+
+  addMaquina(){
+    const dialogRef = this.dialog.open(CreacionMaquinaDialogComponent, {
+      panelClass: 'custom-dialog-container-big-2',
+      data: { modeDialog: 'add'},
+    });
+  
+  }
+
   openDialog(x: string) {
+
+    
+
     if (x == 'resumen') {
       const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, {
         panelClass: 'custom-dialog-container-medium',
@@ -173,6 +197,8 @@ export class CreacionArriendoComponent implements OnInit {
         console.log(`Dialog result: ${result}`);
       });
     } else {
+      console.log("entro al else");
+      
       const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
         panelClass: 'custom-dialog-container-big',
       });
@@ -181,6 +207,9 @@ export class CreacionArriendoComponent implements OnInit {
         console.log(`Dialog result: ${result}`);
       });
     }
+
+  
+    
   }
 
   procesarOt() {
@@ -188,9 +217,10 @@ export class CreacionArriendoComponent implements OnInit {
     this.openDialog('resumen');
 
 
-   
-    
   }
+
+
+
 }
 
 interface regiones {

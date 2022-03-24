@@ -21,7 +21,7 @@
                 <div class="col-md-1" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>Estado</mat-label>
-                        <mat-select [(ngModel)]="selectedValue" name="state">
+                        <mat-select [(ngModel)]="selectedValue" name="state" (selectionChange)="estadoFilter($any($event))">
                             <mat-option *ngFor="let state of estados" [value]="state.value">
                                 {{state.viewValue}}
                             </mat-option>
@@ -31,7 +31,7 @@
                 <div class="col-md-7" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>N°/ Cliente/ Máquina</mat-label>
-                        <input matInput>
+                        <input matInput (keyup)="otClienteMaquinaFilter($any($event.target).value)">
                     </mat-form-field>
                 </div>
                 <div class="col-md-3" align="right">
@@ -62,25 +62,47 @@
                         !-- Position Column -->
                         <ng-container matColumnDef="ot">
                             <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo"> {{element.ot}} </a></mat-cell>
+                            <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> {{element.otr_Id}} </a></mat-cell>
                         </ng-container>
 
                         <!-- Name Column -->
                         <ng-container matColumnDef="cliente">
                             <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.cliente}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cli_Id.cli_Nombre}} {{element.cli_Id.cli_Apellidos}} </mat-cell>
                         </ng-container>
 
                         <!-- Weight Column -->
                         <ng-container matColumnDef="comuna">
                             <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.comuna}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cli_Id.cli_Comuna}} </mat-cell>
                         </ng-container>
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="maquina">
                             <mat-header-cell *matHeaderCellDef> Maquina </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.maquina}} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <span *ngFor="let maq of element.odm_Id">
+
+                                    <span *ngIf="element.odm_Id.length == 1">
+                                        {{maq.maq_Id.maq_Nombre}}  
+                                    </span>
+
+                                <span *ngIf="element.odm_Id.length == 2">
+                                    {{maq.maq_Id.maq_Nombre}},
+
+                                   <!--  maq.length : {{maq.filter(a=>a.maq).length}}
+
+                                    <!-- --><span *ngIf="maq.length == element.odm_Id.length">,</span>
+
+
+
+
+
+
+                                </span>
+                                </span>
+
+                            </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="estado">
@@ -88,35 +110,35 @@
                             <mat-cell *matCellDef="let element">
 
                                 <button type="button" class="btn badge" [ngClass]="{
-                                    'tbl-estado-naranja' : element.estado == 'Adeudada',
-                                    'tbl-estado-azul' : element.estado == 'En Terreno',
-                                    'tbl-estado-rojo' : element.estado == 'Sin Retorno',
-                                    'tbl-estado-verde' : element.estado == 'Finalizada',
-                                    'tbl-estado-gris' : element.estado == 'Anulada'
+                                    'tbl-estado-naranja' : element.otr_Estado == 'Iniciada',
+                                    'tbl-estado-azul' : element.otr_Estado == 'En Progreso',
+                                    'tbl-estado-rojo' : element.otr_Estado == 'Vencida',
+                                    'tbl-estado-verde' : element.otr_Estado == 'Finalizada',
+                                    'tbl-estado-gris' : element.otr_Estado == 'Anulada'
                                 }">
-                                    {{ element.estado }}
+                                    {{ element.otr_Estado }}
                                 </button>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="fecha">
                             <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.odm_Id[0].odm_FechaHoraInicio | date : 'dd/MM/YYYY'}} </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="accion">
                             <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <button type="button" class="btn  " routerLink="/detallearriendo">
+                                <button type="button" class="btn  " routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas">
                                     <mat-icon>add</mat-icon>
                                 </button>
-                                <button type="button" class="btn  ">
+                                <button type="button" class="btn  " matTooltip="Editar Orden de Arriendo">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button type="button" class="btn  " (click)="finalizar()">
+                                <button type="button" class="btn  " (click)="finalizar()" matTooltip="Finalizar Orden de Arriendo">
                                     <mat-icon>done</mat-icon>
                                 </button>
-                                <button type="button" class="btn  " (click)="anular()">
+                                <button type="button" class="btn  " (click)="anular()" matTooltip="Anular Orden de Arriendo">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                             </mat-cell>

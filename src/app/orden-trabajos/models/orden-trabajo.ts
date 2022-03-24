@@ -3,23 +3,23 @@ import { Cliente } from '../../clientes/models/cliente';
 
 export class OrdenTrabajo {
     
-    id: number=0;
-    tipo: string="";
-    fechaHrSalida: string="";
-    fechaHrRetorno: string="";
-    estado: string="";
-    impuesto: string="";
-    precioTotal: number=0;
-    estadoPago: string="";
-    formaPago: string="";
-    observacion: string="";
-    nivEstanSalida: string="";
-    traslado: string="";
-    combustible: string="";
+    otr_Id: number=0;
+    otr_Tipo: string="";
+    otr_FechaHoraSalida: string="";
+    otr_FechaHoraRetorno: string="";
+    otr_Estado: string="";
+    otr_Impuesto: string="";
+    otr_PrecioTotal: number=0;
+    otr_EstadoPago: string="";
+    otr_FormaPago: string="";
+    otr_Observacion: string="";
+    otr_NivelEstanqueSalida: string="";
+    otr_Traslado: string="";
+    otr_combustible: string="";
 
     /* RELACIONES DE CLASES */
-    otDetMaq: OtDetalleMaquina[] = [];
-    cli: Cliente = new Cliente;
+    otr_otDetMaq: OtDetalleMaquina[] = [];
+    cli_Id: Cliente = new Cliente;
     //usuario: Usuario;
 
 

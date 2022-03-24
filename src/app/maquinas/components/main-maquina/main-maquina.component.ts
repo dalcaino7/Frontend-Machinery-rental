@@ -106,7 +106,7 @@ export class MainMaquinaComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  regionFilter($event: any) {
+  estadoFilter($event: any) {
     if ($event.value.toLowerCase() === 'todos') {
       let filteredData = _.filter(this.listMaquinasTabla, (item) => {
         return item;
@@ -124,14 +124,14 @@ export class MainMaquinaComponent implements AfterViewInit {
   }
 
 
-  applyFilter(filterValue: string) {
+ /*  applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
+  } */
 
-  addDetalleArriendo() {}
-
+ /*  addDetalleArriendo() {}
+ */
   addMaquina() {
     this.openDialog('add');
   }
@@ -217,7 +217,7 @@ interface EstadoMaquina {
   value: string;
   viewValue: string;
 }
-
+/* 
 export interface maquina {
   codigo: number;
   nombre: string;
@@ -304,3 +304,4 @@ const ELEMENT_DATA: maquina[] = [
 ];
 
 
+ */

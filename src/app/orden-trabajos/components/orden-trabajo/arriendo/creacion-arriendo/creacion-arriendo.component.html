@@ -12,7 +12,6 @@
             </div>
         </div>
 
-
         <!--CARD ORDEN DE TRABAJO-->
         <div class="card" id="card-ot">
             <div class="card-header">
@@ -61,7 +60,7 @@
                         <h1 class="mat-h2">Cliente</h1>
                     </div>
                     <div class="col-md-6 mt-1 " id="boton-header-div" align="right">
-                        <button mat-raised-button color="primary" class="btn-formulario" routerLink="/cliente">Añadir</button>
+                        <button mat-raised-button color="primary" class="btn-formulario" (click)="addCliente()">Añadir</button>
                     </div>
                 </div>
             </div>
@@ -204,7 +203,7 @@
                         <h1 class="mat-h2">Maquinaria</h1>
                     </div>
                     <div class="col-md-6 mt-1 " id="boton-header-div" align="right">
-                        <button mat-raised-button color="primary" class="btn-formulario" routerLink="/main-maquina">Añadir</button>
+                        <button type="button" mat-raised-button color="primary" class="btn-formulario" (click)="addMaquina()">Añadir</button>
                     </div>
                 </div>
             </div>
@@ -312,7 +311,7 @@
         <div class="row ">
 
             <div class="col-md-12" id="boton-finalizar" align="right">
-                <button mat-raised-button color="primary" class="btn-formulario-footer">Finalizar</button>
+                <button type="submit" mat-raised-button color="primary" class="btn-formulario-footer">Finalizar</button>
             </div>
         </div>
 
