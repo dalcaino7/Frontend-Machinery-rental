@@ -16,6 +16,9 @@ import { DetalleMaquinariaDialogComponent } from './detalle-maquinaria/detalle-m
 import { ResumenArriendoDialogComponent } from './resumen-arriendo/resumen-arriendo-dialog.component';
 import { CreacionClienteDialogComponent } from '../../../../../clientes/components/creacion-cliente/creacion-cliente-dialog.component';
 import { CreacionMaquinaDialogComponent } from '../../../../../maquinas/components/creacion-maquina/creacion-maquina-dialog.component';
+import { ClienteService } from '../../../../../clientes/services/cliente.service';
+import { Cliente } from 'src/app/clientes/models/cliente';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -31,10 +34,72 @@ import { CreacionMaquinaDialogComponent } from '../../../../../maquinas/componen
 export class CreacionArriendoComponent implements OnInit {
   otForm!: FormGroup;
 
+  formUbicacion!: FormGroup;
+
+  public toggle_mostrarMapa = false;
+  // Configuración de Google Maps
+  map = null;
+  center: any;
+  zoom: any;
+  display?: google.maps.LatLngLiteral;
+  marker: any;
+  listClientesTabla: any = []; //contiene la lista de clientes de la tabla
+  clientes: Cliente[] = [];
+
+  // Configuración de combobox de direcciones
+
+  selectedValueRegion: string = '';
+  selectedValueComuna: string = '';
+  /*   email = new FormControl('', [Validators.required, Validators.email]);
+   */
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  tercerFormGroup!: FormGroup;
+
+  //dataSourceCliente = ELEMENT_DATA_CLIENTE;
+  dataSourceCliente = new MatTableDataSource<Cliente>(this.clientes);
+
+  dataSourceMaquinaria = ELEMENT_DATA_MAQUINARIA;
+
+  displayedColumnsCliente: string[] = [
+    'rut',
+    'nombre',
+    'comuna',
+    'deleteAction',
+  ];
+  displayedColumnsMaquinaria: string[] = [
+    'codigo',
+    'nombre',
+    'valorMinimo',
+    'precio',
+    'tipoCobro',
+    'acciones',
+  ];
+
+  region: regiones[] = [
+    { value: 'arica-0', viewValue: 'Arica' },
+    { value: 'iquique-1', viewValue: 'iquique' },
+    { value: 'antofagasta-2', viewValue: 'antofagasta' },
+    { value: 'valparaiso-3', viewValue: 'Valparaiso' },
+    { value: 'metropolitana-4', viewValue: 'Región Metropolitana' },
+    { value: 'ohiggins-5', viewValue: 'Libertador Bernardo Ohiggins' },
+  ];
+
+  comuna: comunas[] = [
+    { value: 'algarrobo-0', viewValue: 'algarrobo' },
+    { value: 'alhue-1', viewValue: 'Alhue' },
+    { value: 'camarones-2', viewValue: 'camarones' },
+    { value: 'hualpen-3', viewValue: 'hualpen' },
+    { value: 'independencia-4', viewValue: 'independencia' },
+    { value: 'lagranja-5', viewValue: 'la granja' },
+    { value: 'mostazal-5', viewValue: 'mostazal' },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     public locationService: LocationService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cliService: ClienteService
   ) {
     this.formUbicacion = formBuilder.group({
       select_region: '',
@@ -43,11 +108,9 @@ export class CreacionArriendoComponent implements OnInit {
       toggle_localizacion: ['', Validators.requiredTrue],
     });
 
-    console.log('fin constructor');
   }
 
   ngOnInit() {
-    console.log('init');
 
     /* DECLARACION DE FORMULARIO DE OT */
     this.otForm = this.formBuilder.group({
@@ -87,63 +150,6 @@ export class CreacionArriendoComponent implements OnInit {
   onFormSubmit() {
     alert(JSON.stringify(this.formUbicacion.value, null, 2));
   }
-
-  formUbicacion!: FormGroup;
-
-  public toggle_mostrarMapa = false;
-  // Configuración de Google Maps
-  map = null;
-  center: any;
-  zoom: any;
-  display?: google.maps.LatLngLiteral;
-  marker: any;
-
-  // Configuración de combobox de direcciones
-
-  selectedValueRegion: string = '';
-  selectedValueComuna: string = '';
-  /*   email = new FormControl('', [Validators.required, Validators.email]);
-   */
-  firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup;
-  tercerFormGroup!: FormGroup;
-
-  dataSource = ELEMENT_DATA_CLIENTE;
-  dataSourceMaquinaria = ELEMENT_DATA_MAQUINARIA;
-
-  displayedColumnsCliente: string[] = [
-    'rut',
-    'nombre',
-    'comuna',
-    'deleteAction',
-  ];
-  displayedColumnsMaquinaria: string[] = [
-    'codigo',
-    'nombre',
-    'valorMinimo',
-    'precio',
-    'tipoCobro',
-    'acciones',
-  ];
-
-  region: regiones[] = [
-    { value: 'arica-0', viewValue: 'Arica' },
-    { value: 'iquique-1', viewValue: 'iquique' },
-    { value: 'antofagasta-2', viewValue: 'antofagasta' },
-    { value: 'valparaiso-3', viewValue: 'Valparaiso' },
-    { value: 'metropolitana-4', viewValue: 'Región Metropolitana' },
-    { value: 'ohiggins-5', viewValue: 'Libertador Bernardo Ohiggins' },
-  ];
-
-  comuna: comunas[] = [
-    { value: 'algarrobo-0', viewValue: 'algarrobo' },
-    { value: 'alhue-1', viewValue: 'Alhue' },
-    { value: 'camarones-2', viewValue: 'camarones' },
-    { value: 'hualpen-3', viewValue: 'hualpen' },
-    { value: 'independencia-4', viewValue: 'independencia' },
-    { value: 'lagranja-5', viewValue: 'la granja' },
-    { value: 'mostazal-5', viewValue: 'mostazal' },
-  ];
 
   deleteCliente() {
     console.log('hola a todos');
@@ -207,19 +213,63 @@ export class CreacionArriendoComponent implements OnInit {
         console.log(`Dialog result: ${result}`);
       });
     }
-
-  
     
   }
-
   procesarOt() {
    // confirm('Está seguro de finalizar?');
     this.openDialog('resumen');
 
-
   }
 
+  rutClienteFilter(filterValue: string) {
+    /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
+ 
+    if(filterValue){
 
+ 
+
+    console.log("rut->",filterValue);
+    
+    this.dataSourceCliente.filter = filterValue; 
+
+    
+    this.cliService.getListClientes().subscribe((cli: Cliente[]) => {
+      this.dataSourceCliente.data = cli;
+      this.listClientesTabla = cli;
+      console.log("cli->",cli);
+
+
+     /*  cli.forEach(( e: any) => {
+        console.log("e.cli_Rut",e.cli_Rut);
+
+        if (filterValue === e.cli_Rut) {
+          console.log("filterValue === e.cli_Rut",filterValue," === ", e.cli_Rut);
+          console.log("e->",e);
+          
+         // filterValue = filterValue;
+          
+      
+         
+
+         
+
+
+        }
+        
+
+        
+        
+        
+      }); */
+
+    //  console.log("this.dataSourceCliente.data->",this.dataSourceCliente.data);
+      
+    });
+  }else{
+    console.log("vacio: filterValue->",filterValue);
+    this.dataSourceCliente.data = [];
+  }
+  }
 
 }
 

@@ -69,7 +69,7 @@
                     <div class="col-md-3" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Rut</mat-label>
-                            <input matInput formControlName="txtRutClienteOt">
+                            <input matInput formControlName="txtRutClienteOt" (keyup)="rutClienteFilter($any($event.target).value)">
                         </mat-form-field>
                     </div>
                     <div class="col-md-9" align="left">
@@ -86,21 +86,21 @@
 
                 <div class="row" id="fila-tabla-cliente">
                     <div class="table-responsive">
-                        <mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+                        <mat-table [dataSource]="dataSourceCliente" class="mat-elevation-z0">
 
                             <ng-container matColumnDef="rut">
                                 <mat-header-cell *matHeaderCellDef> Rut </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.rut}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.cli_Rut}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="nombre">
                                 <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.cli_Nombre}} {{element.cli_Apellidos}}</mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="comuna">
                                 <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.comuna}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.cli_Comuna}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="deleteAction">

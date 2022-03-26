@@ -22,6 +22,7 @@ export class ResumenArriendoDialogComponent implements OnInit {
     'total'
   ];
 
+  
 
   estados: EstadoArriendos[] = [
     { value: 'en-terreno-1', viewValue: 'Efectivo' },
