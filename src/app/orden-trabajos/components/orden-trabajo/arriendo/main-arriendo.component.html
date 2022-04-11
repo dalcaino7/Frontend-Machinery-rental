@@ -14,7 +14,6 @@
     </div>
 
 
-
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -52,8 +51,6 @@
                 </div>
             </div>
 
-
-
             <div class="mat-elevation-z2">
                 <div class="table-responsive">
 
@@ -65,42 +62,49 @@
                             <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> {{element.otr_Id}} </a></mat-cell>
                         </ng-container>
 
-                        <!-- Name Column -->
                         <ng-container matColumnDef="cliente">
                             <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.cli_Id.cli_Nombre}} {{element.cli_Id.cli_Apellidos}} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <span *ngIf="element.otr_Cli_Id.cli_RazonSocial">
+                                        {{element.otr_Cli_Id.cli_RazonSocial}}
+                                    </span>
+                                <span *ngIf="!element.otr_Cli_Id.cli_RazonSocial">
+                                        {{element.otr_Cli_Id.cli_Nombre}} {{element.otr_Cli_Id.cli_Apellidos}} 
+                                </span>
+
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreCliente">
+                            <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <span *ngIf="!element.otr_Cli_Id.cli_RazonSocial">{{element.otr_Cli_Id.cli_Nombre}} {{element.cli_Id.cli_Apellidos}}  </span>
+                            </mat-cell>
                         </ng-container>
 
                         <!-- Weight Column -->
                         <ng-container matColumnDef="comuna">
                             <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.cli_Id.cli_Comuna}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.otr_Cli_Id.cli_Comuna}} </mat-cell>
                         </ng-container>
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="maquina">
                             <mat-header-cell *matHeaderCellDef> Maquina </mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <span *ngFor="let maq of element.odm_Id">
+                                <div class="container-fluid p-0">
 
-                                    <span *ngIf="element.odm_Id.length == 1">
-                                        {{maq.maq_Id.maq_Nombre}}  
-                                    </span>
+                                    <div class="row button-box" *ngFor="let maq of element.otr_Odm_Id; let i=index">
 
-                                <span *ngIf="element.odm_Id.length == 2">
-                                    {{maq.maq_Id.maq_Nombre}},
+                                        <div class="col">
+                                            <button type="button" class="btn badge btn-without-focus" id="tbl-list-maquina-cian">
+                                                {{maq.odm_Maq_Id.maq_Nombre }}
+                                            </button>
+                                        </div>
 
-                                   <!--  maq.length : {{maq.filter(a=>a.maq).length}}
-
-                                    <!-- --><span *ngIf="maq.length == element.odm_Id.length">,</span>
-
-
-
-
-
-
-                                </span>
-                                </span>
+                                    </div>
+                                </div>
 
                             </mat-cell>
                         </ng-container>
@@ -109,7 +113,7 @@
                             <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
-                                <button type="button" class="btn badge" [ngClass]="{
+                                <button type="button" class="btn badge btn-without-focus" [ngClass]="{
                                     'tbl-estado-naranja' : element.otr_Estado == 'Iniciada',
                                     'tbl-estado-azul' : element.otr_Estado == 'En Progreso',
                                     'tbl-estado-rojo' : element.otr_Estado == 'Vencida',
@@ -123,7 +127,12 @@
 
                         <ng-container matColumnDef="fecha">
                             <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.odm_Id[0].odm_FechaHoraInicio | date : 'dd/MM/YYYY'}} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                {{element.otr_FechaHoraCreacionOt | date : 'dd/MM/YYYY'}}
+
+
+                            </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="accion">

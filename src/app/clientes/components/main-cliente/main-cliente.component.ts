@@ -40,6 +40,7 @@ export class ClienteComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Cliente>(this.clientes);
   displayedColumns: string[] = [
     'rut',
+    'razonSocial',
     'nombre',
     'region',
     'comuna',
@@ -97,9 +98,18 @@ export class ClienteComponent implements AfterViewInit {
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase();
       var nombreCompleto = nombre.concat(' '.concat(apellido));
+
+      var rsocial = data.cli_RazonSocial
+      .toString()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+
       return (
         data.cli_Rut.toString().toLowerCase().includes(filter) ||
-        nombreCompleto.includes(filter)
+        nombreCompleto.includes(filter) || 
+        rsocial.includes(filter)
       );
     };
   }

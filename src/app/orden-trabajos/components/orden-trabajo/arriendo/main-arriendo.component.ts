@@ -13,6 +13,8 @@ import { ResumenArriendoDialogComponent } from './creacion-arriendo/resumen-arri
 import { OrdenTrabajoService } from '../../../services/orden-trabajo.service';
 import { OrdenTrabajo } from '../../../models/orden-trabajo';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
+import { data } from 'jquery';
+import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
 
 @Component({
   selector: 'app-arriendo',
@@ -21,12 +23,13 @@ import * as _ from 'lodash'; //paquete para el manejo de matrices
 })
 export class ArriendoComponent implements AfterViewInit {
   selectedValueEstado: string = '';
-
   selectedValue: string = '';
   selectedCar: string = '';
   ordenT: OrdenTrabajo = new OrdenTrabajo();
   ordenTs: OrdenTrabajo[] = [];
-
+  detalleOrdenTrabajo: OtDetalleMaquina = new OtDetalleMaquina();
+  detalleOrdenTrabajos: OtDetalleMaquina[] = [];
+  validacionRazonSocial: boolean= false;
   listOtTabla: any = []; //contiene la lista de ot de la tabla
 
   estados: EstadoArriendos[] = [
@@ -47,6 +50,7 @@ export class ArriendoComponent implements AfterViewInit {
     'fecha',
     'accion',
   ];
+
   dataSource = new MatTableDataSource<OrdenTrabajo>(this.ordenTs);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -65,32 +69,21 @@ export class ArriendoComponent implements AfterViewInit {
   listArriendo(){
     this.dataSource.paginator = this.paginator;
     this.OtService.getListOt().subscribe((ot: OrdenTrabajo[]) => {
+
       this.listOtTabla = ot;
-
-      console.log(this.listOtTabla);
-      
-      /* for(let i=0; i < this.listOtTabla.length; i++ ){
-        console.log(ot);
-
-        if(this.listOtTabla[i].maq_LimiteMantencion === null ){
-          this.listOtTabla[i].maq_LimiteMantencion = '';
-        }
-        if(this.listOtTabla[i].maq_ValorRenovacion === null  ){
-          this.listOtTabla[i].maq_ValorRenovacion = '';
-        }
-        if(this.listOtTabla[i].maq_ValorMinArriendo === null){
-          this.listOtTabla[i].maq_ValorMinArriendo = '';
-        }
-        if(this.listOtTabla[i].maq_UltKmHm === null ){
-          this.listOtTabla[i].maq_UltKmHm = '';
-        }
-      } */
       this.dataSource.data = ot;
-    });
 
+      console.log("ot->",ot);
+      
+    
+      
+      
+    });
+    this.filtroBusquedaTable();
   }
  
-  
+
+
   estadoFilter($event: any) {
     if ($event.value.toLowerCase() === 'todos') {
       let filteredData = _.filter(this.listOtTabla, (item) => {
@@ -108,14 +101,71 @@ export class ArriendoComponent implements AfterViewInit {
     }
   }
 
+  /* PERMITE RETORNAR NOMBRE Y APELLIDOS JUNTOS PARA LA BUSQUEDA*/
+  filtroBusquedaTable() {
+    this.dataSource.filterPredicate = (data, filter: string): boolean => {
+      /*FORMATEA EL TEXTO ELIMINANDO TILDES Y DEJANDO EN MINUSCULA */
+
+      var maquinarias = [];
+      var rsocial = '';
+
+      var nombre = data.otr_Cli_Id.cli_Nombre
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+        
+      var apellido = data.otr_Cli_Id.cli_Apellidos
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase(); 
+
+      var nombreCompleto = nombre.concat(' '.concat(apellido));
+
+      if(data.otr_Cli_Id.cli_RazonSocial){
+        rsocial = data.otr_Cli_Id.cli_RazonSocial
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+      }
+
+    for (let i = 0; i < data.otr_Odm_Id.length; i++) { 
+          if(data.otr_Odm_Id[i].odm_Maq_Id.maq_Nombre){
+            maquinarias[i] = data.otr_Odm_Id[i].odm_Maq_Id.maq_Nombre
+            .toString()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+          }
+        }
+
+      if(data.otr_Cli_Id.cli_RazonSocial){
+          return (
+            maquinarias.join(' ').includes(filter)  || data.otr_Id.toString().includes(filter) ||
+            rsocial.includes(filter)
+          );
+      }else{
+        return (
+          maquinarias.join(' ').includes(filter) || data.otr_Id.toString().includes(filter) ||
+          nombreCompleto.includes(filter)
+        );
+      }
+    };
+  }
+
   /* Se guarda el filtro ingresado por cada evento onKey */
   otClienteMaquinaFilter(filterValue: string) {
     /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
+
     filterValue = filterValue
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
-    this.dataSource.filter = filterValue;
+
+      this.dataSource.filter = filterValue;
+
   }
 
   applyFilter(filterValue: string) {
@@ -137,9 +187,7 @@ export class ArriendoComponent implements AfterViewInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, { panelClass: 'custom-dialog-container-medium' });
-    console.log('open dialog');
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
     });
   }
 
@@ -150,187 +198,3 @@ interface EstadoArriendos {
   value: string;
   viewValue: string;
 }
-
-/* export interface arriendo {
-  ot: number;
-  cliente: string;
-  comuna: string;
-  maquina: string;
-  estado: string;
-  fecha: string;
-  accion: string;
-}
-
-const ELEMENT_DATA: arriendo[] = [
-  {
-    ot: 234,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'En Terreno',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 345,
-    cliente: 'Municipalidad Mostazal',
-    comuna: 'Mostazal',
-    maquina: 'Grua 02',
-    estado: 'Adeudada',
-    fecha: '04/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 344,
-    cliente: 'Juan Perez',
-    comuna: 'Graneros',
-    maquina: 'Camion 01',
-    estado: 'Sin Retorno',
-    fecha: '05/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 432,
-    cliente: 'Agricola San jose',
-    comuna: 'Linderos',
-    maquina: 'Tractor 01',
-    estado: 'Finalizada',
-    fecha: '06/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 6,
-    cliente: 'Gustavo Urzua',
-    comuna: 'Santiago',
-    maquina: 'Grua 01',
-    estado: 'Anulada',
-    fecha: '07/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 4,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Macul',
-    maquina: 'Grua 04',
-    estado: 'Arrendada',
-    fecha: '09/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 64,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Rancagua',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 66,
-    cliente: 'Municipalidad Paine',
-    comuna: 'ÑuÑoa',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 7544,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 987,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 566,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 333,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 664,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 33,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 675,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 487,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 123,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 11,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-  {
-    ot: 1,
-    cliente: 'Municipalidad Paine',
-    comuna: 'Paine',
-    maquina: 'Grua 01',
-    estado: 'Arrendada',
-    fecha: '02/11/2021',
-    accion: 'Eliminar',
-  },
-]; */

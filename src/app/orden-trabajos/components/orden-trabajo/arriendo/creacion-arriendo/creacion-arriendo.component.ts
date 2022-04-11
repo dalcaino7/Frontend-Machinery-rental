@@ -19,6 +19,9 @@ import { CreacionMaquinaDialogComponent } from '../../../../../maquinas/componen
 import { ClienteService } from '../../../../../clientes/services/cliente.service';
 import { Cliente } from 'src/app/clientes/models/cliente';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Maquina } from '../../../../../maquinas/models/maquina';
+import { MaquinaService } from '../../../../../maquinas/services/maquina.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -45,6 +48,7 @@ export class CreacionArriendoComponent implements OnInit {
   marker: any;
   listClientesTabla: any = []; //contiene la lista de clientes de la tabla
   clientes: Cliente[] = [];
+  maquinas: Maquina[] = [];
 
   // Configuración de combobox de direcciones
 
@@ -59,7 +63,10 @@ export class CreacionArriendoComponent implements OnInit {
   //dataSourceCliente = ELEMENT_DATA_CLIENTE;
   dataSourceCliente = new MatTableDataSource<Cliente>(this.clientes);
 
-  dataSourceMaquinaria = ELEMENT_DATA_MAQUINARIA;
+  //dataSourceMaquinaria = new MatTableDataSource<Maquina>(this.maquinas);
+    dataSourceMaquinaria = ELEMENT_DATA_MAQUINARIA;
+
+  listaMaquinasOptions!: Observable<string[]>;
 
   displayedColumnsCliente: string[] = [
     'rut',
@@ -99,7 +106,8 @@ export class CreacionArriendoComponent implements OnInit {
     private formBuilder: FormBuilder,
     public locationService: LocationService,
     public dialog: MatDialog,
-    private cliService: ClienteService
+    private cliService: ClienteService,
+    private maqService: MaquinaService
   ) {
     this.formUbicacion = formBuilder.group({
       select_region: '',
@@ -222,53 +230,130 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   rutClienteFilter(filterValue: string) {
-    /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
- 
+    let valorEncontrado: string;
     if(filterValue){
+      this.cliService.getListClientes().subscribe((cli: Cliente[]) => {
+        
+        console.log("INICIO");
 
- 
-
-    console.log("rut->",filterValue);
-    
-    this.dataSourceCliente.filter = filterValue; 
-
-    
-    this.cliService.getListClientes().subscribe((cli: Cliente[]) => {
-      this.dataSourceCliente.data = cli;
-      this.listClientesTabla = cli;
-      console.log("cli->",cli);
-
-
-     /*  cli.forEach(( e: any) => {
-        console.log("e.cli_Rut",e.cli_Rut);
-
-        if (filterValue === e.cli_Rut) {
-          console.log("filterValue === e.cli_Rut",filterValue," === ", e.cli_Rut);
-          console.log("e->",e);
-          
-         // filterValue = filterValue;
-          
       
-         
+      for(let i = 0; i < cli.length; i++){
 
-         
+        console.log("NO: cli[i].cli_Rut == filterValue->",cli[i].cli_Rut," == ",filterValue);
 
+        if(cli[i].cli_Rut === filterValue ){
+          this.dataSourceCliente.filter = filterValue; 
 
+          console.log("ENCONTRO! cli[i].cli_Rut == filterValue->",cli[i].cli_Rut," == ",filterValue);
+          this.dataSourceCliente.data = cli;
+
+          valorEncontrado = cli[i].cli_Rut
         }
-        
 
-        
-        
-        
-      }); */
+      }
 
-    //  console.log("this.dataSourceCliente.data->",this.dataSourceCliente.data);
+      if (!valorEncontrado) {
+        this.dataSourceCliente.data = [];
+
+      }
       
+     
+
+
     });
+    
   }else{
-    console.log("vacio: filterValue->",filterValue);
     this.dataSourceCliente.data = [];
   }
+  }
+
+  nombreClienteFilter(filterValue: string){
+
+    let valorEncontrado: string = '';
+    
+    
+    
+    if(filterValue){
+      this.cliService.getListClientes().subscribe((cli: Cliente[]) => {
+        
+     
+       console.log("INICIO");
+       console.log("filterValue->",filterValue);
+
+      for(let i = 0; i < cli.length; i++){
+
+        var nombre = cli[i].cli_Nombre
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+        var apellido = cli[i].cli_Apellidos
+          .toString()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase();
+
+        var nombreCompleto = nombre.concat(' '.concat(apellido));
+  
+
+
+        console.log("NO: cli[i].cli_Nombre == filterValue->",nombreCompleto," === ",filterValue);
+
+        if(nombreCompleto === filterValue ){
+          
+
+          this.dataSourceCliente.data = cli;
+          console.log(" this.dataSourceCliente.data->", this.dataSourceCliente.data);
+          
+
+          this.dataSourceCliente.filter = filterValue; 
+          console.log("this.dataSourceCliente.filter->",this.dataSourceCliente.filter);
+          
+
+          console.log("ENCONTRO! nombreCompleto == filterValue->",nombreCompleto," ===",filterValue);
+
+          valorEncontrado = nombreCompleto
+        }
+      }
+
+      if (!valorEncontrado) {
+        this.dataSourceCliente.data = [];
+
+      }
+      
+     
+
+
+    });
+    
+  }else{
+    this.dataSourceCliente.data = [];
+  }
+  }
+
+
+  /* Se guarda el filtro ingresado por cada evento onKey */
+  nombreRutFilter(filterValue: string) {
+    /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
+    filterValue = filterValue
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+   // this.dataSourceMaquinaria.filter = filterValue;
+
+
+     /* MUESTRA LA LISTA DE OPERARIOS */
+     /* filterValue = this.txtOperarioDetMaqOt.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value))
+    ); */
+/* this.maqService.getListMaquinas().subscribe( (m: any) =>
+
+
+
+) */
+    
   }
 
 }

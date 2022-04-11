@@ -91,17 +91,26 @@ mat-cell {
 
 /*redimension de columnas OT y CLIENTE de la tabla*/
 
-.mat-column-ot {
-    flex: 0 0 110px;
+.mat-column-rut {
+    flex: 0 0 120px;
 }
 
-.mat-column-cliente {
-    flex: 0 0 250px;
+.mat-column-razonSocial {
+    flex: 0 0 146px;
+    padding-right: 16px;
 }
 
-.mat-column-estado {
+.mat-column-nombre {
+    flex: 0 0 123px;
+    padding-right: 16px;
+}
+
+.mat-column-region {
     flex: 0 0 150px;
-    padding-left: 10px;
+}
+
+.mat-column-comuna {
+    flex: 0 0 100px;
 }
 
 .mat-column-accion {

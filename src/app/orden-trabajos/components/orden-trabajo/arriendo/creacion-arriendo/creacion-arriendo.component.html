@@ -75,7 +75,7 @@
                     <div class="col-md-9" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Nombre</mat-label>
-                            <input matInput formControlName="txtNombreClienteOt">
+                            <input matInput formControlName="txtNombreClienteOt" (keyup)="nombreClienteFilter($any($event.target).value)">
                         </mat-form-field>
                     </div>
                     <div class="col-md-3" align="right">
@@ -211,21 +211,20 @@
                 <div class="row" id="fila-busqueda-cliente">
                     <div class="col-md-3" align="left">
                         <mat-form-field appearance="outline">
-                            <mat-label>Código</mat-label>
-                            <input matInput formControlName="txtCodigoMaquinaOt">
+                            <mat-label>Código/ Nombre / Marca</mat-label>
+                            <input matInput (keyup)="nombreRutFilter($any($event.target).value)">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                <mat-option *ngFor="let maquina of listaMaquinasOptions | async" [value]="maquina">
+                                    {{maquina}}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3" align="left">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Nombre maquinaria</mat-label>
-                            <input matInput formControlName="txtNombreMaquinaOt">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3" align="left">
+                    <!-- <div class="col-md-3" align="left">
                         <button mat-mini-fab color="primary" aria-label="descarga">
                         <mat-icon>search</mat-icon>
                     </button>
-                    </div>
+                    </div> -->
 
                 </div>
 

@@ -39,7 +39,8 @@ mat-cell {
     border-radius: 7px;
     color: white;
     border: none;
-    font-size: 12px;
+    font-size: smaller;
+    font-weight: 500;
 }
 
 .tbl-estado-naranja {
@@ -47,7 +48,8 @@ mat-cell {
     border-radius: 7px;
     color: white;
     border: none;
-    font-size: 12px;
+    font-size: smaller;
+    font-weight: 500;
 }
 
 .tbl-estado-rojo {
@@ -55,7 +57,8 @@ mat-cell {
     border-radius: 7px;
     color: white;
     border: none;
-    font-size: 12px;
+    font-size: smaller;
+    font-weight: 500;
 }
 
 .tbl-estado-verde {
@@ -63,7 +66,8 @@ mat-cell {
     border-radius: 7px;
     color: white;
     border: none;
-    font-size: 12px;
+    font-size: smaller;
+    font-weight: 500;
 }
 
 .tbl-estado-gris {
@@ -71,7 +75,8 @@ mat-cell {
     border-radius: 7px;
     color: white;
     border: none;
-    font-size: 12px;
+    font-size: smaller;
+    font-weight: 500;
 }
 
 .tbl-accion {
@@ -88,25 +93,57 @@ mat-cell {
     line-height: 22px;
 }
 
+#tbl-list-maquina-cian {
+    background-color: rgb(0 227 217);
+    border-radius: 8px;
+    border: solid;
+    border-color: #ffffff;
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.btn-without-focus:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0);
+}
+
 
 /*redimension de columnas OT y CLIENTE de la tabla*/
 
 .mat-column-ot {
-    flex: 0 0 110px;
+    flex: 0 0 80px;
 }
 
 .mat-column-cliente {
-    flex: 0 0 250px;
+    flex: 0 0 240px;
+}
+
+.mat-column-comuna {
+    flex: 0 0 120px;
+    padding-left: 10px;
+}
+
+.mat-column-maquina {
+    flex: 0 0 265px;
 }
 
 .mat-column-estado {
-    flex: 0 0 150px;
-    padding-left: 10px;
+    flex: 0 0 130px;
+}
+
+.mat-column-fecha {
+    flex: 0 0 100px;
+    padding-right: 100px;
 }
 
 .mat-column-accion {
     /*  flex: 0 0 100px; */
-    padding-right: 100px;
+    padding-right: 30px;
+}
+
+.button-box {
+    display: inline-grid;
 }
 
 

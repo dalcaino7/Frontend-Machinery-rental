@@ -4,15 +4,15 @@ import { Maquina } from '../../maquinas/models/maquina';
 
 export class OtDetalleMaquina {
 
-    id: number=0;
-    fechaHrInicio: string="";  
-    controlInicio: number=0;  
-    fechaHrTermino: string="";  
-    controlTermino: number=0;  
-    firmaUsuario: string="";  
+    odm_Id: number=0;
+    odm_FechaHrInicio: string="";  
+    odm_ControlInicio: number=0;  
+    odm_FechaHrTermino: string="";  
+    odm_ControlTermino: number=0;  
+    odm_FirmaUsuario: string="";  
 
     /* RELACION ENTRE CLASES */
-    maquina: Maquina = new Maquina;
+    odm_Maq_Id: Maquina = new Maquina;
     
 
 }
