@@ -29,7 +29,7 @@
         "jquery": "^3.6.0",
         "jspdf": "^2.5.0",
         "lodash": "^4.17.21",
-        "moment": "^2.29.1",
+        "moment": "^2.29.3",
         "ng2-charts": "^2.4.3",
         "popper.js": "^1.16.1",
         "react-native-paper": "^4.10.1",

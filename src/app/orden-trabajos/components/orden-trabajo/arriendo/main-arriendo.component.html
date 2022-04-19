@@ -1,6 +1,7 @@
 <div class="container">
 
-
+    <!--     <form [formGroup]="rangeFormGroup">
+ -->
 
     <div class="container">
         <div class="row cabecera">
@@ -14,8 +15,11 @@
     </div>
 
 
+
     <div class="card">
         <div class="card-body">
+            <!--             <form [formGroup]="rangeFormGroup">
+ -->
             <div class="row">
                 <div class="col-md-1" align="right">
                     <mat-form-field appearance="outline">
@@ -36,30 +40,40 @@
                 <div class="col-md-3" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>Ingrese un rango de fechas</mat-label>
-                        <mat-date-range-input [rangePicker]="picker">
-                            <input matStartDate placeholder="Start date">
-                            <input matEndDate placeholder="End date">
+                        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Fecha inicio" #dateRangeStart>
+                            <input matEndDate formControlName="end" placeholder="Fecha término" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
                         </mat-date-range-input>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matSuffix (click)="clearStartDate()">
+                            <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                        </mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
+                        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha inicio inválida</mat-error>
+                        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha término inválida</mat-error>
                     </mat-form-field>
                 </div>
+
                 <div class="col-md-1" align="right">
                     <button mat-mini-fab color="primary" aria-label="descarga">
                         <mat-icon>download</mat-icon>
                     </button>
                 </div>
             </div>
-
+            <!--             </form>
+ -->
             <div class="mat-elevation-z2">
                 <div class="table-responsive">
 
-                    <mat-table [dataSource]="dataSource" matSort class="tabla-mat">
+                    <mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="tabla-mat">
 
-                        !-- Position Column -->
-                        <ng-container matColumnDef="ot">
-                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> {{element.otr_Id}} </a></mat-cell>
+                        <ng-container matColumnDef="otr_Id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> 
+                                    {{element.otr_Id}} 
+                                </a>
+                            </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="cliente">
@@ -76,20 +90,11 @@
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="nombreCliente">
-                            <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <span *ngIf="!element.otr_Cli_Id.cli_RazonSocial">{{element.otr_Cli_Id.cli_Nombre}} {{element.cli_Id.cli_Apellidos}}  </span>
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- Weight Column -->
-                        <ng-container matColumnDef="comuna">
+                        <ng-container matColumnDef="cli_Comuna">
                             <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element.otr_Cli_Id.cli_Comuna}} </mat-cell>
                         </ng-container>
 
-                        <!-- Symbol Column -->
                         <ng-container matColumnDef="maquina">
                             <mat-header-cell *matHeaderCellDef> Maquina </mat-header-cell>
                             <mat-cell *matCellDef="let element">
@@ -109,8 +114,8 @@
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="estado">
-                            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                        <ng-container matColumnDef="otr_Estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
                                 <button type="button" class="btn badge btn-without-focus" [ngClass]="{
@@ -125,8 +130,8 @@
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="fecha">
-                            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+                        <ng-container matColumnDef="otr_FechaHoraCreacionOt">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> Fecha </mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
                                 {{element.otr_FechaHoraCreacionOt | date : 'dd/MM/YYYY'}}
@@ -159,6 +164,8 @@
                     </mat-table>
 
                 </div>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
             </div>
 
@@ -167,6 +174,6 @@
         </div>
     </div>
 
-
+    <!-- </form> -->
 
 </div>

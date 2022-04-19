@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import {
   FormBuilder,
@@ -15,13 +16,23 @@ import { OrdenTrabajo } from '../../../models/orden-trabajo';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
 import { data } from 'jquery';
 import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-arriendo',
   templateUrl: './main-arriendo.component.html',
   styleUrls: ['./main-arriendo.component.css'],
 })
+
 export class ArriendoComponent implements AfterViewInit {
+  public date!: Date;
+
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+
+
   selectedValueEstado: string = '';
   selectedValue: string = '';
   selectedCar: string = '';
@@ -31,6 +42,7 @@ export class ArriendoComponent implements AfterViewInit {
   detalleOrdenTrabajos: OtDetalleMaquina[] = [];
   validacionRazonSocial: boolean= false;
   listOtTabla: any = []; //contiene la lista de ot de la tabla
+  //rangeFormGroup : any;
 
   estados: EstadoArriendos[] = [
     { value: 'Todos', viewValue: 'Todos' },
@@ -42,32 +54,44 @@ export class ArriendoComponent implements AfterViewInit {
   ];
 
   displayedColumns: string[] = [
-    'ot',
+    'otr_Id',
     'cliente',
-    'comuna',
+    'cli_Comuna',
     'maquina',
-    'estado',
-    'fecha',
+    'otr_Estado',
+    'otr_FechaHoraCreacionOt',
     'accion',
   ];
 
   dataSource = new MatTableDataSource<OrdenTrabajo>(this.ordenTs);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSortModule) sort!: MatSortModule;
+  //@ViewChild(MatSortModule) sort!: MatSortModule;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private formMainFilter: FormBuilder,
     private formDetalleMaqOt: FormBuilder,
     public dialog: MatDialog,
-    public OtService: OrdenTrabajoService
+    public OtService: OrdenTrabajoService,
+    private _liveAnnouncer: LiveAnnouncer
   ) {}
 
   ngAfterViewInit() {
+
+    
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.listArriendo();
+
+
+
   }
 
+
   listArriendo(){
-    this.dataSource.paginator = this.paginator;
+
+
     this.OtService.getListOt().subscribe((ot: OrdenTrabajo[]) => {
 
       this.listOtTabla = ot;
@@ -84,24 +108,9 @@ export class ArriendoComponent implements AfterViewInit {
  
 
 
-  estadoFilter($event: any) {
-    if ($event.value.toLowerCase() === 'todos') {
-      let filteredData = _.filter(this.listOtTabla, (item) => {
-        return item;
-      });
-      this.dataSource.data = filteredData;
-    } else {
-      /* FILTRO DE BUSQUEDA DE ESTADO EN TABLA */
-      let filteredData = _.filter(this.listOtTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
-        this.selectedValueEstado;
-        return item.otr_Estado.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
-      });
-      /* MUESTRA TABLA FILTRADA */
-      this.dataSource.data = filteredData;
-    }
-  }
+ 
 
-  /* PERMITE RETORNAR NOMBRE Y APELLIDOS JUNTOS PARA LA BUSQUEDA*/
+  /* PERMITE RETORNAR NOMBRE Y APELLIDOS JUNTOS PARA LA BUSQUEDA, N° OT Y MAQUINA */
   filtroBusquedaTable() {
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
       /*FORMATEA EL TEXTO ELIMINANDO TILDES Y DEJANDO EN MINUSCULA */
@@ -131,7 +140,7 @@ export class ArriendoComponent implements AfterViewInit {
         .toLowerCase();
       }
 
-    for (let i = 0; i < data.otr_Odm_Id.length; i++) { 
+      for (let i = 0; i < data.otr_Odm_Id.length; i++) { 
           if(data.otr_Odm_Id[i].odm_Maq_Id.maq_Nombre){
             maquinarias[i] = data.otr_Odm_Id[i].odm_Maq_Id.maq_Nombre
             .toString()
@@ -139,7 +148,7 @@ export class ArriendoComponent implements AfterViewInit {
             .replace(/[\u0300-\u036f]/g, '')
             .toLowerCase();
           }
-        }
+      }
 
       if(data.otr_Cli_Id.cli_RazonSocial){
           return (
@@ -155,6 +164,58 @@ export class ArriendoComponent implements AfterViewInit {
     };
   }
 
+  /* dateRangeFilter($event: any){
+
+    console.log("date->", this.range.value);
+    
+  } */
+
+  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
+  
+    let dateStart = dateRangeStart.value.toString().replace(/[/]/g,'-');
+      
+    let dateEnd = dateRangeEnd.value.toString().replace(/[/]/g,'-');
+
+    let filteredData = _.filter(this.listOtTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
+
+       let check = new Date(Date.parse(item.otr_FechaHoraCreacionOt)).toLocaleDateString('cl', { year: 'numeric', month: '2-digit', day: '2-digit' });
+       let dateCheck = check.replace(/[/]/g,'-');
+ 
+      return   moment(dateCheck,"DD-MM-YYYY").isBetween(moment(dateStart,"DD-MM-YYYY"), moment(dateEnd,"DD-MM-YYYY"), null, "[]") 
+
+    });
+
+    this.dataSource.data = filteredData;
+
+  }
+
+  clearStartDate() {
+    let filteredData = _.filter(this.listOtTabla, (item) => {
+      return item;
+    });
+    this.dataSource.data = filteredData;
+
+    this.range.patchValue({start:''});
+    this.range.patchValue({end:''});
+  }
+   
+  estadoFilter($event: any) {
+    if ($event.value.toLowerCase() === 'todos') {
+      let filteredData = _.filter(this.listOtTabla, (item) => {
+        return item;
+      });
+      this.dataSource.data = filteredData;
+    } else {
+      /* FILTRO DE BUSQUEDA DE ESTADO EN TABLA */
+      let filteredData = _.filter(this.listOtTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
+        this.selectedValueEstado;
+        return item.otr_Estado.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
+      });
+      /* MUESTRA TABLA FILTRADA */
+      this.dataSource.data = filteredData;
+    }
+  }
+
   /* Se guarda el filtro ingresado por cada evento onKey */
   otClienteMaquinaFilter(filterValue: string) {
     /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
@@ -163,7 +224,6 @@ export class ArriendoComponent implements AfterViewInit {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
-
       this.dataSource.filter = filterValue;
 
   }
@@ -172,6 +232,15 @@ export class ArriendoComponent implements AfterViewInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  announceSortChange(sortState: Sort) {
+
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
   }
 
   addDetalleArriendo() {}
