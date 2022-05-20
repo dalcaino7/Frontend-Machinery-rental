@@ -72,7 +72,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     { value: '14-4', viewValue: '1/4' },
   ];
 
-  dataArray = [];
+  //dataArray = [];
 
   txtOperarioDetMaqOt = new FormControl();
   // options: string[] = ['One', 'Two', 'Three'];

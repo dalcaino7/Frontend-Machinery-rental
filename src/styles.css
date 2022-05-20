@@ -91,6 +91,20 @@ body {
     max-height: inherit;
 }
 
+.custom-dialog-container-big-3 .mat-dialog-container {
+    /* add your styles */
+    display: block;
+    padding: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 1116px;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
 .custom-dialog-container-big-landscape .mat-dialog-container {
     /* add your styles */
     display: block;

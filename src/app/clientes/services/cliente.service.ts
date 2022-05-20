@@ -28,7 +28,8 @@ export class ClienteService {
         console.log(e.error.mensaje);
         swal.fire('Error al obtener clientes', e.error.mensaje, 'error');
         return throwError(e);
-      })
+      }
+      )
     );
   }
 

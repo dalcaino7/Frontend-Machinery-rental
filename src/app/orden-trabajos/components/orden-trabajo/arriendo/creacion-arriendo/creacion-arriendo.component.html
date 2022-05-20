@@ -60,26 +60,24 @@
                         <h1 class="mat-h2">Cliente</h1>
                     </div>
                     <div class="col-md-6 mt-1 " id="boton-header-div" align="right">
-                        <button mat-raised-button color="primary" class="btn-formulario" (click)="addCliente()">Añadir</button>
+                        <button type="button" mat-raised-button color="primary" class="btn-formulario" (click)="addCliente()">Añadir</button>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <div class="row" id="fila-busqueda-cliente">
-                    <div class="col-md-3" align="left">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Rut</mat-label>
-                            <input matInput formControlName="txtRutClienteOt" (keyup)="rutClienteFilter($any($event.target).value)">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-9" align="left">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Nombre</mat-label>
-                            <input matInput formControlName="txtNombreClienteOt" (keyup)="nombreClienteFilter($any($event.target).value)">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3" align="right">
+                <div class="row">
+                    <div class="col-md-12" align="left">
+                        <mat-form-field appearance="outline" id="busqueda-cliente">
+                            <mat-label>Rut, Nombre / Razón social</mat-label>
+                            <input type="text" placeholder="Escriba y Seleccione" matInput [formControl]="txtRutCliente" [matAutocomplete]="auto" (keyup)="busquedaClienteFilter($any($event.target).value)">
 
+                            <mat-autocomplete class="option-cliente-list" #auto="matAutocomplete">
+                                <mat-option id="option-cliente-list" *ngFor="let clienteList of filteredClienteList | async" [value]="clienteList" (click)="showCliente(clienteList)">
+                                    {{clienteList}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </mat-form-field>
                     </div>
 
                 </div>
@@ -91,6 +89,10 @@
                             <ng-container matColumnDef="rut">
                                 <mat-header-cell *matHeaderCellDef> Rut </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.cli_Rut}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="razonSocial">
+                                <mat-header-cell *matHeaderCellDef> Razon Social </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.cli_RazonSocial}}</mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="nombre">
@@ -151,9 +153,9 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Región</mat-label>
-                            <mat-select formControlName="txtRegionContactoClienteOt">
-                                <mat-option *ngFor="let rg of region" [value]="rg.value">
-                                    {{rg.viewValue}}
+                            <mat-select formControlName="txtRegionContactoClienteOt" [(ngModel)]="cli.cli_Region" (selectionChange)="regionFilter($any($event))">
+                                <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre">
+                                    {{rgn.nombre}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -161,9 +163,9 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Comuna</mat-label>
-                            <mat-select formControlName="txtComunaContactoClienteOt">
-                                <mat-option *ngFor="let cmn of comuna" [value]="cmn.value">
-                                    {{cmn.viewValue}}
+                            <mat-select formControlName="txtComunaContactoClienteOt" [(ngModel)]="cli.cli_Comuna">
+                                <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
+                                    {{cmn.nombre}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

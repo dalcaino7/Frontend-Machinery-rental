@@ -25,6 +25,18 @@
     display: block;
 }
 
+.mat-autocomplete {
+    width: 100px;
+}
+
+.mat-option {
+    font-size: 14px !important;
+}
+
+#busqueda-cliente {
+    width: 450px;
+}
+
 #boton-finalizar {
     padding-right: 25px;
     height: 10px;
@@ -48,9 +60,10 @@
     /*Da la separacion entre input */
 }
 
-#fila-busqueda-cliente {
+
+/* #fila-busqueda-cliente {
     max-width: 80%;
-}
+} */
 
 #fila-tabla-cliente {
     padding-bottom: 10px;
@@ -179,15 +192,19 @@ mat-row {
 /*redimension de columnas de tabla*/
 
 .mat-column-rut {
-    flex: 0 0 220px;
+    flex: 0 0 160px;
+}
+
+.mat-column-razonSocial {
+    flex: 0 0 250px;
 }
 
 .mat-column-nombre {
-    flex: 0 0 350px;
+    flex: 0 0 260px;
 }
 
 .mat-column-comuna {
-    flex: 0 0 300px;
+    flex: 0 0 235px;
 }
 
 .mat-column-deleteAction {

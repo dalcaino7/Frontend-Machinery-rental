@@ -197,7 +197,7 @@ export class CreacionClienteDialogComponent implements OnInit {
     this.cli.cli_Estado_Pago = 'Sin Registro';
 
     this.cliService.createCliente(this.cli).subscribe((resp) => {
-      this.rou.navigate(['main-cliente']);
+      //this.rou.navigate(['main-cliente']);
       Swal.fire({
         position: 'center',
         icon: 'success',
