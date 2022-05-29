@@ -40,7 +40,9 @@ import { Comuna } from 'src/app/models/comuna';
   ],
 })
 export class CreacionArriendoComponent implements OnInit {
-  txtRutCliente = new FormControl();
+  txtBusquedaCliente = new FormControl();
+  txtBusquedaMaquina = new FormControl();
+
   public cli: Cliente = new Cliente();
 
   otForm!: FormGroup;
@@ -69,26 +71,15 @@ export class CreacionArriendoComponent implements OnInit {
   secondFormGroup!: FormGroup;
   tercerFormGroup!: FormGroup;
 
-  //dataSourceCliente = ELEMENT_DATA_CLIENTE;
   dataSourceCliente = new MatTableDataSource<Cliente>(this.clientes);
-  
-  //dataSourceMaquinaria = new MatTableDataSource<Maquina>(this.maquinas);
-  dataSourceMaquinaria = ELEMENT_DATA_MAQUINARIA;
+  dataSourceMaquinaria = new MatTableDataSource<Maquina>(this.maquinas);
 
-  listaMaquinasOptions!: Observable<string[]>;
   filteredClienteList!: Observable<string[]>;
+  filteredMaquinaList!: Observable<string[]>;
 
-  //listClientes_flag: any = []; //contiene la lista de clientes de la tabla
   listClientesListInput: any = [];
-  //matrizClientesColumn: any = [];
-  //clienteList: any = [];
- /*  clienteList: any = [
-    '11111111-1 | Juan Pablo Moya',
-    '12345567-7 | Ramón Perez Oyarce',
-    '33456345-2 | Pedro Ortuza',
-    '22333444-5 | Daniel Esteban Solis',
-    '1111222-3 | Marcelo Diaz Lopez',
-  ]; */
+  listMaquinasListInput: any = [];
+
 
   displayedColumnsCliente: string[] = [
     'rut',
@@ -110,25 +101,6 @@ export class CreacionArriendoComponent implements OnInit {
   regionSelect: any[] = []; //Muestra la lista del select en el template
   comunaSelect: any[] = [];
 
- /*  region: regiones[] = [
-    { value: 'arica-0', viewValue: 'Arica' },
-    { value: 'iquique-1', viewValue: 'iquique' },
-    { value: 'antofagasta-2', viewValue: 'antofagasta' },
-    { value: 'valparaiso-3', viewValue: 'Valparaiso' },
-    { value: 'metropolitana-4', viewValue: 'Región Metropolitana' },
-    { value: 'ohiggins-5', viewValue: 'Libertador Bernardo Ohiggins' },
-  ];
-
-  comuna: comunas[] = [
-    { value: 'algarrobo-0', viewValue: 'algarrobo' },
-    { value: 'alhue-1', viewValue: 'Alhue' },
-    { value: 'camarones-2', viewValue: 'camarones' },
-    { value: 'hualpen-3', viewValue: 'hualpen' },
-    { value: 'independencia-4', viewValue: 'independencia' },
-    { value: 'lagranja-5', viewValue: 'la granja' },
-    { value: 'mostazal-5', viewValue: 'mostazal' },
-  ];
- */
 
   constructor(
     private formBuilder: FormBuilder,
@@ -147,46 +119,11 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listRegiones();
+    /*  FUNCIONALIDAD CLIENTE */
+    this.listCliente();
 
-    this.cliService.getListClientes().subscribe((cli) => {
-      
-      this.listClientesListInput = cli;
-    
-      for (let i = 0; i < cli.length; i++) {
-        
-        if (!cli[i].cli_RazonSocial || cli[i].cli_RazonSocial === null) {
-          this.listClientesListInput[i] =
-            cli[i].cli_Rut +
-            '  '+' | ' +'  '+
-            cli[i].cli_Nombre +
-            ' ' +
-            cli[i].cli_Apellidos;
-        } else {
-          this.listClientesListInput[i] =
-            cli[i].cli_Rut +
-            '  '+' | ' +'  '+
-            cli[i].cli_RazonSocial +
-            '  '+' | ' +'  '+
-            cli[i].cli_Nombre +
-            ' ' +
-            cli[i].cli_Apellidos; 
-            
-        }
-      }
-      //console.log('this.listClientes_flag FINAL->', this.listClientesList);
-      console.log("listClientesList[][]->",this.listClientesListInput);
-
-    });
-
-    this.filteredClienteList = this.txtRutCliente.valueChanges.pipe(
-      startWith(''),
-      map(
-        (value) =>
-          //console.log("value->",this._filter(value))
-          this._filter(value) //va al metodo filter
-      )
-    );
+    /*  FUNCIONALIDAD MAQUINARIA */
+    this.listMaquina();
 
     /* DECLARACION DE FORMULARIO DE OT */
     this.otForm = this.formBuilder.group({
@@ -219,6 +156,76 @@ export class CreacionArriendoComponent implements OnInit {
     this.tercerFormGroup = this.formBuilder.group({
       tercerCtrl: ['', Validators.required],
     });
+    this.listRegiones();
+  } // fin Init
+
+  listCliente(){
+    this.cliService.getListClientes().subscribe((cli) => {
+      this.listClientesListInput = cli;
+    
+      for (let i = 0; i < cli.length; i++) {
+        if (!cli[i].cli_RazonSocial || cli[i].cli_RazonSocial === null) {
+          this.listClientesListInput[i] =
+            cli[i].cli_Rut +
+            '  '+' | ' +'  '+
+            cli[i].cli_Nombre +
+            ' ' +
+            cli[i].cli_Apellidos;
+        } else {
+          this.listClientesListInput[i] =
+            cli[i].cli_Rut +
+            '  '+' | ' +'  '+
+            cli[i].cli_RazonSocial +
+            '  '+' | ' +'  '+
+            cli[i].cli_Nombre +
+            ' ' +
+            cli[i].cli_Apellidos; 
+        }
+      }
+    });
+
+    this.filteredClienteList = this.txtBusquedaCliente.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterCliente(value) //va al metodo filter
+    ));
+
+  }
+
+  listMaquina(){
+    this.maqService.getListMaquinas().subscribe((maq) => {
+      this.listMaquinasListInput = maq;
+    
+      for (let i = 0; i < maq.length; i++) {
+          this.listMaquinasListInput[i] = 
+            maq[i].maq_Codigo +
+            '  '+' | ' +'  '+
+            maq[i].maq_Nombre +
+            '  '+' | ' +'  '+
+            maq[i].maq_Marca;
+
+      }
+    });
+
+    this.filteredMaquinaList = this.txtBusquedaMaquina.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterMaquina(value) //va al metodo filter
+    ));
+
+  }
+
+  /* metodo que entra en el init */
+  private _filterCliente(value: string): string[] {
+    const filterValueCli = value.toLowerCase();
+    return this.listClientesListInput.filter((option: string) =>
+      option.toLowerCase().includes(filterValueCli)
+    );
+  }
+
+  private _filterMaquina(value: string): string[] {
+    const filterValueMaq = value.toLowerCase();
+    return this.listMaquinasListInput.filter((option: string) =>
+      option.toLowerCase().includes(filterValueMaq)
+    );
   }
 
   listRegiones() {
@@ -242,12 +249,13 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   showCliente(dataCliente: any){
-
-  this.txtRutCliente.setValue('');
-   let rutSearch = dataCliente.substring(0,12).replace('|',' ').trim();
+    //console.log("HII");
+    
+    this.txtBusquedaCliente.setValue('');
+    let cliSearch = dataCliente.substring(0,12).replace('|',' ').trim();
     this.cliService.getListClientes().subscribe((cli) => {
     for (let i = 0; i < cli.length; i++) {
-      if(cli[i].cli_Rut == rutSearch){
+      if(cli[i].cli_Rut == cliSearch){
         this.dataSourceCliente.filter = cli[i].cli_Rut
         this.dataSourceCliente.data = cli
       }
@@ -255,17 +263,33 @@ export class CreacionArriendoComponent implements OnInit {
     });
   }
 
-  /* metodo que entra en el init */
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-   // console.log('_filter');
+  showMaquina(dataMaquina: any){
 
-    //console.log('this.clienteList->', this.listClientes_flag);
+    //console.log("dataMaquina->",dataMaquina);
     
-    return this.listClientesListInput.filter((option: string) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    this.txtBusquedaMaquina.setValue('');
+
+    //console.log("MAQ->",dataMaquina);
+    let maqSearch = dataMaquina.substring(0,dataMaquina.indexOf('|')).trim();//.lastIndexOf('|')//.substring(0,12).replace('|',' ').trim();
+    this.maqService.getListMaquinas().subscribe((maq) => {
+      for (let i = 0; i < maq.length; i++) {
+        if(maq[i].maq_Codigo == maqSearch){
+
+          //this.dataSourceMaquinaria.filter = maq[i].maq_Codigo
+          this.dataSourceMaquinaria.data.push(maq[i]);
+          this.dataSourceMaquinaria.data = this.dataSourceMaquinaria.data.slice();
+
+          console.log("maqSearch->",maqSearch);
+
+        }
+      }
+    
+    });
+
+
   }
+
+  
 
   onFormSubmit() {
     alert(JSON.stringify(this.formUbicacion.value, null, 2));
@@ -275,6 +299,9 @@ export class CreacionArriendoComponent implements OnInit {
     this.dataSourceCliente.data = [];
   }
 
+  deleteMaquina() {
+    this.dataSourceMaquinaria.data = [];
+  }
  /*  mostrarMapa() {
     if (this.toggle_mostrarMapa) {
       let location = this.getLocation();
@@ -333,31 +360,7 @@ export class CreacionArriendoComponent implements OnInit {
     this.openDialog('resumen');
   }
 
-  /* rutClienteFilter(filterValue: string) {
-    let valorEncontrado: string;
-    if (filterValue) {
-      this.cliService.getListClientes().subscribe((cli: Cliente[]) => {
-        for (let i = 0; i < cli.length; i++) {
-          //  console.log("NO: cli[i].cli_Rut == filterValue->",cli[i].cli_Rut," == ",filterValue);
 
-          if (cli[i].cli_Rut === filterValue) {
-            this.dataSourceCliente.filter = filterValue;
-
-            //console.log("ENCONTRO! cli[i].cli_Rut == filterValue->",cli[i].cli_Rut," == ",filterValue);
-            this.dataSourceCliente.data = cli;
-
-            valorEncontrado = cli[i].cli_Rut;
-          }
-        }
-
-        if (!valorEncontrado) {
-          this.dataSourceCliente.data = [];
-        }
-      });
-    } else {
-      this.dataSourceCliente.data = [];
-    }
-  } */
 
   busquedaClienteFilter(filterValue: string) {
    /*  let valorEncontrado: string = '';
@@ -432,7 +435,8 @@ export class CreacionArriendoComponent implements OnInit {
   /* Se guarda el filtro ingresado por cada evento onKey */
   nombreRutFilter(filterValue: string) {
     /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
-    console.log('nombreRutFilter');
+    //
+  //console.log('nombreRutFilter');
 
     filterValue = filterValue
       .normalize('NFD')
@@ -471,14 +475,6 @@ export interface clienteTable {
   deleteAction: string;
 }
 
-const ELEMENT_DATA_CLIENTE: clienteTable[] = [
-  {
-    rut: '12.345.987-9',
-    nombre: 'Municipalidad Paine',
-    comuna: 'Paine',
-    deleteAction: '',
-  },
-];
 
 export interface maquinariaTable {
   codigo: string;
@@ -489,29 +485,3 @@ export interface maquinariaTable {
   acciones: string;
 }
 
-const ELEMENT_DATA_MAQUINARIA: maquinariaTable[] = [
-  {
-    codigo: '0213',
-    nombre: 'Grua 01',
-    valorMinimo: '160 Hrs.',
-    precio: 6000,
-    tipoCobro: 'Hora',
-    acciones: '',
-  },
-  {
-    codigo: '1533',
-    nombre: 'Camion de remolque 02',
-    valorMinimo: '1 día',
-    precio: 10000,
-    tipoCobro: 'Día',
-    acciones: '',
-  },
-  {
-    codigo: '1456',
-    nombre: 'Rastrillo 01',
-    valorMinimo: '1 día',
-    precio: 2000,
-    tipoCobro: 'Día',
-    acciones: '',
-  },
-];

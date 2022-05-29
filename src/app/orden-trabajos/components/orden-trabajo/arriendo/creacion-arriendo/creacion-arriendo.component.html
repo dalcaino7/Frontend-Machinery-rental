@@ -67,12 +67,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12" align="left">
-                        <mat-form-field appearance="outline" id="busqueda-cliente">
+                        <mat-form-field appearance="outline" id="busqueda-filter">
                             <mat-label>Rut, Nombre / Razón social</mat-label>
-                            <input type="text" placeholder="Escriba y Seleccione" matInput [formControl]="txtRutCliente" [matAutocomplete]="auto" (keyup)="busquedaClienteFilter($any($event.target).value)">
+                            <input type="text" matInput [formControl]="txtBusquedaCliente" placeholder="Escriba y Seleccione" [matAutocomplete]="autoCli">
 
-                            <mat-autocomplete class="option-cliente-list" #auto="matAutocomplete">
-                                <mat-option id="option-cliente-list" *ngFor="let clienteList of filteredClienteList | async" [value]="clienteList" (click)="showCliente(clienteList)">
+                            <mat-autocomplete autoActiveFirstOption #autoCli="matAutocomplete">
+                                <mat-option *ngFor="let clienteList of filteredClienteList | async" [value]="clienteList" (click)="showCliente(clienteList)">
                                     {{clienteList}}
                                 </mat-option>
                             </mat-autocomplete>
@@ -210,14 +210,14 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row" id="fila-busqueda-cliente">
-                    <div class="col-md-3" align="left">
-                        <mat-form-field appearance="outline">
+                <div class="row">
+                    <div class="col-md-12" align="left">
+                        <mat-form-field appearance="outline" id="busqueda-filter">
                             <mat-label>Código/ Nombre / Marca</mat-label>
-                            <input matInput (keyup)="nombreRutFilter($any($event.target).value)">
-                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                <mat-option *ngFor="let maquina of listaMaquinasOptions | async" [value]="maquina">
-                                    {{maquina}}
+                            <input type="text" matInput [formControl]="txtBusquedaMaquina" placeholder="Escriba y Seleccione" [matAutocomplete]="autoMaq">
+                            <mat-autocomplete autoActiveFirstOption #autoMaq="matAutocomplete">
+                                <mat-option *ngFor="let maquinaList of filteredMaquinaList | async" [value]="maquinaList" (click)="showMaquina(maquinaList)">
+                                    {{maquinaList}}
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
@@ -236,27 +236,27 @@
 
                             <ng-container matColumnDef="codigo">
                                 <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.codigo }} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_Codigo }} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="nombre">
                                 <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_Nombre}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="valorMinimo">
                                 <mat-header-cell *matHeaderCellDef> Valor mínimo </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.valorMinimo}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_ValorMinArriendo}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="precio">
                                 <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_ValorArriendo}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="tipoCobro">
                                 <mat-header-cell *matHeaderCellDef> Tipo cobro </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.tipoCobro}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_TipoUltKmHm}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="acciones">
@@ -266,7 +266,7 @@
                                     <mat-icon>add</mat-icon>
                                 </button>
 
-                                    <button type="button" class="btn badge tbl-eliminar " (click)="deleteCliente()">
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="deleteMaquina()">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                                 </mat-cell>
