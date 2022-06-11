@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,10 +9,12 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AnyObject } from 'chart.js/types/basic';
 import { ThemePalette } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Maquina } from '../../../../../../maquinas/models/maquina';
+import { MaquinaService } from '../../../../../../maquinas/services/maquina.service';
 
 @Component({
   selector: 'app-detalle-maquinaria',
@@ -29,6 +31,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   marker: any; */
 
   // Configuración de combobox de direcciones
+  public maq: Maquina = new Maquina();
 
   selectedValueRegion: string = '';
   selectedValueComuna: string = '';
@@ -78,9 +81,20 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   // options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
 
-  constructor(private formDetalleMaqOt: FormBuilder,public dialog: MatDialog) {}
+  constructor(
+    private maqService: MaquinaService,
+    private formDetalleMaqOt: FormBuilder, 
+    public dialog: MatDialog, 
+   // @Inject(MAT_DIALOG_DATA) public machine: Maquina,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    ) {}
 
   ngOnInit(): void {
+
+    this.maqService.getMaquina(parseInt(this.data.codeMachine)).subscribe( m => {
+      this.maq = m;
+    });
+       
     this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
 
     this.maquinaDetalleForm = this.formDetalleMaqOt.group({
@@ -231,4 +245,9 @@ export interface detMaquinariaTable {
 interface Icombustible {
   value: string;
   viewValue: string;
+}
+
+export interface DialogData {
+  codeMachine: string;
+  
 }

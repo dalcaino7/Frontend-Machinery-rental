@@ -43,6 +43,7 @@ export class CreacionArriendoComponent implements OnInit {
   txtBusquedaCliente = new FormControl();
   txtBusquedaMaquina = new FormControl();
 
+
   public cli: Cliente = new Cliente();
 
   otForm!: FormGroup;
@@ -265,30 +266,41 @@ export class CreacionArriendoComponent implements OnInit {
 
   showMaquina(dataMaquina: any){
 
-    //console.log("dataMaquina->",dataMaquina);
-    
     this.txtBusquedaMaquina.setValue('');
-
-    //console.log("MAQ->",dataMaquina);
     let maqSearch = dataMaquina.substring(0,dataMaquina.indexOf('|')).trim();//.lastIndexOf('|')//.substring(0,12).replace('|',' ').trim();
-    this.maqService.getListMaquinas().subscribe((maq) => {
-      for (let i = 0; i < maq.length; i++) {
-        if(maq[i].maq_Codigo == maqSearch){
-
-          //this.dataSourceMaquinaria.filter = maq[i].maq_Codigo
-          this.dataSourceMaquinaria.data.push(maq[i]);
-          this.dataSourceMaquinaria.data = this.dataSourceMaquinaria.data.slice();
-
-          console.log("maqSearch->",maqSearch);
-
+         
+    if(this.dataSourceMaquinaria.data.length == 0){ // validamos el largo de la tabla 
+      this.insertDataSourceMaquina(maqSearch);
+    }else{
+      var valInsert: any=[];
+      for (let x = 0; x < this.dataSourceMaquinaria.data.length; x++) {
+        if(maqSearch === this.dataSourceMaquinaria.data[x].maq_Codigo){
+          valInsert[x] = false;
+        }else{
+          valInsert[x] = true;
         }
       }
-    
-    });
 
+      if(!valInsert.includes(false)){
+        this.insertDataSourceMaquina(maqSearch);
+      }
+
+    }
 
   }
 
+  insertDataSourceMaquina(maqSearch: any){
+    this.maqService.getListMaquinas().subscribe((maq) => {
+
+      for (let i = 0; i < maq.length; i++) {
+        if(maq[i].maq_Codigo === maqSearch){
+          this.dataSourceMaquinaria.data.push(maq[i]);
+          this.dataSourceMaquinaria.data = this.dataSourceMaquinaria.data.slice();  
+        }
+      }
+    });
+    
+  }
   
 
   onFormSubmit() {
@@ -299,8 +311,9 @@ export class CreacionArriendoComponent implements OnInit {
     this.dataSourceCliente.data = [];
   }
 
-  deleteMaquina() {
-    this.dataSourceMaquinaria.data = [];
+  deleteMaquina(idx: any) {
+    this.dataSourceMaquinaria.data.splice(idx, 1);
+    this.dataSourceMaquinaria._updateChangeSubscription(); // <-- Refresh the datasource 
   }
  /*  mostrarMapa() {
     if (this.toggle_mostrarMapa) {
@@ -334,7 +347,7 @@ export class CreacionArriendoComponent implements OnInit {
     });
   }
 
-  openDialog(x: string) {
+  openDialog(x: string, register: any) {
     if (x == 'resumen') {
       const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, {
         panelClass: 'custom-dialog-container-medium',
@@ -343,21 +356,21 @@ export class CreacionArriendoComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         console.log(`Dialog result: ${result}`);
       });
-    } else {
-      console.log('entro al else');
-
-      const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
-        panelClass: 'custom-dialog-container-big',
-      });
-      console.log('open dialog');
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log(`Dialog result: ${result}`);
-      });
+    } else {        
+        const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
+          panelClass: 'custom-dialog-container-big',
+          data: { codeMachine: this.dataSourceMaquinaria.data[register].maq_Id }
+        });
+        console.log('open dialog');
+        dialogRef.afterClosed().subscribe((result) => {
+          console.log(`Dialog result: ${result}`);
+        });
+     
     }
   }
   procesarOt() {
     // confirm('Está seguro de finalizar?');
-    this.openDialog('resumen');
+    this.openDialog('resumen',null);
   }
 
 

@@ -261,12 +261,12 @@
 
                             <ng-container matColumnDef="acciones">
                                 <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-                                <mat-cell *matCellDef="let element">
-                                    <button type="button" class="btn badge tbl-eliminar " (click)="openDialog('detalle')">
+                                <mat-cell *matCellDef="let element; let idx = index;">
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="openDialog('detalle',idx)">
                                     <mat-icon>add</mat-icon>
-                                </button>
+                                    </button>
 
-                                    <button type="button" class="btn badge tbl-eliminar " (click)="deleteMaquina()">
+                                    <button type="button" class="btn badge tbl-eliminar " (click)="deleteMaquina(idx)">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                                 </mat-cell>

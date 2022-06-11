@@ -115,7 +115,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="otr_Estado">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado Arriendo</mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
                                 <button type="button" class="btn badge btn-without-focus" [ngClass]="{
@@ -131,7 +131,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="otr_FechaHoraCreacionOt">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> Fecha </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> Fecha Creación </mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
                                 {{element.otr_FechaHoraCreacionOt | date : 'dd/MM/YYYY'}}

@@ -57,6 +57,7 @@ export class ClienteComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
+
     this.listClientes();
     this.listRegiones();
   }
@@ -79,6 +80,8 @@ export class ClienteComponent implements AfterViewInit {
       this.listClientesTabla = cli;
       this.dataSource.data = cli;
     });
+    this.dataSource._updateChangeSubscription();
+
 
     this.filtroBusquedaTable();
   }
