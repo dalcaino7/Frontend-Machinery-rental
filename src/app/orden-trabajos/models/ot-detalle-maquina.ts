@@ -9,8 +9,8 @@ export class OtDetalleMaquina {
     odm_ControlInicio: number=0;  
     odm_FechaHrTermino: string="";  
     odm_ControlTermino: number=0;  
-    odm_FirmaUsuario: string="";  
-
+    odm_NombreUsuario: string="";  
+    odm_Operario: String="";
     /* RELACION ENTRE CLASES */
     odm_Maq_Id: Maquina = new Maquina;
     

@@ -2,3 +2,53 @@
     opacity: 0.75;
     font-size: 0.75em;
 }
+
+#busqueda-filter {
+    width: 100px;
+}
+
+.card-footer {
+    background-color: #e9eef7;
+    bottom: 100%;
+    height: 62px;
+    padding-top: 16px;
+    padding-left: 22%;
+    border-top: 0px;
+}
+
+.btn-formulario-cabecera {
+    left: 5px;
+    width: 110px;
+    height: 25px;
+    align-content: center;
+    line-height: 22px;
+    /*     background-color: #005fff;
+ */
+}
+
+
+/*redimension de columnas OT y CLIENTE de la tabla*/
+
+.mat-column-operario {
+    flex: 0 0 240px;
+    padding-left: 0px;
+}
+
+.mat-column-valor {
+    flex: 0 0 140px;
+    padding-left: 0px;
+}
+
+.mat-column-precio {
+    flex: 0 0 140px;
+    padding-left: 0px;
+}
+
+.mat-column-combustible {
+    padding-left: 0px;
+}
+
+.mat-column-precio {
+    flex: 0 0 140px;
+    padding-left: 0px;
+}

@@ -112,11 +112,11 @@ mat-cell {
 /*redimension de columnas OT y CLIENTE de la tabla*/
 
 .mat-column-otr_Id {
-    flex: 0 0 80px;
+    flex: 0 0 75px;
 }
 
 .mat-column-cliente {
-    flex: 0 0 240px;
+    flex: 0 0 215px;
 }
 
 .mat-column-cli_Comuna {
@@ -125,7 +125,7 @@ mat-cell {
 }
 
 .mat-column-maquina {
-    flex: 0 0 265px;
+    flex: 0 0 260px;
 }
 
 .mat-column-otr_Estado {
@@ -133,8 +133,9 @@ mat-cell {
 }
 
 .mat-column-otr_FechaHoraCreacionOt {
-    flex: 0 0 100px;
-    padding-right: 100px;
+    flex: 0 0 144px;
+    /*     padding-right: 100px;
+ */
 }
 
 .mat-column-accion {

@@ -27,6 +27,7 @@ import { data } from 'jquery';
 import { RegionComunaChileService } from 'src/app/services/region-comuna-chile.service';
 import { Region } from 'src/app/models/region';
 import { Comuna } from 'src/app/models/comuna';
+import { ComunasRegiones } from '../../../../../models/comunasRegiones';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -40,6 +41,8 @@ import { Comuna } from 'src/app/models/comuna';
   ],
 })
 export class CreacionArriendoComponent implements OnInit {
+  strIntoObj: Region[] = [];
+
   txtBusquedaCliente = new FormControl();
   txtBusquedaMaquina = new FormControl();
 
@@ -230,9 +233,10 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-      this.regionSelect = rgn;      
-    });
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
   }
 
   regionFilter($event: any) {
@@ -243,9 +247,11 @@ export class CreacionArriendoComponent implements OnInit {
       }
   }
 
+ 
   listComuna(cod: string) {
-    this.rgnService.getListComunas(cod).subscribe((cmn: Comuna[]) => {
-      this.comunaSelect = cmn;
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
     });
   }
 
@@ -358,7 +364,7 @@ export class CreacionArriendoComponent implements OnInit {
       });
     } else {        
         const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
-          panelClass: 'custom-dialog-container-big',
+          panelClass: 'custom-dialog-container-medium',
           data: { codeMachine: this.dataSourceMaquinaria.data[register].maq_Id }
         });
         console.log('open dialog');

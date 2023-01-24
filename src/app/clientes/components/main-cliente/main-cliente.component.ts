@@ -14,6 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { RegionComunaChileService } from '../../../services/region-comuna-chile.service';
 import { Region } from 'src/app/models/region';
 import { Comuna } from 'src/app/models/comuna';
+import { ComunasRegiones } from '../../../models/comunasRegiones';
 
 @Component({
   selector: 'app-cliente',
@@ -21,6 +22,8 @@ import { Comuna } from 'src/app/models/comuna';
   styleUrls: ['./main-cliente.component.css'],
 })
 export class ClienteComponent implements AfterViewInit {
+  strIntoObj: Region[] = [];
+
   selectedValueRegion: string = ''; //guarda el nombre de la region
   selectedValueComuna: string = ''; // guarda el nombre de la comuna
   estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
@@ -63,14 +66,16 @@ export class ClienteComponent implements AfterViewInit {
   }
 
   listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-      this.regionSelect = rgn;
-    });
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
   }
 
   listComuna(cod: string) {
-    this.rgnService.getListComunas(cod).subscribe((cmn: Comuna[]) => {
-      this.comunaSelect = cmn;
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
     });
   }
 
@@ -199,6 +204,7 @@ export class ClienteComponent implements AfterViewInit {
   }
 
   regionFilter($event: any) {
+    
     if ($event.value.toLowerCase() === 'todos') {
       let filteredData = _.filter(this.listClientesTabla, (item) => {
         return item;
@@ -214,6 +220,7 @@ export class ClienteComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
       for (let rg of this.regionSelect) {
         if (rg.nombre === $event.value) {
+          console.log("TABLA FILTRADA",rg.codigo);
           this.listComuna(rg.codigo);
         }
       }
@@ -233,4 +240,12 @@ export class ClienteComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
     }
   }
+
+ /* unicodeToChar(text:any) {
+    return text.replace(/\\u[\dA-F]{4}/gi, 
+           function (match:any) {
+                return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+           });
+ }*/
+ 
 }

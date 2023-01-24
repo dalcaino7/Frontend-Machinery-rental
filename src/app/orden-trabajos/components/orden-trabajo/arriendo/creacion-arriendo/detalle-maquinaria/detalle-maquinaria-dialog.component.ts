@@ -5,16 +5,17 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { AnyObject } from 'chart.js/types/basic';
-import { ThemePalette } from '@angular/material/core';
+
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ComunasRegiones } from 'src/app/models/comunasRegiones';
 import { Maquina } from '../../../../../../maquinas/models/maquina';
 import { MaquinaService } from '../../../../../../maquinas/services/maquina.service';
+import { TipoMaquinaService } from '../../../../../../maquinas/services/tipo-maquina.service';
+import { Region } from '../../../../../../models/region';
+import { RegionComunaChileService } from '../../../../../../services/region-comuna-chile.service';
 
 @Component({
   selector: 'app-detalle-maquinaria',
@@ -22,25 +23,20 @@ import { MaquinaService } from '../../../../../../maquinas/services/maquina.serv
   styleUrls: ['./detalle-maquinaria-dialog.component.css'],
 })
 export class DetalleMaquinariaDialogComponent implements OnInit {
-  /*  public toggle_mostrarMapa = false;
-  // Configuración de Google Maps
-  map = null;
-  center: any;
-  zoom: any;
-  display?: google.maps.LatLngLiteral;
-  marker: any; */
 
-  // Configuración de combobox de direcciones
+  strIntoObj: Region[] = [];
+  regionSelect: any[] = []; //Muestra la lista del select en el template
+  comunaSelect: any[] = [];
+  estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
+
+  listClientesTabla: any = []; //contiene la lista de clientes de la tabla
+
   public maq: Maquina = new Maquina();
 
   selectedValueRegion: string = '';
   selectedValueComuna: string = '';
 
   email = new FormControl('', [Validators.required, Validators.email]);
-
-  /* firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup;
-  tercerFormGroup!: FormGroup; */
 
   dataSource: any;
 
@@ -59,14 +55,14 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
 
   maquinaDetalleForm!: FormGroup;
 
-  implementos: string[] = [
-    'Cortadora rotativa',
+  implementos: string[] = [];
+/*     'Cortadora rotativa',
     'Escarificador',
     'Perforadora',
     'Sembradora',
     'Aspersora',
     'Rastra',
-  ];
+  ]; */
 
   combustible: Icombustible[] = [
     { value: '44-0', viewValue: '4/4' },
@@ -80,11 +76,15 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   txtOperarioDetMaqOt = new FormControl();
   // options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
+  //region: Region = new Region();
 
   constructor(
+    private tipoMaq: TipoMaquinaService,
     private maqService: MaquinaService,
     private formDetalleMaqOt: FormBuilder, 
-    public dialog: MatDialog, 
+    public dialog: MatDialog,
+    private rgnService: RegionComunaChileService,
+   // private regService: RegionComunaChileService,
    // @Inject(MAT_DIALOG_DATA) public machine: Maquina,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     ) {}
@@ -93,18 +93,32 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
 
     this.maqService.getMaquina(parseInt(this.data.codeMachine)).subscribe( m => {
       this.maq = m;
+
     });
-       
+
+    this.listRegiones();
+
+/*
+    this.regService.getListRegiones().subscribe(r => {
+      console.log(r);
+    });*/
+
+
+    console.log("this.maq.maq_Tma_Id.tma_Descripcion->",this.maq.maq_Tma_Id.tma_Descripcion);
+
+    
+
+
     this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
 
     this.maquinaDetalleForm = this.formDetalleMaqOt.group({
+
       /*TABLA DETALLE MAQUINA*/
-      txtOperarioDetMaqOt: new FormControl(
-        'txtOperarioDetMaqOt',
-        Validators.required
-      ),
-      txtPrecioDetMaqOt: ['$ 3.750 /Hr.'],
-      txtValorMinimoDetMaqOt: ['160 Hrs.'],
+      
+      txtOperarioDetMaqOt: [''],
+     
+      txtPrecioDetMaqOt: [''],//['$ 3.750 /Hr.'],
+      txtValorMinimoDetMaqOt: [''],//['160 Hrs.'],
       
 
       selImplementoDetMaqOt: [''],
@@ -133,6 +147,31 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     );
   }
 
+  listRegiones() {
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
+  }
+
+  regionFilter($event: any) {
+      for (let rg of this.regionSelect) {
+        if (rg.nombre === $event.value) {
+          this.listComuna(rg.codigo);
+        }
+      }
+  }
+
+ 
+  listComuna(cod: string) {
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
+    });
+  }
+
+
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -149,29 +188,10 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     'operario',
     'valor',
     'precio',
-    'implemento',
-    'combustible',
-    'accion',
+   // 'implemento',
+    'combustible'
   ];
 
-  region: regiones[] = [
-    { value: 'arica-0', viewValue: 'Arica' },
-    { value: 'iquique-1', viewValue: 'iquique' },
-    { value: 'antofagasta-2', viewValue: 'antofagasta' },
-    { value: 'valparaiso-3', viewValue: 'Valparaiso' },
-    { value: 'metropolitana-4', viewValue: 'Región Metropolitana' },
-    { value: 'ohiggins-5', viewValue: 'Libertador Bernardo Ohiggins' },
-  ];
-
-  comuna: comunas[] = [
-    { value: 'algarrobo-0', viewValue: 'algarrobo' },
-    { value: 'alhue-1', viewValue: 'Alhue' },
-    { value: 'camarones-2', viewValue: 'camarones' },
-    { value: 'hualpen-3', viewValue: 'hualpen' },
-    { value: 'independencia-4', viewValue: 'independencia' },
-    { value: 'lagranja-5', viewValue: 'la granja' },
-    { value: 'mostazal-5', viewValue: 'mostazal' },
-  ];
 
   deleteCliente() {
     console.log('ELIMINADO');
@@ -203,10 +223,10 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   }
 
   setDetalleMaquinaria() {
+    this.closeDialog();
 
     console.log('ingreso: ', this.txtOperarioDetMaqOt.value);
 
-    this.closeDialog();
   }
 
   closeDialog() {

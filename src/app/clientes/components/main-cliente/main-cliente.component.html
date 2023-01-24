@@ -16,7 +16,7 @@
                 <div class="col-md-3" align="left">
                     <mat-form-field appearance="outline">
                         <mat-label>Región</mat-label>
-                        <mat-select [(ngModel)]="selectedValueRegion" name="region" (selectionChange)="regionFilter($any($event))">
+                        <mat-select name="region" (selectionChange)="regionFilter($any($event))">
                             <mat-option value="Todos" (click)="estadoSelectorComuna = true">Todos</mat-option>
                             <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre" (click)="estadoSelectorComuna = false">
                                 {{rgn.nombre}}
@@ -27,7 +27,7 @@
                 <div class="col-md-1" align="left">
                     <mat-form-field appearance="outline">
                         <mat-label>Comuna</mat-label>
-                        <mat-select [(ngModel)]="selectedValueComuna" name="comuna" (selectionChange)="comunaFilter($any($event))" [disabled]="estadoSelectorComuna">
+                        <mat-select name="comuna" (selectionChange)="comunaFilter($any($event))" [disabled]="estadoSelectorComuna">
                             <mat-option value="Todos">Todos</mat-option>
                             <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
                                 {{cmn.nombre}}
@@ -48,7 +48,6 @@
                     </button>
                 </div>
             </div>
-
 
 
             <div class="mat-elevation-z2">

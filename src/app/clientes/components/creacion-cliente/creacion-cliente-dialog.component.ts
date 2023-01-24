@@ -22,6 +22,7 @@ import { RegionComunaChileService } from '../../../services/region-comuna-chile.
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
+import { ComunasRegiones } from '../../../models/comunasRegiones';
 
 @Component({
   selector: 'app-creacion-cliente',
@@ -30,6 +31,8 @@ import * as _ from 'lodash'; //paquete para el manejo de matrices
 })
 
 export class CreacionClienteDialogComponent implements OnInit {
+  strIntoObj: Region[] = [];
+
   selectedValueRegion: string = ''; //guarda el nombre de la region
   selectedValueComuna: string = ''; // guarda el nombre de la comuna
   estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
@@ -76,8 +79,8 @@ export class CreacionClienteDialogComponent implements OnInit {
 
     if(this.stateMainCliente.modeDialog == 'mod'){//si es mod entra a consultar comuna para mostrar
       /* MUESTRA TABLA FILTRADA */
-       this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-        this.regionSelect = rgn;
+       this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      //  this.regionSelect = rgn.rcsDescripcion;
         console.log("1-> lleno el selector (this.regionSelect): ",this.regionSelect);
 
           for (let rg of this.regionSelect) {
@@ -118,9 +121,10 @@ export class CreacionClienteDialogComponent implements OnInit {
   }
 
   listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-      this.regionSelect = rgn;      
-    });
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
   }
 
   regionFilter($event: any) {
@@ -131,11 +135,15 @@ export class CreacionClienteDialogComponent implements OnInit {
       }
   }
 
+ 
   listComuna(cod: string) {
-    this.rgnService.getListComunas(cod).subscribe((cmn: Comuna[]) => {
-      this.comunaSelect = cmn;
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
     });
   }
+
+
 
   validateShowDataDialog() {
     if (this.stateMainCliente.modeDialog == 'add') {
