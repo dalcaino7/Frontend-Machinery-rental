@@ -41,6 +41,7 @@ import { ComunasRegiones } from '../../../../../models/comunasRegiones';
   ],
 })
 export class CreacionArriendoComponent implements OnInit {
+  validaLStorage: boolean[] = [];
   strIntoObj: Region[] = [];
 
   txtBusquedaCliente = new FormControl();
@@ -123,6 +124,8 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    localStorage.clear();
     /*  FUNCIONALIDAD CLIENTE */
     this.listCliente();
 
@@ -271,7 +274,7 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   showMaquina(dataMaquina: any){
-
+    
     this.txtBusquedaMaquina.setValue('');
     let maqSearch = dataMaquina.substring(0,dataMaquina.indexOf('|')).trim();//.lastIndexOf('|')//.substring(0,12).replace('|',' ').trim();
          
@@ -300,8 +303,10 @@ export class CreacionArriendoComponent implements OnInit {
 
       for (let i = 0; i < maq.length; i++) {
         if(maq[i].maq_Codigo === maqSearch){
+          this.validaLStorage[i] = false;
           this.dataSourceMaquinaria.data.push(maq[i]);
           this.dataSourceMaquinaria.data = this.dataSourceMaquinaria.data.slice();  
+
         }
       }
     });
@@ -317,9 +322,23 @@ export class CreacionArriendoComponent implements OnInit {
     this.dataSourceCliente.data = [];
   }
 
-  deleteMaquina(idx: any) {
-    this.dataSourceMaquinaria.data.splice(idx, 1);
+  deleteMaquina(x: any) {
+    console.log("****  INICIO DELETE MAQ  ****");
+    console.log("x: ",x);
+
+    console.log("this.dataSourceMaquinaria.data[x].maq_Codigo: ",this.dataSourceMaquinaria.data[x].maq_Codigo);
+    this.validaLStorage[x] = false;
+    this.validaLStorage.splice(x,1);
+    console.log("this.validaLStorage: ",this.validaLStorage);
+
+    localStorage.removeItem(this.dataSourceMaquinaria.data[x].maq_Codigo);
+    this.dataSourceMaquinaria.data.splice(x, 1);
     this.dataSourceMaquinaria._updateChangeSubscription(); // <-- Refresh the datasource 
+
+    
+    
+    console.log("**** FIN DELETE MAQ  ****");
+
   }
  /*  mostrarMapa() {
     if (this.toggle_mostrarMapa) {
@@ -353,8 +372,11 @@ export class CreacionArriendoComponent implements OnInit {
     });
   }
 
-  openDialog(x: string, register: any) {
-    if (x == 'resumen') {
+  openDialog(definition: string, x: any) {
+    console.log("open dialog: (definition): ", definition);
+    console.log("open dialog: (x): ", x);
+
+    if (definition == 'resumen') {
       const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, {
         panelClass: 'custom-dialog-container-medium',
       });
@@ -365,13 +387,38 @@ export class CreacionArriendoComponent implements OnInit {
     } else {        
         const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
           panelClass: 'custom-dialog-container-medium',
-          data: { codeMachine: this.dataSourceMaquinaria.data[register].maq_Id }
+          data: { 
+            idMachine: this.dataSourceMaquinaria.data[x].maq_Id, 
+            codeMachine: this.dataSourceMaquinaria.data[x].maq_Codigo }
         });
-        console.log('open dialog');
         dialogRef.afterClosed().subscribe((result) => {
-          console.log(`Dialog result: ${result}`);
+          // console.log("Dialog result codigo?: ", this.dataSourceMaquinaria.data[register].maq_Codigo);
+          let jsonData = JSON.parse(localStorage.getItem(this.dataSourceMaquinaria.data[x].maq_Codigo) || '[]');
+          // for (let x = 0; x < this.dataSourceMaquinaria.data.length; x++) {
+            // console.log("this.dataSourceMaquinaria.data.length: ",this.dataSourceMaquinaria.data.length);
+          console.log("jsonData: ",jsonData);
+
+          console.log("codLocStorage: ",jsonData.codigoMaquina);
+
+            if (jsonData !== null) {
+              if(jsonData.codigoMaquina === this.dataSourceMaquinaria.data[x].maq_Codigo){
+
+              console.log("this.dataSourceMaquinaria.data[register].maq_Codigo: ",this.dataSourceMaquinaria.data[x].maq_Codigo);
+              this.validaLStorage[x] = true;
+              console.log("this.validaLStorage: ",this.validaLStorage);
+
+              }
+          //     if(jsonData.codigoMaquina === this.dataSourceMaquinaria.data[register].maq_Codigo){
+          //       console.log("SI esta el valor en el localstorage ");
+
+          // //       this.validaLStorage[x] = false;
+          // //     }else{
+          // //       this.validaLStorage[x] = true;
+          //     }
+            }
+          // }
+
         });
-     
     }
   }
   procesarOt() {
@@ -475,6 +522,16 @@ export class CreacionArriendoComponent implements OnInit {
 
 ) */
   }
+
+  // changeStateIconMaquinaList(e: any){
+
+  //   console.log("padre | changeStateIconMaquinaList (e): ", e);
+    
+  //   this.validaLStorage = e;
+  //   console.log("padre | changeStateIconMaquinaList (this.validaLStorage): ", this.validaLStorage);
+
+  // }
+
 }
 
 interface regiones {

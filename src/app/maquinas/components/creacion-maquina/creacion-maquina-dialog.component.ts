@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PipeTransform } from '@angular/core';
+import { Component, OnInit, Inject, PipeTransform, Input } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -28,6 +28,8 @@ import { AnyObject } from 'chart.js/types/basic';
   styleUrls: ['./creacion-maquina-dialog.component.css'],
 })
 export class CreacionMaquinaDialogComponent implements OnInit {
+
+
   titulo: string = '';
   nombreMaquina: string = '';
   nombreBoton: string = '';

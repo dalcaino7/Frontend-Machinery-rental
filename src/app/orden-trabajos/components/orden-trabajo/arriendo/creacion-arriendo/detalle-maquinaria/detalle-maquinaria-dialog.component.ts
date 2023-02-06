@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,10 +7,12 @@ import {
 } from '@angular/forms';
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { forEach } from 'lodash';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ComunasRegiones } from 'src/app/models/comunasRegiones';
+import { DetalleMaquinaTemporal } from 'src/app/orden-trabajos/models/detalle-maquina-temporal.model';
 import { Maquina } from '../../../../../../maquinas/models/maquina';
 import { MaquinaService } from '../../../../../../maquinas/services/maquina.service';
 import { TipoMaquinaService } from '../../../../../../maquinas/services/tipo-maquina.service';
@@ -24,12 +26,20 @@ import { RegionComunaChileService } from '../../../../../../services/region-comu
 })
 export class DetalleMaquinariaDialogComponent implements OnInit {
 
+
+  @Output() newItemEvent = new EventEmitter();
+
+  // validate: string = "true";
+  valorMinArriendo: string = ""; // this.maq.maq_ValorMinArriendo
+  valorArriendo: string = ""; // this.maq.maq_ValorArriendo
+
+  mapDetalle = new Map<string, any>();
+
+  detMaqTemp: DetalleMaquinaTemporal = new DetalleMaquinaTemporal();
+
   strIntoObj: Region[] = [];
   regionSelect: any[] = []; //Muestra la lista del select en el template
   comunaSelect: any[] = [];
-  estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
-
-  listClientesTabla: any = []; //contiene la lista de clientes de la tabla
 
   public maq: Maquina = new Maquina();
 
@@ -53,10 +63,8 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
 
   toppings = new FormControl();
 
-  maquinaDetalleForm!: FormGroup;
-
   implementos: string[] = [];
-/*     'Cortadora rotativa',
+  /*     'Cortadora rotativa',
     'Escarificador',
     'Perforadora',
     'Sembradora',
@@ -65,133 +73,130 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   ]; */
 
   combustible: Icombustible[] = [
-    { value: '44-0', viewValue: '4/4' },
-    { value: '34-1', viewValue: '3/4' },
-    { value: '12-3', viewValue: '1/2' },
-    { value: '14-4', viewValue: '1/4' },
+    { value: '4/4', viewValue: '4/4' },
+    { value: '3/4', viewValue: '3/4' },
+    { value: '1/2', viewValue: '1/2' },
+    { value: '1/4', viewValue: '1/4' },
   ];
 
-  //dataArray = [];
+  machineDetailForm: any;
 
   txtOperarioDetMaqOt = new FormControl();
-  // options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
-  //region: Region = new Region();
 
   constructor(
+    private fb: FormBuilder,
     private tipoMaq: TipoMaquinaService,
     private maqService: MaquinaService,
-    private formDetalleMaqOt: FormBuilder, 
     public dialog: MatDialog,
     private rgnService: RegionComunaChileService,
-   // private regService: RegionComunaChileService,
-   // @Inject(MAT_DIALOG_DATA) public machine: Maquina,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    ) {}
+
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
 
   ngOnInit(): void {
-
-    this.maqService.getMaquina(parseInt(this.data.codeMachine)).subscribe( m => {
-      this.maq = m;
-
-    });
-
-    this.listRegiones();
-
-/*
-    this.regService.getListRegiones().subscribe(r => {
-      console.log(r);
-    });*/
-
-
-    console.log("this.maq.maq_Tma_Id.tma_Descripcion->",this.maq.maq_Tma_Id.tma_Descripcion);
-
-    
-
-
-    this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
-
-    this.maquinaDetalleForm = this.formDetalleMaqOt.group({
-
-      /*TABLA DETALLE MAQUINA*/
-      
+    this.machineDetailForm = this.fb.group({
       txtOperarioDetMaqOt: [''],
-     
-      txtPrecioDetMaqOt: [''],//['$ 3.750 /Hr.'],
-      txtValorMinimoDetMaqOt: [''],//['160 Hrs.'],
-      
-
-      selImplementoDetMaqOt: [''],
+      txtValorMinimoDetMaqOt: [''],
+      txtPrecioDetMaqOt: [''],
       selCombustibleDetMaqOt: [''],
-
-      /* Check EXTRAS */
       checkTrasladoDetOt: [false],
       checkCilindroDetOt: [false],
-
-      /* DATOS DE CONTACTO */
       txtNombreContactoDetOt: [''],
-      txtTelefonoContactoDetOt: [''],
-      txtEmailContactoDetOt: [''],
-
-      /* UBICACION */
-      selRegionDetOt: [''],
-      selComunaDetOt: [''],
+      txtTelefonoContactoDetOt: [
+        '',
+        [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      ],
+      txtEmailContactoDetOt: ['', Validators.email],
+      selRegionDetMaq: ['', Validators.required],
+      selComunaDetMaq: ['', Validators.required],
       txtDireccionDetOt: [''],
-      //toggle_localizacion: ['', Validators.requiredTrue]
     });
+    
+    this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
 
     /* MUESTRA LA LISTA DE OPERARIOS */
-    this.filteredOptions = this.txtOperarioDetMaqOt.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value))
-    );
+    // this.filteredOptions = this.txtOperarioDetMaqOt.valueChanges.pipe(
+    //   startWith(''),
+    //   map((value) => this._filter(value))
+    // );
+    this.listDetalleMaquinaria();
+
+
   }
 
-  listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
-      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
-      this.regionSelect = this.strIntoObj;
-    }); 
+  
+
+
+
+  listDetalleMaquinaria() {
+    let jsonData = JSON.parse(localStorage.getItem(this.data.codeMachine) || '[]');
+      this.maqService.getMaquina(parseInt(this.data.idMachine)).subscribe((m) => {
+        this.maq = m;
+        if(!jsonData.codigoMaquina){
+            this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
+            this.valorArriendo = this.maq.maq_ValorArriendo;
+        }
+        if(jsonData.codigoMaquina){
+          this.machineDetailForm.get('txtOperarioDetMaqOt').setValue(jsonData.operario);
+          if(!jsonData.valorMinimo || !jsonData.precio){
+            this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
+            this.valorArriendo = this.maq.maq_ValorArriendo;
+          }else{
+            this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(jsonData.valorMinimo);
+            this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(jsonData.precio);
+          }
+          this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue(jsonData.combustible);
+          this.machineDetailForm.get(['checkTrasladoDetOt']).setValue(jsonData.traslado);
+          this.machineDetailForm.get(['checkCilindroDetOt']).setValue(jsonData.cilindroGas);
+          this.machineDetailForm.get('txtNombreContactoDetOt').setValue(jsonData.nombreContacto);
+          this.machineDetailForm.get('txtTelefonoContactoDetOt').setValue(jsonData.telefonoContacto);
+          this.machineDetailForm.get('txtEmailContactoDetOt').setValue(jsonData.emailContacto);
+          this.machineDetailForm.get('txtDireccionDetOt').setValue(jsonData.direccion);
+        }
+        this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+          this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+          this.regionSelect = this.strIntoObj;
+          this.machineDetailForm.get(['selRegionDetMaq']).setValue(jsonData.region);
+          for (let rg of this.regionSelect) {
+            if(rg.nombre == jsonData.region){
+              this.listComuna(rg.codigo);
+              this.machineDetailForm.get(['selComunaDetMaq']).setValue(jsonData.comuna);
+            }
+          }
+        });
+      });
   }
 
   regionFilter($event: any) {
-      for (let rg of this.regionSelect) {
-        if (rg.nombre === $event.value) {
-          this.listComuna(rg.codigo);
-        }
+    for (let rg of this.regionSelect) {
+      if (rg.nombre === $event.value) {
+        this.listComuna(rg.codigo);
       }
+    }
   }
 
- 
-  listComuna(cod: string) {
+  listComuna(cod: string) {    
     this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
       this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
       this.comunaSelect = this.strIntoObj;
     });
   }
 
-
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
     return this.operariosList.filter((option) =>
       option.toLowerCase().includes(filterValue)
     );
   }
 
-  /* onFormSubmit() {
-    // alert(JSON.stringify(this.formUbicacion.value, null, 2));
-  } */
-
   displayedColumnsDetMaquinaria: string[] = [
     'operario',
     'valor',
     'precio',
-   // 'implemento',
-    'combustible'
+    // 'implemento',
+    'combustible',
   ];
-
 
   deleteCliente() {
     console.log('ELIMINADO');
@@ -223,28 +228,40 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   }
 
   setDetalleMaquinaria() {
+    this.detMaqTemp.codigoMaquina = this.maq.maq_Codigo;
+    this.detMaqTemp.operario = this.machineDetailForm.value.txtOperarioDetMaqOt;
+    this.detMaqTemp.valorMinimo = this.machineDetailForm.value.txtValorMinimoDetMaqOt;
+    this.detMaqTemp.precio = this.machineDetailForm.value.txtPrecioDetMaqOt;
+    this.detMaqTemp.combustible = this.machineDetailForm.value['selCombustibleDetMaqOt'];
+    this.detMaqTemp.traslado = this.machineDetailForm.value.checkTrasladoDetOt;
+    this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt;
+    this.detMaqTemp.nombreContacto = this.machineDetailForm.value.txtNombreContactoDetOt;
+    this.detMaqTemp.telefonoContacto = this.machineDetailForm.value.txtTelefonoContactoDetOt;
+    this.detMaqTemp.emailContacto = this.machineDetailForm.value.txtEmailContactoDetOt;
+    this.detMaqTemp.region = this.machineDetailForm.value['selRegionDetMaq'];
+    this.detMaqTemp.comuna = this.machineDetailForm.value['selComunaDetMaq'];
+    this.detMaqTemp.direccion = this.machineDetailForm.value.txtDireccionDetOt;
+ 
+    localStorage.setItem(this.maq.maq_Codigo, JSON.stringify(this.detMaqTemp));
+    
+    // this.emitEvent(this.validate);
+
     this.closeDialog();
-
-    console.log('ingreso: ', this.txtOperarioDetMaqOt.value);
-
   }
+
+  // emitEvent(value: string){
+  //   console.log("emit: ",value);
+    
+  //   this.newItemEvent.emit(value);
+  // }
 
   closeDialog() {
     const dialogRef = this.dialog.closeAll();
-    console.log('close dialog');
-
   }
+
+ 
 }
 
-interface regiones {
-  value: string;
-  viewValue: string;
-}
-
-interface comunas {
-  value: string;
-  viewValue: string;
-}
 
 export interface clienteTable {
   rut: string;
@@ -268,6 +285,6 @@ interface Icombustible {
 }
 
 export interface DialogData {
+  idMachine: string;
   codeMachine: string;
-  
 }

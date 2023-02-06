@@ -33,9 +33,9 @@ import { ComunasRegiones } from '../../../models/comunasRegiones';
 export class CreacionClienteDialogComponent implements OnInit {
   strIntoObj: Region[] = [];
 
-  selectedValueRegion: string = ''; //guarda el nombre de la region
-  selectedValueComuna: string = ''; // guarda el nombre de la comuna
-  estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
+  // selectedValueRegion: string = ''; //guarda el nombre de la region
+  // selectedValueComuna: string = ''; // guarda el nombre de la comuna
+  // estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
   regionSelect: any[] = []; //Muestra la lista del select en el template
   comunaSelect: any[] = [];
 
@@ -74,6 +74,7 @@ export class CreacionClienteDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.validateShowDataDialog();
 //console.log("1 cli.cli_Region: ",this.cli.cli_Region);
 

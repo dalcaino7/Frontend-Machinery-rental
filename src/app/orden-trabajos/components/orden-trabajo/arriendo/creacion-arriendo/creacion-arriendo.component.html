@@ -153,7 +153,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Región</mat-label>
-                            <mat-select formControlName="txtRegionContactoClienteOt" [(ngModel)]="cli.cli_Region" (selectionChange)="regionFilter($any($event))">
+                            <mat-select formControlName="txtRegionContactoClienteOt" (selectionChange)="regionFilter($any($event))">
                                 <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre">
                                     {{rgn.nombre}}
                                 </mat-option>
@@ -163,7 +163,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Comuna</mat-label>
-                            <mat-select formControlName="txtComunaContactoClienteOt" [(ngModel)]="cli.cli_Comuna">
+                            <mat-select formControlName="txtComunaContactoClienteOt">
                                 <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
                                     {{cmn.nombre}}
                                 </mat-option>
@@ -263,7 +263,8 @@
                                 <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                                 <mat-cell *matCellDef="let element; let idx = index;">
                                     <button type="button" class="btn badge tbl-eliminar " (click)="openDialog('detalle',idx)">
-                                    <mat-icon>add</mat-icon>
+                                        <mat-icon *ngIf="validaLStorage[idx] == false">add</mat-icon>
+                                        <mat-icon [ngStyle]="{'color':'green'}" *ngIf="validaLStorage[idx] == true">check_circle</mat-icon>
                                     </button>
 
                                     <button type="button" class="btn badge tbl-eliminar " (click)="deleteMaquina(idx)">

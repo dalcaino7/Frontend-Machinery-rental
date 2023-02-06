@@ -15,7 +15,7 @@ import { OrdenTrabajoService } from '../../../services/orden-trabajo.service';
 import { OrdenTrabajo } from '../../../models/orden-trabajo';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
 import { data } from 'jquery';
-import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
+// import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
 import * as moment from 'moment';
 
 @Component({
@@ -38,8 +38,8 @@ export class ArriendoComponent implements AfterViewInit {
   selectedCar: string = '';
   ordenT: OrdenTrabajo = new OrdenTrabajo();
   ordenTs: OrdenTrabajo[] = [];
-  detalleOrdenTrabajo: OtDetalleMaquina = new OtDetalleMaquina();
-  detalleOrdenTrabajos: OtDetalleMaquina[] = [];
+  // detalleOrdenTrabajo: OtDetalleMaquina = new OtDetalleMaquina();
+  // detalleOrdenTrabajos: OtDetalleMaquina[] = [];
   validacionRazonSocial: boolean= false;
   listOtTabla: any = []; //contiene la lista de ot de la tabla
   //rangeFormGroup : any;

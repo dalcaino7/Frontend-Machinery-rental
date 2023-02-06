@@ -1,6 +1,6 @@
 <div class="card" id="card-cliente">
 
-    <form (submit)="setDetalleMaquinaria()" [formGroup]="maquinaDetalleForm">
+    <form (submit)="setDetalleMaquinaria()" [formGroup]="machineDetailForm">
         <div class="card-header">
 
             <div class="row ">
@@ -46,7 +46,7 @@
                             <mat-header-cell *matHeaderCellDef> Valor mín. por {{this.maq.maq_TipoValorMinArriendo}} </mat-header-cell>
                             <mat-cell *matCellDef="let element">
                                 <mat-form-field appearance="outline" id="busqueda-filter">
-                                    <input matInput value="{{ this.maq.maq_ValorMinArriendo }}" formControlName="txtValorMinimoDetMaqOt">
+                                    <input matInput value="{{ this.valorMinArriendo }}" formControlName="txtValorMinimoDetMaqOt">
                                 </mat-form-field>
                             </mat-cell>
                         </ng-container>
@@ -55,7 +55,7 @@
                             <mat-header-cell *matHeaderCellDef> Precio por {{this.maq.maq_TipoValorMinArriendo}}</mat-header-cell>
                             <mat-cell *matCellDef="let element">
                                 <mat-form-field appearance="outline" id="busqueda-filter">
-                                    <input matInput value="{{ this.maq.maq_ValorArriendo }}" formControlName="txtPrecioDetMaqOt">
+                                    <input matInput value="{{ this.valorArriendo }}" formControlName="txtPrecioDetMaqOt">
                                 </mat-form-field>
                             </mat-cell>
                         </ng-container>
@@ -145,8 +145,8 @@
                 <div class="col-md-4" align="left">
                     <mat-form-field appearance="outline">
                         <mat-label>Región</mat-label>
-                        <mat-select name="region" (selectionChange)="regionFilter($any($event))">
-                            <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre" (click)="estadoSelectorComuna = false">
+                        <mat-select formControlName="selRegionDetMaq" name="region" (selectionChange)="regionFilter($any($event))">
+                            <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre">
                                 {{rgn.nombre}}
                             </mat-option>
                         </mat-select>
@@ -155,7 +155,7 @@
                 <div class="col-md-4" align="left">
                     <mat-form-field appearance="outline" style="right: 35px;">
                         <mat-label>Comuna</mat-label>
-                        <mat-select name="comuna" [disabled]="estadoSelectorComuna">
+                        <mat-select formControlName="selComunaDetMaq" name="comuna">
                             <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
                                 {{cmn.nombre}}
                             </mat-option>
