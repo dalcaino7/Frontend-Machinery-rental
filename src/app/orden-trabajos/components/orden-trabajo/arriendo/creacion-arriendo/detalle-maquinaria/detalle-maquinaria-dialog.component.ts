@@ -133,16 +133,30 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     let jsonData = JSON.parse(localStorage.getItem(this.data.codeMachine) || '[]');
       this.maqService.getMaquina(parseInt(this.data.idMachine)).subscribe((m) => {
         this.maq = m;
+        
+      
+
         if(!jsonData.codigoMaquina){
-            this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
-            this.valorArriendo = this.maq.maq_ValorArriendo;
+          console.log("1. if(!jsonData.codigoMaquina){");
+            // this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
+            // this.valorArriendo = this.maq.maq_ValorArriendo;
+            this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(this.maq.maq_ValorMinArriendo);
+            this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(this.maq.maq_ValorArriendo);
         }
         if(jsonData.codigoMaquina){
+          console.log("2. if(jsonData.codigoMaquina){){");
+
           this.machineDetailForm.get('txtOperarioDetMaqOt').setValue(jsonData.operario);
           if(!jsonData.valorMinimo || !jsonData.precio){
-            this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
-            this.valorArriendo = this.maq.maq_ValorArriendo;
+            console.log("3. if(!jsonData.valorMinimo || !jsonData.precio)");
+
+            // this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
+            // this.valorArriendo = this.maq.maq_ValorArriendo;
+            this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(this.maq.maq_ValorMinArriendo);
+            this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(this.maq.maq_ValorArriendo);
           }else{
+            console.log("3. ELSE -> if(!jsonData.valorMinimo || !jsonData.precio)");
+
             this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(jsonData.valorMinimo);
             this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(jsonData.precio);
           }
@@ -243,7 +257,11 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     this.detMaqTemp.direccion = this.machineDetailForm.value.txtDireccionDetOt;
  
     localStorage.setItem(this.maq.maq_Codigo, JSON.stringify(this.detMaqTemp));
-    
+
+    console.log("this.machineDetailForm.value.txtValorMinimoDetMaqOt: ", this.machineDetailForm.value.txtValorMinimoDetMaqOt);
+
+    console.log("this.detMaqTemp.valorMinimo : ", this.detMaqTemp.valorMinimo );
+
     // this.emitEvent(this.validate);
 
     this.closeDialog();

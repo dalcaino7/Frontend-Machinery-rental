@@ -299,17 +299,48 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   insertDataSourceMaquina(maqSearch: any){
+    
+
     this.maqService.getListMaquinas().subscribe((maq) => {
+      console.log("======================================================================== ");
+      console.log("******************* inicio INSERT ********************** ");
+
+      console.log("maq.length: ",maq.length);
 
       for (let i = 0; i < maq.length; i++) {
+        console.log("i: ",i);
+
+        console.log("maq[i].maq_Codigo: ",maq[i].maq_Codigo);
+        console.log("maqSearch: ",maqSearch);
         if(maq[i].maq_Codigo === maqSearch){
-          this.validaLStorage[i] = false;
+          console.log("Entro a if donde->  maq[i].maq_Codigo === maqSearch");
+
+          let x = this.dataSourceMaquinaria.data.length;
+          console.log("this.dataSourceMaquinaria.data.length: ", x);
+
+          
+
+
+          console.log("this.validaLStorage[i]: ",this.validaLStorage[x]);
+
+          this.validaLStorage[x] = false;
+          console.log("this.validaLStorage[i]: ",this.validaLStorage[x]);
+
+         
+          console.log("this.validaLStorage: ",this.validaLStorage);
+
+         
           this.dataSourceMaquinaria.data.push(maq[i]);
           this.dataSourceMaquinaria.data = this.dataSourceMaquinaria.data.slice();  
-
         }
       }
+      console.log("******************* FIN INSERT ********************** ");
+      console.log("======================================================================== ");
+
     });
+
+    
+
     
   }
   
@@ -323,6 +354,8 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   deleteMaquina(x: any) {
+    console.log("==================================================================");
+
     console.log("****  INICIO DELETE MAQ  ****");
     console.log("x: ",x);
 
@@ -337,7 +370,9 @@ export class CreacionArriendoComponent implements OnInit {
 
     
     
-    console.log("**** FIN DELETE MAQ  ****");
+    console.log("****   FIN DELETE MAQ    ****");
+    console.log("==================================================================");
+
 
   }
  /*  mostrarMapa() {
@@ -392,7 +427,10 @@ export class CreacionArriendoComponent implements OnInit {
             codeMachine: this.dataSourceMaquinaria.data[x].maq_Codigo }
         });
         dialogRef.afterClosed().subscribe((result) => {
-          // console.log("Dialog result codigo?: ", this.dataSourceMaquinaria.data[register].maq_Codigo);
+          console.log("==================================================================");
+          console.log("****   INICIO CIERRE DET MAQ    ****");
+
+
           let jsonData = JSON.parse(localStorage.getItem(this.dataSourceMaquinaria.data[x].maq_Codigo) || '[]');
           // for (let x = 0; x < this.dataSourceMaquinaria.data.length; x++) {
             // console.log("this.dataSourceMaquinaria.data.length: ",this.dataSourceMaquinaria.data.length);
@@ -405,7 +443,30 @@ export class CreacionArriendoComponent implements OnInit {
 
               console.log("this.dataSourceMaquinaria.data[register].maq_Codigo: ",this.dataSourceMaquinaria.data[x].maq_Codigo);
               this.validaLStorage[x] = true;
-              console.log("this.validaLStorage: ",this.validaLStorage);
+
+            //  for (let j = 0; j < this.dataSourceMaquinaria.data.length; j++) {
+                // if(jsonData.codigoMaquina === this.dataSourceMaquinaria.data[x].maq_Codigo){
+                // }
+                console.log("this.dataSourceMaquinaria.data[j].maq_Id: ",this.dataSourceMaquinaria.data[x].maq_Id);
+
+                // if(jsonData.valorMinimo == null || jsonData.precio == null){
+                //   // this.maqService.getListMaquinas().subscribe((maq) => {
+
+
+
+                //     this.dataSourceMaquinaria.data[x].maq_ValorMinArriendo =  this.machineDetailForm.value.txtTelefonoContactoDetOt;
+                //     this.dataSourceMaquinaria.data[x].maq_ValorArriendo    = 
+                //   // });
+                  
+                // }else{
+                  this.dataSourceMaquinaria.data[x].maq_ValorMinArriendo = jsonData.valorMinimo;
+                  this.dataSourceMaquinaria.data[x].maq_ValorArriendo    = jsonData.precio;
+                // }
+               
+            //  }
+
+
+              console.log("this.dataSourceMaquinaria: ",this.dataSourceMaquinaria);
 
               }
           //     if(jsonData.codigoMaquina === this.dataSourceMaquinaria.data[register].maq_Codigo){
@@ -417,6 +478,9 @@ export class CreacionArriendoComponent implements OnInit {
           //     }
             }
           // }
+          console.log("****   FIN CIERRE DET MAQ    ****");
+
+          console.log("==================================================================");
 
         });
     }
