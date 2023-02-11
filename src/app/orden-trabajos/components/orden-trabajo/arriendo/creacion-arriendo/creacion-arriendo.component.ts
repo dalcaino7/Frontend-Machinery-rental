@@ -28,6 +28,9 @@ import { RegionComunaChileService } from 'src/app/services/region-comuna-chile.s
 import { Region } from 'src/app/models/region';
 import { Comuna } from 'src/app/models/comuna';
 import { ComunasRegiones } from '../../../../../models/comunasRegiones';
+import { OrdenTrabajo } from '../../../../models/orden-trabajo';
+import { OtDetalleMaquina } from '../../../../models/ot-detalle-maquina';
+import { OrdenTrabajoService } from '../../../../services/orden-trabajo.service';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -41,6 +44,9 @@ import { ComunasRegiones } from '../../../../../models/comunasRegiones';
   ],
 })
 export class CreacionArriendoComponent implements OnInit {
+  ot:OrdenTrabajo = new OrdenTrabajo;
+  detOt:OtDetalleMaquina = new OtDetalleMaquina;
+
   validaLStorage: boolean[] = [];
   strIntoObj: Region[] = [];
 
@@ -113,7 +119,8 @@ export class CreacionArriendoComponent implements OnInit {
     public dialog: MatDialog,
     private rgnService: RegionComunaChileService,
     private cliService: ClienteService,
-    private maqService: MaquinaService
+    private maqService: MaquinaService,
+    private otService: OrdenTrabajoService
   ) {
     this.formUbicacion = formBuilder.group({
       select_region: '',
@@ -407,15 +414,41 @@ export class CreacionArriendoComponent implements OnInit {
     });
   }
 
+  procesarOt() {
+    this.addLocalStorage();
+    // confirm('Está seguro de finalizar?');
+    this.openDialog('resumen',null);
+  }
+
+  addLocalStorage(){
+    this.ot.otr_NumeroOrden = '';
+    this.ot.otr_Referencia ='';
+    this.ot.otr_FechaHoraCreacionOt='';
+    this.ot.otr_Cli_Id.cli_Id = '';
+    this.ot.otr_NombreContacto ='';
+
+/**  SEGUIR COMPLETANDO **/
+    
+
+
+    
+    this.otService.createOt(this.ot).subscribe(()=>{
+
+    });
+
+
+  }
+
   openDialog(definition: string, x: any) {
     console.log("open dialog: (definition): ", definition);
     console.log("open dialog: (x): ", x);
 
     if (definition == 'resumen') {
+
       const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, {
         panelClass: 'custom-dialog-container-medium',
       });
-      console.log('open dialog');
+
       dialogRef.afterClosed().subscribe((result) => {
         console.log(`Dialog result: ${result}`);
       });
@@ -485,12 +518,15 @@ export class CreacionArriendoComponent implements OnInit {
         });
     }
   }
-  procesarOt() {
-    // confirm('Está seguro de finalizar?');
-    this.openDialog('resumen',null);
+
+
+ 
+
+  addOtLocalStorage(){
+
+    
+
   }
-
-
 
   busquedaClienteFilter(filterValue: string) {
    /*  let valorEncontrado: string = '';
