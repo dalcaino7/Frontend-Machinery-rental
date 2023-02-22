@@ -11,8 +11,8 @@ export class OrdenTrabajo {
     otr_FechaHoraCreacionOt: string="";
     otr_FechaHoraTerminoOt: string="";
     otr_Estado: string="";
-    otr_Impuesto: number=0;
-    otr_PrecioTotal: number=0;
+    otr_Impuesto: string="";
+    otr_PrecioTotal: string="";
     otr_EstadoPago: string="";
     otr_FormaPago: string="";
     otr_NombreContacto: string="";
@@ -25,7 +25,10 @@ export class OrdenTrabajo {
 
     otr_Cli_Id: Cliente = new Cliente;
     otr_Usu_Id: Usuario = new Usuario;
-    otr_Odm_Id: OtDetalleMaquina[] = [];
+   // otr_Odm_Id!: OtDetalleMaquina[];
+    //otr_Odm_Id: OtDetalleMaquina[] | undefined;
+
+    otr_Odm_Id: OtDetalleMaquina[] = new Array<OtDetalleMaquina>();
     
     // otr_Id: string="";
     // otr_Tipo: string="";

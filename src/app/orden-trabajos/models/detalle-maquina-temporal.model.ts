@@ -1,5 +1,7 @@
 export class DetalleMaquinaTemporal {
+    idMaquina: string = "";
     codigoMaquina: string="";
+    nombreMaquina: string="";
     operario: string="";
     valorMinimo: string="";
     precio: string="";

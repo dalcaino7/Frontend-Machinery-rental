@@ -4,7 +4,7 @@ import { TipoMaquina } from './tipo-maquina';
 
 export class Maquina {
  
-  maq_Id: number = 0;
+  maq_Id: string="";
   maq_Codigo: string = '';
   maq_Nombre: string = '';
   maq_Descripcion: string = '';

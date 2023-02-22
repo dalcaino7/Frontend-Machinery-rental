@@ -3,17 +3,22 @@
     <form (submit)="setResumenArriendo()">
         <div class="card-header">
 
-            <div class="row ">
-                <div class="col-md-6 mt-1" align="left">
-                    <h2 class="mat-h3">Finalizar Orden - OA-123</h2>
-                </div>
-
+            <div class="col-md-12" align="left">
+                <h2 class="titulo">Resumen de Orden de Arriendo</h2>
             </div>
+
+
+        </div>
+        <div>
+            <h3 class="orden"><b>Orden: </b> {{ordenIdOt}}</h3>
         </div>
 
         <div class="card-body">
+
+
             <div class="row" id="fila-busqueda-cliente">
-                <div class="col-md-3 scrollbar" align="left">
+                <div class="col-md-6 scrollbar" align="left">
+
                     <div class="row">
                         <!--  Cliente -->
 
@@ -21,44 +26,50 @@
                         <table class="table borderless" id="table-cliente">
 
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <h2>Municipalidad de Paine</h2>
+
+                                <tr *ngIf="cliRazonSocialOt != ''">
+
+                                    <td colspan="2">
+                                        <h2>{{cliRazonSocialOt}}</h2>
                                     </td>
-
-
                                 </tr>
 
                                 <tr>
                                     <td>
-                                        <p><b>Rut:</b> 22.654.623-8</p>
+                                        <p><b>Rut:</b> {{cliRutOt}}</p>
+                                    </td>
+                                    <td *ngIf="cliNameOt != ''">
+                                        <p><b>Nombre cliente:</b> {{cliNameOt}} {{cliApellidosOt}}</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <p><b>Contacto:</b> {{cliContactoOt}}</p>
                                     </td>
                                     <td>
-                                        <p><b>Ubicación del trabajo:</b> Av Calle principal 3445, Paine</p>
+                                        <p><b>Ubicación del trabajo:</b> {{cliDireccionOt}}, {{cliComunaOt}}</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><b>Contacto:</b> Manuel Ortiz</p>
+                                        <p><b>Teléfono:</b> {{cliTelefonoOt}}</p>
                                     </td>
                                     <td>
-                                        <p><b>Teléfono:</b> 945684123</p>
+                                        <p><b>Email:</b> {{cliEmailOt}}</p>
                                     </td>
-
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Email:</b> contacto@municipalidadpaine.cl</p>
-                                    </td>
 
-                                </tr>
                             </tbody>
                         </table>
 
                     </div>
-                    <mat-divider></mat-divider>
-                    <br>
-                    <div class="row">
+                    <div class="row" *ngFor="let data of listMaq">
+                        <br>
+                        <br>
+
+                        <mat-divider></mat-divider>
+                        <br>
                         <!--  Maquinaria -->
                         <div class="icon-row-maq">
                             <mat-icon>arrow_forward_ios</mat-icon>
@@ -69,42 +80,42 @@
 
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <h2>G001 | Grua 01</h2>
+                                    <td colspan="2">
+                                        <h2>{{data.code}} | {{data.nombre}}</h2>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><b>Valor mínimo:</b> 160 Hrs.</p>
+                                        <p><b>Valor mínimo:</b> {{data.valorMinimo}</p>
                                     </td>
                                     <td>
-                                        <p><b>Precio:</b> $ 3.750 /Hr. </p>
+                                        <p><b>Precio:</b> $ {{data.precio}} /{{data.tipoPrecio}}. </p>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><b>Implemento:</b> N/A</p>
+                                        <p><b>Implemento:</b> {{data.implemento}}</p>
                                     </td>
                                     <td>
-                                        <p><b>Operario:</b> Diego Pozo</p>
+                                        <p><b>Operario:</b> {{data.operario}}</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><b>Combustible:</b> Si</p>
+                                        <p><b>Combustible:</b> {{data.combustible}}</p>
                                     </td>
                                     <td>
-                                        <p><b>Cilindro de gas:</b> No</p>
+                                        <p><b>Cilindro de gas:</b> {{data.cilindro}}</p>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><b>Nivel de estanque:</b> 3/4</p>
+                                        <p><b>Nivel de estanque:</b> {{data.combustible}}</p>
                                     </td>
                                     <td>
-                                        <p><b>Traslado:</b> No</p>
+                                        <p><b>Traslado:</b> {{data.traslado}}</p>
                                     </td>
 
                                 </tr>
@@ -112,71 +123,12 @@
                             </tbody>
                         </table>
                         <br><br>
-                        <mat-divider></mat-divider>
 
                         <br>
 
                     </div>
 
 
-                    <div class="row">
-                        <!--  Maquinaria -->
-                        <div class="icon-row-maq">
-                            <mat-icon>arrow_forward_ios</mat-icon>
-                        </div>
-
-
-
-                        <table class="table borderless" id="table-maquina">
-
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h2>G001 | Grua 02</h2>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Valor mínimo:</b> 160 Hrs.</p>
-                                    </td>
-                                    <td>
-                                        <p><b>Precio:</b> $ 3.750 /Hr. </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Implemento:</b> Rastra 01</p>
-                                    </td>
-                                    <td>
-                                        <p><b>Operario:</b> Sergio Valenzuela</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Combustible:</b> Si</p>
-                                    </td>
-                                    <td>
-                                        <p><b>Cilindro de gas:</b> No</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><b>Nivel de estanque:</b> 3/4</p>
-                                    </td>
-                                    <td>
-                                        <p><b>Traslado:</b> No</p>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-                        </table>
-                        <br><br>
-                        <mat-divider></mat-divider>
-
-                    </div>
 
                 </div>
 

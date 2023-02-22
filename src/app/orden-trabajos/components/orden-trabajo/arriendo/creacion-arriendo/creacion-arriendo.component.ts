@@ -21,7 +21,7 @@ import { Cliente } from 'src/app/clientes/models/cliente';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Maquina } from '../../../../../maquinas/models/maquina';
 import { MaquinaService } from '../../../../../maquinas/services/maquina.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { data } from 'jquery';
 import { RegionComunaChileService } from 'src/app/services/region-comuna-chile.service';
@@ -31,6 +31,9 @@ import { ComunasRegiones } from '../../../../../models/comunasRegiones';
 import { OrdenTrabajo } from '../../../../models/orden-trabajo';
 import { OtDetalleMaquina } from '../../../../models/ot-detalle-maquina';
 import { OrdenTrabajoService } from '../../../../services/orden-trabajo.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { forEach } from 'lodash';
+import { DetalleArriendoComponent } from '../detalle-arriendo/detalle-arriendo.component';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -45,7 +48,9 @@ import { OrdenTrabajoService } from '../../../../services/orden-trabajo.service'
 })
 export class CreacionArriendoComponent implements OnInit {
   ot:OrdenTrabajo = new OrdenTrabajo;
-  detOt:OtDetalleMaquina = new OtDetalleMaquina;
+  //detOt:OtDetalleMaquina = new OtDetalleMaquina;
+
+  detOtList: Array<OtDetalleMaquina> = [];
 
   validaLStorage: boolean[] = [];
   strIntoObj: Region[] = [];
@@ -161,15 +166,15 @@ export class CreacionArriendoComponent implements OnInit {
       txtNombreMaquinaOt: [''],
     });
 
-    this.firstFormGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required],
-    });
-    this.secondFormGroup = this.formBuilder.group({
-      secondCtrl: ['', Validators.required],
-    });
-    this.tercerFormGroup = this.formBuilder.group({
-      tercerCtrl: ['', Validators.required],
-    });
+    // this.firstFormGroup = this.formBuilder.group({
+    //   firstCtrl: ['', Validators.required],
+    // });
+    // this.secondFormGroup = this.formBuilder.group({
+    //   secondCtrl: ['', Validators.required],
+    // });
+    // this.tercerFormGroup = this.formBuilder.group({
+    //   tercerCtrl: ['', Validators.required],
+    // });
     this.listRegiones();
   } // fin Init
 
@@ -415,26 +420,98 @@ export class CreacionArriendoComponent implements OnInit {
   }
 
   procesarOt() {
+    console.log("0 this.ot.otr_Odm_Id: ",this.ot.otr_Odm_Id);
+
     this.addLocalStorage();
     // confirm('Está seguro de finalizar?');
     this.openDialog('resumen',null);
   }
+  
+ 
 
   addLocalStorage(){
-    this.ot.otr_NumeroOrden = '';
-    this.ot.otr_Referencia ='';
-    this.ot.otr_FechaHoraCreacionOt='';
-    this.ot.otr_Cli_Id.cli_Id = '';
-    this.ot.otr_NombreContacto ='';
+
+    this.ot.otr_Id = "0";
+    this.ot.otr_NumeroOrden = this.otForm.value.txtNumeroOt;
+    console.log("this.ot.otr_NumeroOrden: ",this.ot.otr_NumeroOrden);
+
+    this.ot.otr_Referencia =this.otForm.value.txtReferenciaOt;
+    this.ot.otr_Tipo = "Arriendo";
+    this.ot.otr_FechaHoraCreacionOt=this.otForm.value.txtFechaOt;
+    //this.ot.otr_FechaHoraTerminoOt='';
+    this.ot.otr_Estado = "Iniciada";
+    this.ot.otr_Impuesto = "0";
+    this.ot.otr_PrecioTotal = "0";
+    this.ot.otr_EstadoPago = "Pendiente";
+    //this.ot.otr_FormaPago = null;
+    
+    this.ot.otr_NombreContacto =this.otForm.value.txtNombreContactoClienteOt;
+    this.ot.otr_TelefonoContacto=this.otForm.value.txtTelefonoContactoClienteOt;
+    this.ot.otr_EmailContacto = this.otForm.value.txtEmailContactoClienteOt;
+    this.ot.otr_RegionTrabajo = this.otForm.value['txtRegionContactoClienteOt'];
+    this.ot.otr_ComunaTrabajo = this.otForm.value['txtComunaContactoClienteOt'];
+    this.ot.otr_DireccionTrabajo = this.otForm.value.txtDireccionContactoClienteOt;
+
+    this.ot.otr_Observacion = "Observacion por defecto";
+    
+    this.ot.otr_Cli_Id.cli_Id = this.dataSourceCliente.filteredData[0].cli_Id;
+    this.ot.otr_Cli_Id.cli_Nombre = this.dataSourceCliente.filteredData[0].cli_Nombre;
+    this.ot.otr_Cli_Id.cli_Apellidos = this.dataSourceCliente.filteredData[0].cli_Apellidos;
+    this.ot.otr_Cli_Id.cli_RazonSocial = this.dataSourceCliente.filteredData[0].cli_RazonSocial;
+    this.ot.otr_Cli_Id.cli_Rut = this.dataSourceCliente.filteredData[0].cli_Rut;
+    this.ot.otr_Usu_Id.usu_Id = "1";
+
+    for (let x=0; x < this.dataSourceMaquinaria.data.length; x++) {
+  
+      let jsonDetMaqOt = JSON.parse(localStorage.getItem(this.dataSourceMaquinaria.data[x].maq_Codigo) || '[]');
+      let maquina = new Maquina();
+      //maquina.maq_Id = this.dataSourceMaquinaria.data[x].maq_Id;
+      maquina.maq_Id = jsonDetMaqOt.idMaquina;
+      maquina.maq_Codigo = jsonDetMaqOt.codigoMaquina;
+      maquina.maq_Nombre = jsonDetMaqOt.nombreMaquina;
+
+      this.ot.otr_Odm_Id.push({
+        odm_Id: "0",
+        odm_NombreOperario:jsonDetMaqOt.operario,
+        odm_ValorMinArriendo:jsonDetMaqOt.valorMinimo,
+        odm_TipoValorMinArriendo:this.dataSourceMaquinaria.data[x].maq_TipoValorMinArriendo,
+        odm_ValorArriendo: jsonDetMaqOt.precio,
+        odm_NivelEstanqueSalida:jsonDetMaqOt.combustible,
+        otr_Traslado: jsonDetMaqOt.traslado,
+        odm_CilindroGas:jsonDetMaqOt.cilindroGas,
+        odm_NombreContacto:jsonDetMaqOt.nombreContacto,
+        odm_TelefonoContacto:jsonDetMaqOt.telefonoContacto,
+        odm_EmailContacto: jsonDetMaqOt.emailContacto,
+        odm_RegionTrabajo: jsonDetMaqOt.region,
+        odm_ComunaTrabajo: jsonDetMaqOt.comuna,
+        odm_DireccionTrabajo:jsonDetMaqOt.direccion,
+        odm_FechaHoraInicio: "",
+        odm_ControlInicio: "0",
+        odm_FechaHoraTermino: "",
+        odm_ControlTermino:"0",
+        odm_NombreUsuario: "",
+        odm_Maq_Id: maquina
+      });
+      
+    }
+   
+    console.log("this.ot: ",this.ot);
+    localStorage.setItem(this.ot.otr_NumeroOrden, JSON.stringify(this.ot));
+   
+
+
+
 
 /**  SEGUIR COMPLETANDO **/
     
 
 
     
-    this.otService.createOt(this.ot).subscribe(()=>{
+    // this.otService.createOt(this.ot).subscribe((ot)=>{
 
-    });
+    // console.log("OT: ",ot);
+    
+    // });
 
 
   }
@@ -447,6 +524,9 @@ export class CreacionArriendoComponent implements OnInit {
 
       const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, {
         panelClass: 'custom-dialog-container-medium',
+        data:{
+          idOt: this.otForm.value.txtNumeroOt
+        }
       });
 
       dialogRef.afterClosed().subscribe((result) => {

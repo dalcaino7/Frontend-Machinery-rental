@@ -59,5 +59,5 @@ export class VerMaquinaDialogComponent implements OnInit {
 }
 
 export interface DialogData {
-  idMaquinaDialog: number;
+  idMaquinaDialog: string;
 }

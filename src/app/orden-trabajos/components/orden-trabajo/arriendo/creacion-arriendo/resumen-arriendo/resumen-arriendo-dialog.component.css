@@ -1,12 +1,45 @@
+.card {
+    border: 0px solid rgba(0, 0, 0, .125);
+    color: white;
+    background-color: rgba(0, 0, 0, .125);
+}
+
 .card-body {
-    width: 388%;
-    height: 433px;
+    width: 92%;
+    height: 432px;
     margin-left: 3%;
-    padding-top: 14px;
+    background-color: white;
+    margin-bottom: 2%;
+    margin-top: -1%;
+    border-radius: 7px;
+}
+
+.titulo {
+    color: white;
+    margin-top: -3px;
+}
+
+mat-divider {
+    max-width: 95%;
+    position: absolute;
+}
+
+.card-header {
+    background-color: rgb(45 59 80);
+    padding-top: 10px;
+    height: 45px;
 }
 
 .card-footer {
     padding-left: 87%;
+}
+
+.orden {
+    color: black;
+    /* position: fixed; */
+    /* top: 20%; */
+    margin-left: 22px;
+    padding-top: 9px;
 }
 
 .borderless td,
@@ -14,10 +47,17 @@
     border: none;
 }
 
+.col-md-6 {
+    border-radius: 7px;
+}
+
 .scrollbar {
-    height: 404px;
+    height: 432px;
     overflow-y: scroll;
-    padding-right: 21px;
+    right: 0%;
+    position: absolute;
+    top: 90px;
+    width: 95%;
 }
 
 table td {
@@ -32,15 +72,19 @@ table td {
 }
 
 .icon-row-maq {
-    width: 0%;
-    padding-left: 0px;
+    width: 4%;
+    padding-left: 0%;
+    color: black;
+    padding-top: 2%;
+    position: absolute;
 }
 
 #table-cliente {
-    width: 95%;
+    width: 94%;
 }
 
 #table-maquina {
-    width: 82%;
-    margin-left: 23px;
+    width: 79%;
+    margin-left: 34px;
+    margin-top: 11px;
 }

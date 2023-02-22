@@ -91,7 +91,7 @@ export class MainMaquinaComponent implements AfterViewInit {
 
   }
 
-  updateMaquina(id: number) {
+  updateMaquina(id: string) {
     this.maquina.maq_Id = id;
     this.openDialog('mod');
   }
@@ -167,7 +167,7 @@ export class MainMaquinaComponent implements AfterViewInit {
     }
   }
 
-  deleteMaquina(id: number) {
+  deleteMaquina(id: string) {
     Swal.fire({
       title: '¿Estás Seguro de eliminar esta maquinaria?',
       text: 'No podrás revertirlo...',
@@ -199,7 +199,7 @@ export class MainMaquinaComponent implements AfterViewInit {
     });
   }
 
-  viewCliente(id: number) {
+  viewCliente(id: string) {
     this.maquina.maq_Id = id;
     this.openDialog('ver');
   }

@@ -505,5 +505,5 @@ interface selectData {
 
 export interface DialogData {
   modeDialog: string;
-  idMaquinaDialog: number;
+  idMaquinaDialog: string;
 }

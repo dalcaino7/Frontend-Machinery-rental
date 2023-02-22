@@ -4,11 +4,11 @@ import { Maquina } from '../../maquinas/models/maquina';
 
 export class OtDetalleMaquina {
 
-    odm_Id: number=0;
+    odm_Id: string="";
     odm_NombreOperario: string="";
-    odm_ValorMinArriendo: number=0;
+    odm_ValorMinArriendo: string="";
     odm_TipoValorMinArriendo: string="";
-    odm_ValorArriendo: number=0;
+    odm_ValorArriendo: string="";
     odm_NivelEstanqueSalida: string="";
     otr_Traslado: string="";
     odm_CilindroGas: string="";
@@ -19,9 +19,9 @@ export class OtDetalleMaquina {
     odm_ComunaTrabajo: string="";
     odm_DireccionTrabajo: string="";
     odm_FechaHoraInicio: string ="";
-    odm_ControlInicio: number=0;
+    odm_ControlInicio: string="";
     odm_FechaHoraTermino: string ="";
-    odm_ControlTermino: number=0;
+    odm_ControlTermino: string="";
     odm_NombreUsuario: string="";
     odm_Maq_Id: Maquina = new Maquina;
 

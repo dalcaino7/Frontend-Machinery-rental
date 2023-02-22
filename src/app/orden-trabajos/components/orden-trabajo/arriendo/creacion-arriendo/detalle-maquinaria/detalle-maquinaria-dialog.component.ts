@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ComunasRegiones } from 'src/app/models/comunasRegiones';
 import { DetalleMaquinaTemporal } from 'src/app/orden-trabajos/models/detalle-maquina-temporal.model';
+import { OrdenTrabajo } from 'src/app/orden-trabajos/models/orden-trabajo';
 import { Maquina } from '../../../../../../maquinas/models/maquina';
 import { MaquinaService } from '../../../../../../maquinas/services/maquina.service';
 import { TipoMaquinaService } from '../../../../../../maquinas/services/tipo-maquina.service';
@@ -25,7 +26,6 @@ import { RegionComunaChileService } from '../../../../../../services/region-comu
   styleUrls: ['./detalle-maquinaria-dialog.component.css'],
 })
 export class DetalleMaquinariaDialogComponent implements OnInit {
-
 
   @Output() newItemEvent = new EventEmitter();
 
@@ -131,7 +131,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
 
   listDetalleMaquinaria() {
     let jsonData = JSON.parse(localStorage.getItem(this.data.codeMachine) || '[]');
-      this.maqService.getMaquina(parseInt(this.data.idMachine)).subscribe((m) => {
+      this.maqService.getMaquina(this.data.idMachine).subscribe((m) => {
         this.maq = m;
         
       
@@ -242,13 +242,15 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   }
 
   setDetalleMaquinaria() {
+    this.detMaqTemp.idMaquina = this.maq.maq_Id.toString();
     this.detMaqTemp.codigoMaquina = this.maq.maq_Codigo;
+    this.detMaqTemp.nombreMaquina = this.maq.maq_Nombre;
     this.detMaqTemp.operario = this.machineDetailForm.value.txtOperarioDetMaqOt;
     this.detMaqTemp.valorMinimo = this.machineDetailForm.value.txtValorMinimoDetMaqOt;
     this.detMaqTemp.precio = this.machineDetailForm.value.txtPrecioDetMaqOt;
     this.detMaqTemp.combustible = this.machineDetailForm.value['selCombustibleDetMaqOt'];
-    this.detMaqTemp.traslado = this.machineDetailForm.value.checkTrasladoDetOt;
-    this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt;
+    this.detMaqTemp.traslado = this.machineDetailForm.value.checkTrasladoDetOt.toString();
+    this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt.toString();
     this.detMaqTemp.nombreContacto = this.machineDetailForm.value.txtNombreContactoDetOt;
     this.detMaqTemp.telefonoContacto = this.machineDetailForm.value.txtTelefonoContactoDetOt;
     this.detMaqTemp.emailContacto = this.machineDetailForm.value.txtEmailContactoDetOt;
@@ -263,6 +265,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     console.log("this.detMaqTemp.valorMinimo : ", this.detMaqTemp.valorMinimo );
 
     // this.emitEvent(this.validate);
+    
 
     this.closeDialog();
   }
