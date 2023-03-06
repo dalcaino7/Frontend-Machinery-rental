@@ -208,9 +208,9 @@ export class CreacionMaquinaDialogComponent implements OnInit {
             showConfirmButton: false,
             timer: 2300,
           });
-          setInterval(function () {
-            location.reload();
-          }, 2000); //actualiza la pagina a los 2seg
+          // setInterval(function () {
+          //   location.reload();
+          // }, 2000); //actualiza la pagina a los 2seg
           this.closeDialog();
         });
 

@@ -34,6 +34,7 @@ import { OrdenTrabajoService } from '../../../../services/orden-trabajo.service'
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { forEach } from 'lodash';
 import { DetalleArriendoComponent } from '../detalle-arriendo/detalle-arriendo.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -147,9 +148,9 @@ export class CreacionArriendoComponent implements OnInit {
     /* DECLARACION DE FORMULARIO DE OT */
     this.otForm = this.formBuilder.group({
       /* VARIABLES DE ORDEN DE TRABAJO */
-      txtNumeroOt: [''],
-      txtReferenciaOt: [''],
-      txtFechaOt: [''],
+      txtNumeroOt: ['',[Validators.required, Validators.maxLength(20)]],
+      txtReferenciaOt: ['',Validators.maxLength(20)],
+      txtFechaOt: ['',Validators.required],
 
       /* VARIABLES DE CLIENTE */
       txtRutClienteOt: [''],
@@ -157,9 +158,9 @@ export class CreacionArriendoComponent implements OnInit {
       txtNombreContactoClienteOt: [''],
       txtTelefonoContactoClienteOt: [''],
       txtEmailContactoClienteOt: [''],
-      txtRegionContactoClienteOt: [''],
-      txtComunaContactoClienteOt: [''],
-      txtDireccionContactoClienteOt: [''],
+      txtRegionContactoClienteOt: ['',Validators.required],
+      txtComunaContactoClienteOt: ['',Validators.required],
+      txtDireccionContactoClienteOt: ['',[Validators.required, Validators.maxLength(60)]],
 
       /* VARIABLES DE MAQUINARIA */
       txtCodigoMaquinaOt: [''],
@@ -469,6 +470,18 @@ export class CreacionArriendoComponent implements OnInit {
       maquina.maq_Id = jsonDetMaqOt.idMaquina;
       maquina.maq_Codigo = jsonDetMaqOt.codigoMaquina;
       maquina.maq_Nombre = jsonDetMaqOt.nombreMaquina;
+          
+      if(jsonDetMaqOt.traslado=='true'){
+        jsonDetMaqOt.traslado = 'Si';
+      }else{
+        jsonDetMaqOt.traslado = 'No';
+      }
+
+      if(jsonDetMaqOt.cilindroGas=='true'){
+        jsonDetMaqOt.cilindroGas = 'Si';
+      }else{
+        jsonDetMaqOt.cilindroGas = 'No';
+      }
 
       this.ot.otr_Odm_Id.push({
         odm_Id: "0",
@@ -489,7 +502,8 @@ export class CreacionArriendoComponent implements OnInit {
         odm_ControlInicio: "0",
         odm_FechaHoraTermino: "",
         odm_ControlTermino:"0",
-        odm_NombreUsuario: "",
+        odm_NombreUsuario: "System",
+        odm_Observacion: jsonDetMaqOt.observacion,
         odm_Maq_Id: maquina
       });
       
@@ -516,6 +530,32 @@ export class CreacionArriendoComponent implements OnInit {
 
   }
 
+  insertarOt(){
+    console.log("OT PREVIO",this.ot);
+
+    this.ot.otr_Cli_Id.cli_Id = this.dataSourceCliente.filteredData[0].cli_Id;
+    this.ot.otr_Cli_Id.cli_Nombre = this.dataSourceCliente.filteredData[0].cli_Nombre;
+    this.ot.otr_Cli_Id.cli_Apellidos = this.dataSourceCliente.filteredData[0].cli_Apellidos;
+    this.ot.otr_Cli_Id.cli_RazonSocial = this.dataSourceCliente.filteredData[0].cli_RazonSocial;
+    this.ot.otr_Cli_Id.cli_Rut = this.dataSourceCliente.filteredData[0].cli_Rut;
+    this.ot.otr_Cli_Id.cli_Comuna = '';
+
+    this.otService.createOt(this.ot).subscribe((ot)=>{
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: `La Orden de Arriendo ha sido creada con éxito`,
+        showConfirmButton: false,
+        timer: 2300,
+      });
+      setInterval(function () {
+        location.reload();
+      }, 2000); //actualiza la pagina a los 2seg
+    console.log("OT FINAL INSERTADO: ",ot);
+    
+    });
+  }
+
   openDialog(definition: string, x: any) {
     console.log("open dialog: (definition): ", definition);
     console.log("open dialog: (x): ", x);
@@ -531,6 +571,7 @@ export class CreacionArriendoComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         console.log(`Dialog result: ${result}`);
+        this.insertarOt();
       });
     } else {        
         const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {

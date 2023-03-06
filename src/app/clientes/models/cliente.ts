@@ -11,8 +11,10 @@ export class Cliente {
     cli_Telefono:string="";
     cli_Email:string="";
     cli_Direccion:string="";
-    cli_Comuna: Comuna= new Comuna();
-    cli_Region: Region = new Region();
+    cli_Comuna:string="";
+    cli_Region:string="";
+    // cli_Comuna: Comuna= new Comuna();
+    // cli_Region: Region = new Region();
     cli_Pais:string="";
     cli_Observacion:string="";
     cli_Foto:string="";

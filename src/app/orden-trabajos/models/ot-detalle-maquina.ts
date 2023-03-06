@@ -23,6 +23,7 @@ export class OtDetalleMaquina {
     odm_FechaHoraTermino: string ="";
     odm_ControlTermino: string="";
     odm_NombreUsuario: string="";
+    odm_Observacion: string = "";
     odm_Maq_Id: Maquina = new Maquina;
 
 

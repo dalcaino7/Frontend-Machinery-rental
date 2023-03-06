@@ -112,9 +112,9 @@ export class ResumenArriendoDialogComponent implements OnInit {
       this.listMaq.push({
         code: datoJson.odm_Maq_Id.maq_Codigo,
         nombre: datoJson.odm_Maq_Id.maq_Nombre,
-        valorMin: datoJson.odm_Maq_Id.odm_ValorMinArriendo,
-        precio: datoJson.odm_Maq_Id.odm_ValorArriendo,
-        tipoPrecio: datoJson.odm_Maq_Id.odm_ValorArriendo,
+        valorMin: datoJson.odm_ValorMinArriendo,
+        precio: datoJson.odm_ValorArriendo,
+        tipoPrecio: datoJson.odm_TipoValorMinArriendo,
         implemento:"",
         operario: datoJson.odm_NombreOperario,
         combustible:"",

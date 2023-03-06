@@ -14,4 +14,5 @@ export class DetalleMaquinaTemporal {
     region: string="";
     comuna: string="";
     direccion: string="";
+    observacion: string ="";
 }

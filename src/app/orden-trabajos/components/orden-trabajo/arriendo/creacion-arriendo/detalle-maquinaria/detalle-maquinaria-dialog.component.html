@@ -102,7 +102,7 @@
                     </mat-table>
                 </div>
             </div>
-            <br>
+
             <div class="row">
                 <div class="col-md-3">
                     <mat-checkbox formControlName="checkTrasladoDetOt" color="primary">Traslado</mat-checkbox>
@@ -113,7 +113,7 @@
                 <div class="col-md-6">
                 </div>
             </div>
-            <mat-divider></mat-divider>
+
             <br>
             <h3><b>* Datos de contacto</b></h3>
             <div class="row" id="fila-contacto">
@@ -137,9 +137,7 @@
                     </mat-form-field>
                 </div>
             </div>
-            <br>
-            <mat-divider></mat-divider>
-            <br>
+
             <h3><b>* Ubicación del trabajo</b></h3>
             <div class="row" id="fila-ubicacion">
                 <div class="col-md-4" align="left">
@@ -169,8 +167,18 @@
                     </mat-form-field>
                 </div>
             </div>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="row">
+                <div class="col-md-4" align="left">
+                    <mat-form-field appearance="outline" style="width: 316%;">
+                        <mat-label>Observación</mat-label>
+                        <input matInput formControlName="txtObservacionDetOt">
+                        <textarea matInput></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
-
         <div class="card-footer" align="right">
             <div class="row">
                 <div class="col-md-9"> <button mat-raised-button type="button" color="primary" class="btn-formulario-cabecera" (click)="closeDialog()">Cancelar</button>

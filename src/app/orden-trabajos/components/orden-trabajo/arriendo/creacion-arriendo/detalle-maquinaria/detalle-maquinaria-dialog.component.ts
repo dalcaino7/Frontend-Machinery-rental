@@ -111,6 +111,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
       selRegionDetMaq: ['', Validators.required],
       selComunaDetMaq: ['', Validators.required],
       txtDireccionDetOt: [''],
+      txtObservacionDetOt:[''],
     });
     
     this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
@@ -130,7 +131,10 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
 
 
   listDetalleMaquinaria() {
+
+    
     let jsonData = JSON.parse(localStorage.getItem(this.data.codeMachine) || '[]');
+
       this.maqService.getMaquina(this.data.idMachine).subscribe((m) => {
         this.maq = m;
         
@@ -160,14 +164,30 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
             this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(jsonData.valorMinimo);
             this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(jsonData.precio);
           }
+
+          console.log("jsonData.combustible!!!!!: ",jsonData.combustible);
+
           this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue(jsonData.combustible);
-          this.machineDetailForm.get(['checkTrasladoDetOt']).setValue(jsonData.traslado);
-          this.machineDetailForm.get(['checkCilindroDetOt']).setValue(jsonData.cilindroGas);
+
+          jsonData.traslado = (String(jsonData.traslado).toLowerCase() === 'true');
+          jsonData.cilindroGas = (String(jsonData.cilindroGas).toLowerCase() === 'true');
+
+          console.log("jsonData.traslado: ",jsonData.traslado );
+          console.log("jsonData.cilindroGas: ",jsonData.cilindroGas );
+          this.machineDetailForm.get('checkTrasladoDetOt').setValue(jsonData.traslado);
+
+          this.machineDetailForm.get('checkCilindroDetOt').setValue(jsonData.cilindroGas);
+          
           this.machineDetailForm.get('txtNombreContactoDetOt').setValue(jsonData.nombreContacto);
           this.machineDetailForm.get('txtTelefonoContactoDetOt').setValue(jsonData.telefonoContacto);
           this.machineDetailForm.get('txtEmailContactoDetOt').setValue(jsonData.emailContacto);
           this.machineDetailForm.get('txtDireccionDetOt').setValue(jsonData.direccion);
+          this.machineDetailForm.get('txtObservacionDetOt').setValue(jsonData.observacion);
         }
+        
+        this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue("1/4");
+
+        
         this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
           this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
           this.regionSelect = this.strIntoObj;
@@ -249,6 +269,9 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     this.detMaqTemp.valorMinimo = this.machineDetailForm.value.txtValorMinimoDetMaqOt;
     this.detMaqTemp.precio = this.machineDetailForm.value.txtPrecioDetMaqOt;
     this.detMaqTemp.combustible = this.machineDetailForm.value['selCombustibleDetMaqOt'];
+    console.log("checkTrasladoDetOt: ",this.machineDetailForm.value.checkTrasladoDetOt.toString());
+    console.log("checkCilindroDetOt: ",this.machineDetailForm.value.checkCilindroDetOt.toString());
+
     this.detMaqTemp.traslado = this.machineDetailForm.value.checkTrasladoDetOt.toString();
     this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt.toString();
     this.detMaqTemp.nombreContacto = this.machineDetailForm.value.txtNombreContactoDetOt;
@@ -257,7 +280,8 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     this.detMaqTemp.region = this.machineDetailForm.value['selRegionDetMaq'];
     this.detMaqTemp.comuna = this.machineDetailForm.value['selComunaDetMaq'];
     this.detMaqTemp.direccion = this.machineDetailForm.value.txtDireccionDetOt;
- 
+    this.detMaqTemp.observacion = this.machineDetailForm.value.txtObservacionDetOt;
+
     localStorage.setItem(this.maq.maq_Codigo, JSON.stringify(this.detMaqTemp));
 
     console.log("this.machineDetailForm.value.txtValorMinimoDetMaqOt: ", this.machineDetailForm.value.txtValorMinimoDetMaqOt);

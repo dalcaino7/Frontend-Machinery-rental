@@ -25,12 +25,12 @@
 
 mat-header-cell {
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
     color: black;
 }
 
 mat-cell {
-    font-size: 14px;
+    font-size: 13px;
     color: rgb(63, 63, 63);
 }
 
@@ -112,11 +112,15 @@ mat-cell {
 /*redimension de columnas OT y CLIENTE de la tabla*/
 
 .mat-column-otr_Id {
-    flex: 0 0 75px;
+    flex: 0 0 80px;
+}
+
+.mat-column-otr_NumeroOrden {
+    flex: 0 0 145px;
 }
 
 .mat-column-cliente {
-    flex: 0 0 215px;
+    flex: 0 0 190px;
 }
 
 .mat-column-cli_Comuna {
@@ -125,26 +129,38 @@ mat-cell {
 }
 
 .mat-column-maquina {
-    flex: 0 0 260px;
+    flex: 0 0 240px;
 }
 
 .mat-column-otr_Estado {
-    flex: 0 0 140px;
+    flex: 0 0 132px;
 }
 
 .mat-column-otr_FechaHoraCreacionOt {
-    flex: 0 0 144px;
+    flex: 0 0 124px;
     /*     padding-right: 100px;
  */
 }
 
 .mat-column-accion {
     /*  flex: 0 0 100px; */
-    padding-right: 30px;
+    padding-left: 4px;
+    flex: 0 0 160px;
 }
 
 .button-box {
     display: inline-grid;
+}
+
+.mat-icon {
+    width: 8px;
+    padding-right: 11px;
+}
+
+.material-icons {
+    font-size: 18px;
+    line-height: 1;
+    margin-left: -6px;
 }
 
 

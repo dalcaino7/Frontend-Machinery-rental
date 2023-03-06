@@ -28,13 +28,13 @@
                     <div class="col-md-3" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>N° Orden</mat-label>
-                            <input matInput formControlName="txtNumeroOt">
+                            <input matInput formControlName="txtNumeroOt" maxlength="20">
                         </mat-form-field>
                     </div>
                     <div class="col-md-3 " align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Referencia</mat-label>
-                            <input matInput formControlName="txtReferenciaOt">
+                            <input matInput formControlName="txtReferenciaOt" maxlength="20">
                         </mat-form-field>
                     </div>
                     <div class="col-md-6 " align="left">
@@ -124,19 +124,19 @@
                     <div class="col-md-3" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Nombre contacto</mat-label>
-                            <input matInput formControlName="txtNombreContactoClienteOt">
+                            <input matInput formControlName="txtNombreContactoClienteOt" maxlength="50">
                         </mat-form-field>
                     </div>
                     <div class="col-md-3" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Teléfono contacto</mat-label>
-                            <input matInput formControlName="txtTelefonoContactoClienteOt">
+                            <input matInput formControlName="txtTelefonoContactoClienteOt" maxlength="50">
                         </mat-form-field>
                     </div>
                     <div class="col-md-6" align="left">
                         <mat-form-field appearance="outline">
                             <mat-label>Email contacto</mat-label>
-                            <input matInput placeholder="nombre@mail.com" formControlName="txtEmailContactoClienteOt">
+                            <input matInput placeholder="nombre@mail.com" formControlName="txtEmailContactoClienteOt" maxlength="40">
                             <mat-error *ngIf=""></mat-error>
                         </mat-form-field>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline" style="width: 300px;">
                             <mat-label>Dirección</mat-label>
-                            <input matInput formControlName="txtDireccionContactoClienteOt">
+                            <input matInput formControlName="txtDireccionContactoClienteOt" maxlength="60">
                         </mat-form-field>
                     </div>
 

@@ -17,6 +17,7 @@ import * as _ from 'lodash'; //paquete para el manejo de matrices
 import { data } from 'jquery';
 // import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-arriendo',
@@ -32,11 +33,12 @@ export class ArriendoComponent implements AfterViewInit {
     end: new FormControl(),
   });
 
+  ot:OrdenTrabajo = new OrdenTrabajo;
 
   selectedValueEstado: string = '';
   selectedValue: string = '';
   selectedCar: string = '';
-  ordenT: OrdenTrabajo = new OrdenTrabajo();
+  //ordenT: OrdenTrabajo = new OrdenTrabajo();
   ordenTs: OrdenTrabajo[] = [];
   // detalleOrdenTrabajo: OtDetalleMaquina = new OtDetalleMaquina();
   // detalleOrdenTrabajos: OtDetalleMaquina[] = [];
@@ -55,6 +57,7 @@ export class ArriendoComponent implements AfterViewInit {
 
   displayedColumns: string[] = [
     'otr_Id',
+    'otr_NumeroOrden',
     'cliente',
     'cli_Comuna',
     'maquina',
@@ -93,7 +96,7 @@ export class ArriendoComponent implements AfterViewInit {
 
 
     this.OtService.getListOt().subscribe((ot: OrdenTrabajo[]) => {
-
+    //  this.ordenT = ot;
       this.listOtTabla = ot;
       this.dataSource.data = ot;
 
@@ -152,12 +155,12 @@ export class ArriendoComponent implements AfterViewInit {
 
       if(data.otr_Cli_Id.cli_RazonSocial){
           return (
-            maquinarias.join(' ').includes(filter)  || data.otr_Id.toString().includes(filter) ||
+            maquinarias.join(' ').includes(filter)  || data.otr_NumeroOrden.toString().includes(filter) ||
             rsocial.includes(filter)
           );
       }else{
         return (
-          maquinarias.join(' ').includes(filter) || data.otr_Id.toString().includes(filter) ||
+          maquinarias.join(' ').includes(filter) || data.otr_NumeroOrden.toString().includes(filter) ||
           nombreCompleto.includes(filter)
         );
       }
@@ -219,6 +222,7 @@ export class ArriendoComponent implements AfterViewInit {
   /* Se guarda el filtro ingresado por cada evento onKey */
   otClienteMaquinaFilter(filterValue: string) {
     /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
+console.log("filterValue: ",filterValue);
 
     filterValue = filterValue
       .normalize('NFD')
@@ -250,8 +254,48 @@ export class ArriendoComponent implements AfterViewInit {
       this.openDialog();
   }
 
-  anular() {
-    confirm('¿Está seguro de anular la orden de Arriendo N° 234?');
+  anular(idx: any) {
+    this.dataSource.paginator = this.paginator;
+    let posicion = (this.dataSource.paginator.pageSize*this.dataSource.paginator.pageIndex)+idx;
+
+    Swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: '¿Está seguro de anular la orden N°'+ this.dataSource.data[posicion].otr_NumeroOrden+' ?',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Anular!',
+      
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ot.otr_Id = this.dataSource.data[posicion].otr_Id;
+        this.OtService.getOt(this.ot.otr_Id).subscribe((otarr) => {
+          this.ot = otarr;
+          this.ot.otr_Estado = 'Anulada';
+
+          this.OtService.updateOt(this.ot).subscribe(() => {
+            Swal.fire({
+              title: 'Anulada!',
+              text: 'La Orden de Arriendo ha sido Anulada con éxito.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1800,
+            });
+
+            setInterval(function () {
+              location.reload();
+            }, 2000); //actualiza la pagina a los 2seg
+
+          });
+          
+        });
+      }
+    });;
+
+
+    
   }
 
   openDialog() {

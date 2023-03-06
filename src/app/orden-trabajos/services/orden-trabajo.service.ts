@@ -23,7 +23,7 @@ export class OrdenTrabajoService {
       .pipe(map((response) => response as OrdenTrabajo[]));
   }
 
-  getOt(id: number): Observable<OrdenTrabajo> {
+  getOt(id: string): Observable<OrdenTrabajo> {
     return this.http.get<OrdenTrabajo>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         console.log("Error Servicio",e.error.mensaje);
@@ -49,7 +49,7 @@ export class OrdenTrabajoService {
 
   updateOt(ot: OrdenTrabajo): Observable<OrdenTrabajo> {
     
-    return this.http.put<OrdenTrabajo>(`${this.urlEndPoint}/${ot.otr_Id}`, ot, {
+    return this.http.post<OrdenTrabajo>(`${this.urlEndPoint}/${ot.otr_Id}`, ot, {
         
         headers: this.http_Headers,
         

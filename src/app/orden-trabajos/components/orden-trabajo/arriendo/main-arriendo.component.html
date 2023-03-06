@@ -76,6 +76,15 @@
                             </mat-cell>
                         </ng-container>
 
+                        <ng-container matColumnDef="otr_NumeroOrden">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> No. Orden </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> 
+                                    {{element.otr_NumeroOrden}} 
+                                </a>
+                            </mat-cell>
+                        </ng-container>
+
                         <ng-container matColumnDef="cliente">
                             <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
                             <mat-cell *matCellDef="let element">
@@ -92,7 +101,7 @@
 
                         <ng-container matColumnDef="cli_Comuna">
                             <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.otr_Cli_Id.cli_Comuna}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.otr_ComunaTrabajo}} </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="maquina">
@@ -142,7 +151,7 @@
 
                         <ng-container matColumnDef="accion">
                             <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
+                            <mat-cell *matCellDef="let element; let idx = index">
                                 <button type="button" class="btn  " routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas">
                                     <mat-icon>add</mat-icon>
                                 </button>
@@ -152,7 +161,7 @@
                                 <button type="button" class="btn  " (click)="finalizar()" matTooltip="Finalizar Orden de Arriendo">
                                     <mat-icon>done</mat-icon>
                                 </button>
-                                <button type="button" class="btn  " (click)="anular()" matTooltip="Anular Orden de Arriendo">
+                                <button type="button" class="btn  " (click)="anular(idx)" matTooltip="Anular Orden de Arriendo">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                             </mat-cell>
