@@ -109,6 +109,13 @@ export class ResumenArriendoDialogComponent implements OnInit {
       console.log("datoJson: ",datoJson);
       console.log("datoJson.odm_Maq_Id.maq_Codigo: ",datoJson.odm_Maq_Id.maq_Codigo);
 
+      let estanque;
+      if(datoJson.odm_NivelEstanqueSalida == "true"){
+        estanque= "Si";
+      }else{
+        estanque= "No";
+      }
+      
       this.listMaq.push({
         code: datoJson.odm_Maq_Id.maq_Codigo,
         nombre: datoJson.odm_Maq_Id.maq_Nombre,
@@ -119,7 +126,7 @@ export class ResumenArriendoDialogComponent implements OnInit {
         operario: datoJson.odm_NombreOperario,
         combustible:"",
         cilindro: datoJson.odm_CilindroGas,
-        estanque: datoJson.odm_NivelEstanqueSalida,
+        estanque: estanque,
         traslado: datoJson.otr_Traslado
       });
 

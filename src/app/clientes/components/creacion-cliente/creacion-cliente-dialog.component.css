@@ -1,6 +1,5 @@
 .scrollbar {
     height: 650px;
-    overflow-y: scroll;
     padding-right: 27px;
     padding-left: 30px;
 }
@@ -107,36 +106,36 @@
 
 #validate_Telefono {
     position: absolute;
-    top: 22%;
+    top: 39%;
     left: 35%;
 }
 
 #validate_Email {
     position: absolute;
-    top: 22%;
+    top: 39%;
     left: 57%;
 }
 
 #validate_Pais {
     position: absolute;
-    top: 51%;
+    top: 61%;
     left: 35%;
 }
 
 #validate_Region {
     position: absolute;
-    top: 51%;
+    top: 61%;
     left: 57%;
 }
 
 #validate_Comuna {
     position: absolute;
-    top: 51%;
+    top: 61%;
     left: 79%;
 }
 
 #validate_Direccion {
     position: absolute;
-    top: 79%;
+    top: 83%;
     left: 35%;
 }

@@ -6,8 +6,12 @@ export class DetalleMaquinaTemporal {
     valorMinimo: string="";
     precio: string="";
     combustible: string="";
+    tipoPrecio: string="";
     traslado: string="";
     cilindroGas: string="";
+    medioTraslado: string="";
+    costoTraslado: string="";
+    nombreChofer: string="";
     nombreContacto: string="";
     telefonoContacto: string="";
     emailContacto: string="";

@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { event } from 'jquery';
 import { forEach } from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -28,7 +29,8 @@ import { RegionComunaChileService } from '../../../../../../services/region-comu
 export class DetalleMaquinariaDialogComponent implements OnInit {
 
   @Output() newItemEvent = new EventEmitter();
-
+  showValor: boolean = false;
+  auxCobroMinimo: string="";
   // validate: string = "true";
   valorMinArriendo: string = ""; // this.maq.maq_ValorMinArriendo
   valorArriendo: string = ""; // this.maq.maq_ValorArriendo
@@ -57,6 +59,7 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
       precio: '',
       implemento: '',
       combustible: '',
+      tipoArriendo: '',
       accion: '',
     },
   ];
@@ -72,11 +75,25 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     'Rastra',
   ]; */
 
-  combustible: Icombustible[] = [
+  Icombustible: IcomboBox[] = [
     { value: '4/4', viewValue: '4/4' },
     { value: '3/4', viewValue: '3/4' },
     { value: '1/2', viewValue: '1/2' },
     { value: '1/4', viewValue: '1/4' },
+  ];
+
+  //maq_TipoValorMinArriendo
+  ItipoArriendo: IcomboBox[] = [
+    { value: 'hora', viewValue: 'hora' },
+    { value: 'dia', viewValue: 'dia' },
+    { value: 'mes', viewValue: 'mes' },
+    { value: 'hectarea', viewValue: 'hectarea' },
+  ];
+
+  IFormaTraslado: IcomboBox[] = [
+    { value: 'En camión', viewValue: 'En camión' },
+    { value: 'Traslado cliente', viewValue: 'Traslado cliente' },
+    { value: 'Por un tercero', viewValue: 'Por un tercero' }
   ];
 
   machineDetailForm: any;
@@ -95,89 +112,157 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log("showValor 1: ",this.showValor);
+    
+    this.listDetalleMaquinaria();
+
     this.machineDetailForm = this.fb.group({
       txtOperarioDetMaqOt: [''],
       txtValorMinimoDetMaqOt: [''],
       txtPrecioDetMaqOt: [''],
-      selCombustibleDetMaqOt: [''],
+      //selCombustibleDetMaqOt: [''],
+      selTipoCobroDetMaqOt:[''],
       checkTrasladoDetOt: [false],
+      selFormaTrasladoDetMaqOt:[''],
+      txtNombreChoferDetOt:[''],
+      txtCostoTrasladoDetOt:[''],
+      
       checkCilindroDetOt: [false],
+      checkCombustibleDetOt: [false],
       txtNombreContactoDetOt: [''],
-      txtTelefonoContactoDetOt: [
-        '',
-        [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-      ],
-      txtEmailContactoDetOt: ['', Validators.email],
-      selRegionDetMaq: ['', Validators.required],
-      selComunaDetMaq: ['', Validators.required],
+      txtTelefonoContactoDetOt: ['',[Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+      txtEmailContactoDetOt: [''],
+      selRegionDetMaq: [''],
+      selComunaDetMaq: [''],
       txtDireccionDetOt: [''],
       txtObservacionDetOt:[''],
     });
     
-    this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
 
+    
     /* MUESTRA LA LISTA DE OPERARIOS */
     // this.filteredOptions = this.txtOperarioDetMaqOt.valueChanges.pipe(
     //   startWith(''),
     //   map((value) => this._filter(value))
     // );
-    this.listDetalleMaquinaria();
 
+
+    // if(this.maq.maq_TipoValorMinArriendo=="hectarea"){
+
+    //   this.detMaquinariaTable[] = [
+    //     {
+    //       operario: '',
+    //       precio: '',
+    //       implemento: '',
+    //       combustible: '',
+    //       tipoArriendo: '',
+    //       accion: '',
+    //     },
+    //   ];
+      // this.ELEMENT_DATA_DETMAQUINA: detMaquinariaTableHectarea[] = [
+      //   {
+      //     operario: '',
+      //     precio: '',
+      //     implemento: '',
+      //     combustible: '',
+      //     tipoArriendo: '',
+      //     accion: '',
+      //   },
+      // ];
+    
 
   }
 
   
 
-
-
   listDetalleMaquinaria() {
+    this.dataSource = this.ELEMENT_DATA_DETMAQUINA;
 
-    
     let jsonData = JSON.parse(localStorage.getItem(this.data.codeMachine) || '[]');
-
       this.maqService.getMaquina(this.data.idMachine).subscribe((m) => {
         this.maq = m;
-        
-      
 
+        
+        
         if(!jsonData.codigoMaquina){
-          console.log("1. if(!jsonData.codigoMaquina){");
             // this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
             // this.valorArriendo = this.maq.maq_ValorArriendo;
+            this.machineDetailForm.get(['selTipoCobroDetMaqOt']).setValue(this.maq.maq_TipoValorMinArriendo);
+ 
             this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(this.maq.maq_ValorMinArriendo);
             this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(this.maq.maq_ValorArriendo);
+            if(this.maq.maq_TipoValorMinArriendo == "mes"){
+              this.showValor= false;
+              this.auxCobroMinimo = "hora";
+            }
+            if(this.maq.maq_TipoValorMinArriendo == "hectarea"){
+              this.showValor= true;
+              this.auxCobroMinimo = "hectarea";
+            }
+            if(this.maq.maq_TipoValorMinArriendo == "dia"){
+              this.showValor= false;
+              this.auxCobroMinimo = "dia";
+            }
+            if(this.maq.maq_TipoValorMinArriendo == "hora"){
+              this.showValor= false;
+              this.auxCobroMinimo = "hora";
+            }
         }
         if(jsonData.codigoMaquina){
-          console.log("2. if(jsonData.codigoMaquina){){");
+
+          if(jsonData.tipoPrecio == "mes"){
+            this.showValor= false;
+            this.auxCobroMinimo = "hora";
+          }
+          if(jsonData.tipoPrecio == "hectarea"){
+            this.showValor= true;
+            this.auxCobroMinimo = "hectarea";
+          }
+          if(jsonData.tipoPrecio == "dia"){
+            this.showValor= false;
+            this.auxCobroMinimo = "dia";
+          }
+          if(jsonData.tipoPrecio == "hora"){
+            this.showValor= false;
+            this.auxCobroMinimo = "hora";
+          }
 
           this.machineDetailForm.get('txtOperarioDetMaqOt').setValue(jsonData.operario);
+          
           if(!jsonData.valorMinimo || !jsonData.precio){
-            console.log("3. if(!jsonData.valorMinimo || !jsonData.precio)");
 
             // this.valorMinArriendo = this.maq.maq_ValorMinArriendo;
             // this.valorArriendo = this.maq.maq_ValorArriendo;
+            
             this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(this.maq.maq_ValorMinArriendo);
             this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(this.maq.maq_ValorArriendo);
           }else{
-            console.log("3. ELSE -> if(!jsonData.valorMinimo || !jsonData.precio)");
-
             this.machineDetailForm.get('txtValorMinimoDetMaqOt').setValue(jsonData.valorMinimo);
             this.machineDetailForm.get('txtPrecioDetMaqOt').setValue(jsonData.precio);
           }
+          
 
-          console.log("jsonData.combustible!!!!!: ",jsonData.combustible);
 
-          this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue(jsonData.combustible);
+          //this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue(jsonData.combustible);
 
+          
+
+          jsonData.combustible = (String(jsonData.combustible).toLowerCase() === 'true');
           jsonData.traslado = (String(jsonData.traslado).toLowerCase() === 'true');
           jsonData.cilindroGas = (String(jsonData.cilindroGas).toLowerCase() === 'true');
 
-          console.log("jsonData.traslado: ",jsonData.traslado );
-          console.log("jsonData.cilindroGas: ",jsonData.cilindroGas );
-          this.machineDetailForm.get('checkTrasladoDetOt').setValue(jsonData.traslado);
+          this.machineDetailForm.get(['selTipoCobroDetMaqOt']).setValue(jsonData.tipoPrecio);
 
+          this.machineDetailForm.get('checkTrasladoDetOt').setValue(jsonData.traslado);
           this.machineDetailForm.get('checkCilindroDetOt').setValue(jsonData.cilindroGas);
-          
+          this.machineDetailForm.get('checkCombustibleDetOt').setValue(jsonData.combustible);
+
+
+          this.machineDetailForm.get(['selFormaTrasladoDetMaqOt']).setValue(jsonData.medioTraslado);
+          this.machineDetailForm.get('txtNombreChoferDetOt').setValue(jsonData.nombreChofer);
+          this.machineDetailForm.get('txtCostoTrasladoDetOt').setValue(jsonData.costoTraslado);
+
+
           this.machineDetailForm.get('txtNombreContactoDetOt').setValue(jsonData.nombreContacto);
           this.machineDetailForm.get('txtTelefonoContactoDetOt').setValue(jsonData.telefonoContacto);
           this.machineDetailForm.get('txtEmailContactoDetOt').setValue(jsonData.emailContacto);
@@ -185,7 +270,10 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
           this.machineDetailForm.get('txtObservacionDetOt').setValue(jsonData.observacion);
         }
         
-        this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue("1/4");
+        
+        //this.machineDetailForm.get(['selCombustibleDetMaqOt']).setValue("1/4");
+       // this.machineDetailForm.get('checkCombustibleDetOt').setValue(jsonData.combustible);
+
 
         
         this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
@@ -224,12 +312,57 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     );
   }
 
+  cobroPorFilter($event: any){
+    console.log("evento: ",$event.value);
+    if($event.value == "mes"){
+      this.auxCobroMinimo = "hora";
+      this.showValor= false;
+    }
+    if($event.value == "hectarea"){
+      this.auxCobroMinimo = "";
+      this.showValor= true;
+    }
+    if($event.value == "dia"){
+      this.auxCobroMinimo = "dia";
+      this.showValor= false;
+    }
+    if($event.value == "hora"){
+      this.auxCobroMinimo = "hora";
+      this.showValor= false;
+    }
+
+
+  }
+
+  // verificaTipoCobro(){
+  //   if(this.maq.maq_TipoValorMinArriendo == "mes"){
+  //     this.showValor= false;
+  //     this.auxCobroMinimo = "hora";
+  //     console.log("showValor 2: ",this.showValor);
+  //   }
+  //   if(this.maq.maq_TipoValorMinArriendo == "hectarea"){
+  //     this.showValor= true;
+  //     this.auxCobroMinimo = "hectarea";
+  //     console.log("showValor 2: ",this.showValor);
+  //   }
+  //   if(this.maq.maq_TipoValorMinArriendo == "dia"){
+  //     this.showValor= false;
+  //     this.auxCobroMinimo = "dia";
+  //     console.log("showValor 2: ",this.showValor);
+  //   }
+  //   if(this.maq.maq_TipoValorMinArriendo == "hora"){
+  //     this.showValor= false;
+  //     this.auxCobroMinimo = "hora";
+  //     console.log("showValor 2: ",this.showValor);
+  //   }
+  // }
+
   displayedColumnsDetMaquinaria: string[] = [
-    'operario',
+    'tipoArriendo',
     'valor',
     'precio',
+    'operario'
     // 'implemento',
-    'combustible',
   ];
 
   deleteCliente() {
@@ -262,18 +395,26 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
   }
 
   setDetalleMaquinaria() {
+
+  
     this.detMaqTemp.idMaquina = this.maq.maq_Id.toString();
     this.detMaqTemp.codigoMaquina = this.maq.maq_Codigo;
     this.detMaqTemp.nombreMaquina = this.maq.maq_Nombre;
     this.detMaqTemp.operario = this.machineDetailForm.value.txtOperarioDetMaqOt;
     this.detMaqTemp.valorMinimo = this.machineDetailForm.value.txtValorMinimoDetMaqOt;
     this.detMaqTemp.precio = this.machineDetailForm.value.txtPrecioDetMaqOt;
-    this.detMaqTemp.combustible = this.machineDetailForm.value['selCombustibleDetMaqOt'];
-    console.log("checkTrasladoDetOt: ",this.machineDetailForm.value.checkTrasladoDetOt.toString());
-    console.log("checkCilindroDetOt: ",this.machineDetailForm.value.checkCilindroDetOt.toString());
+    this.detMaqTemp.tipoPrecio = this.machineDetailForm.value['selTipoCobroDetMaqOt'];
+    
 
-    this.detMaqTemp.traslado = this.machineDetailForm.value.checkTrasladoDetOt.toString();
-    this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt.toString();
+    this.detMaqTemp.traslado    = this.machineDetailForm.value.checkTrasladoDetOt;
+    this.detMaqTemp.cilindroGas = this.machineDetailForm.value.checkCilindroDetOt;
+    this.detMaqTemp.combustible = this.machineDetailForm.value.checkCombustibleDetOt;
+
+
+    this.detMaqTemp.medioTraslado = this.machineDetailForm.value['selFormaTrasladoDetMaqOt'];
+    this.detMaqTemp.nombreChofer = this.machineDetailForm.value.txtNombreChoferDetOt;
+    this.detMaqTemp.costoTraslado = this.machineDetailForm.value.txtCostoTrasladoDetOt;
+
     this.detMaqTemp.nombreContacto = this.machineDetailForm.value.txtNombreContactoDetOt;
     this.detMaqTemp.telefonoContacto = this.machineDetailForm.value.txtTelefonoContactoDetOt;
     this.detMaqTemp.emailContacto = this.machineDetailForm.value.txtEmailContactoDetOt;
@@ -283,13 +424,6 @@ export class DetalleMaquinariaDialogComponent implements OnInit {
     this.detMaqTemp.observacion = this.machineDetailForm.value.txtObservacionDetOt;
 
     localStorage.setItem(this.maq.maq_Codigo, JSON.stringify(this.detMaqTemp));
-
-    console.log("this.machineDetailForm.value.txtValorMinimoDetMaqOt: ", this.machineDetailForm.value.txtValorMinimoDetMaqOt);
-
-    console.log("this.detMaqTemp.valorMinimo : ", this.detMaqTemp.valorMinimo );
-
-    // this.emitEvent(this.validate);
-    
 
     this.closeDialog();
   }
@@ -321,13 +455,15 @@ export interface detMaquinariaTable {
   precio: string;
   implemento: string;
   combustible: string;
+  tipoArriendo: string;
   accion: string;
 }
 
-interface Icombustible {
+interface IcomboBox {
   value: string;
   viewValue: string;
 }
+
 
 export interface DialogData {
   idMachine: string;

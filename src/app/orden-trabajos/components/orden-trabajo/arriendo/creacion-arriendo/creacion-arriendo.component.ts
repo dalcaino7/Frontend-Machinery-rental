@@ -151,6 +151,8 @@ export class CreacionArriendoComponent implements OnInit {
       txtNumeroOt: ['',[Validators.required, Validators.maxLength(20)]],
       txtReferenciaOt: ['',Validators.maxLength(20)],
       txtFechaOt: ['',Validators.required],
+      txtFechaFacturacionOt: ['',Validators.required],
+      txtFechaEstimacionTerminoOt: [''],
 
       /* VARIABLES DE CLIENTE */
       txtRutClienteOt: [''],
@@ -434,11 +436,13 @@ export class CreacionArriendoComponent implements OnInit {
 
     this.ot.otr_Id = "0";
     this.ot.otr_NumeroOrden = this.otForm.value.txtNumeroOt;
-    console.log("this.ot.otr_NumeroOrden: ",this.ot.otr_NumeroOrden);
 
     this.ot.otr_Referencia =this.otForm.value.txtReferenciaOt;
     this.ot.otr_Tipo = "Arriendo";
     this.ot.otr_FechaHoraCreacionOt=this.otForm.value.txtFechaOt;
+    this.ot.otr_FechaHoraFacturacionOt = this.otForm.value.txtFechaFacturacionOt;
+    this.ot.otr_FechaHoraEstimacionTerminoOt = this.otForm.value.txtFechaEstimacionTerminoOt;
+
     //this.ot.otr_FechaHoraTerminoOt='';
     this.ot.otr_Estado = "Iniciada";
     this.ot.otr_Impuesto = "0";
@@ -463,7 +467,7 @@ export class CreacionArriendoComponent implements OnInit {
     this.ot.otr_Usu_Id.usu_Id = "1";
 
     for (let x=0; x < this.dataSourceMaquinaria.data.length; x++) {
-  
+
       let jsonDetMaqOt = JSON.parse(localStorage.getItem(this.dataSourceMaquinaria.data[x].maq_Codigo) || '[]');
       let maquina = new Maquina();
       //maquina.maq_Id = this.dataSourceMaquinaria.data[x].maq_Id;
@@ -483,15 +487,26 @@ export class CreacionArriendoComponent implements OnInit {
         jsonDetMaqOt.cilindroGas = 'No';
       }
 
+      if(jsonDetMaqOt.combustible=='true'){
+        jsonDetMaqOt.combustible = 'Si';
+      }else{
+        jsonDetMaqOt.combustible = 'No';
+      }
+      
+    
+
       this.ot.otr_Odm_Id.push({
         odm_Id: "0",
         odm_NombreOperario:jsonDetMaqOt.operario,
         odm_ValorMinArriendo:jsonDetMaqOt.valorMinimo,
         odm_TipoValorMinArriendo:this.dataSourceMaquinaria.data[x].maq_TipoValorMinArriendo,
         odm_ValorArriendo: jsonDetMaqOt.precio,
-        odm_NivelEstanqueSalida:jsonDetMaqOt.combustible,
-        otr_Traslado: jsonDetMaqOt.traslado,
+        odm_Combustible:jsonDetMaqOt.combustible,
+        odm_Traslado: jsonDetMaqOt.traslado,
         odm_CilindroGas:jsonDetMaqOt.cilindroGas,
+        odm_MedioTraslado: jsonDetMaqOt.medioTraslado,
+        odm_CostoTraslado: jsonDetMaqOt.costoTraslado,
+        odm_NombreChofer: jsonDetMaqOt.nombreChofer,
         odm_NombreContacto:jsonDetMaqOt.nombreContacto,
         odm_TelefonoContacto:jsonDetMaqOt.telefonoContacto,
         odm_EmailContacto: jsonDetMaqOt.emailContacto,
@@ -509,7 +524,7 @@ export class CreacionArriendoComponent implements OnInit {
       
     }
    
-    console.log("this.ot: ",this.ot);
+    console.log("this.ot verficiar traslado 2: ",this.ot);
     localStorage.setItem(this.ot.otr_NumeroOrden, JSON.stringify(this.ot));
    
 
@@ -548,9 +563,9 @@ export class CreacionArriendoComponent implements OnInit {
         showConfirmButton: false,
         timer: 2300,
       });
-      setInterval(function () {
-        location.reload();
-      }, 2000); //actualiza la pagina a los 2seg
+      // setInterval(function () {
+      //   location.reload();
+      // }, 2000); //actualiza la pagina a los 2seg
     console.log("OT FINAL INSERTADO: ",ot);
     
     });
@@ -615,6 +630,8 @@ export class CreacionArriendoComponent implements OnInit {
                 // }else{
                   this.dataSourceMaquinaria.data[x].maq_ValorMinArriendo = jsonData.valorMinimo;
                   this.dataSourceMaquinaria.data[x].maq_ValorArriendo    = jsonData.precio;
+                  this.dataSourceMaquinaria.data[x].maq_TipoValorMinArriendo    = jsonData.tipoPrecio;
+
                 // }
                
             //  }

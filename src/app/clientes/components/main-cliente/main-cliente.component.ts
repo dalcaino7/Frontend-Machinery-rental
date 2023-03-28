@@ -131,13 +131,13 @@ export class ClienteComponent implements AfterViewInit {
   openDialog(state: string) {
     if (state == 'add') {
       const dialogRef = this.dialog.open(CreacionClienteDialogComponent, {
-        panelClass: 'custom-dialog-container-big-2',
+        panelClass: 'custom-dialog-container-big-3',
         data: { modeDialog: state},
       });
     }
     if (state == 'mod') {
       const dialogRef = this.dialog.open(CreacionClienteDialogComponent, {
-        panelClass: 'custom-dialog-container-big-2',
+        panelClass: 'custom-dialog-container-big-3',
         data: { modeDialog: state, idClienteDialog: this.cliente.cli_Id },
       });
 

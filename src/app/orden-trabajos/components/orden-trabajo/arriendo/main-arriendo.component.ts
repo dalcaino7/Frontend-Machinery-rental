@@ -18,6 +18,7 @@ import { data } from 'jquery';
 // import { OtDetalleMaquina } from '../../../models/ot-detalle-maquina';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
+import { now } from 'lodash';
 
 @Component({
   selector: 'app-arriendo',
@@ -26,6 +27,7 @@ import Swal from 'sweetalert2';
 })
 
 export class ArriendoComponent implements AfterViewInit {
+  
   public date!: Date;
 
   range = new FormGroup({
@@ -81,7 +83,7 @@ export class ArriendoComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
-
+    moment.locale('es');
     
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -96,22 +98,24 @@ export class ArriendoComponent implements AfterViewInit {
 
 
     this.OtService.getListOt().subscribe((ot: OrdenTrabajo[]) => {
-    //  this.ordenT = ot;
       this.listOtTabla = ot;
       this.dataSource.data = ot;
-
-      console.log("ot->",ot);
       
-    
-      
-      
+      for (let i = 0; i < ot.length; i++) {
+        if(ot[i].otr_Estado=="Vencida"){
+  
+          let momentOne = moment(ot[i].otr_FechaHoraFacturacionOt.slice(0,10), "YYYY-MM-DD");
+          let date = Date.now();
+          let timeNow = moment(new Date(date)).format('YYYY-MM-DD');
+          let durationA = moment.duration(momentOne.diff(timeNow));
+  
+          ot[i].otr_Estado = "Vencida hace "+ durationA.humanize();
+        }
+      }
     });
     this.filtroBusquedaTable();
   }
- 
 
-
- 
 
   /* PERMITE RETORNAR NOMBRE Y APELLIDOS JUNTOS PARA LA BUSQUEDA, N° OT Y MAQUINA */
   filtroBusquedaTable() {
@@ -222,7 +226,7 @@ export class ArriendoComponent implements AfterViewInit {
   /* Se guarda el filtro ingresado por cada evento onKey */
   otClienteMaquinaFilter(filterValue: string) {
     /* se normaliza el valor a buscar quitando tildes y dejando en minuscula */
-console.log("filterValue: ",filterValue);
+  console.log("filterValue: ",filterValue);
 
     filterValue = filterValue
       .normalize('NFD')

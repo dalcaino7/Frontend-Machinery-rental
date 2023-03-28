@@ -25,27 +25,46 @@
             <div class="card-body">
 
                 <div class="row" id="fila-busqueda-ot">
-                    <div class="col-md-3" align="left">
-                        <mat-form-field appearance="outline">
+                    <div class="col-md-2" align="left">
+                        <mat-form-field appearance="outline" style="width: 210px;">
                             <mat-label>N° Orden</mat-label>
                             <input matInput formControlName="txtNumeroOt" maxlength="20">
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3 " align="left">
-                        <mat-form-field appearance="outline">
+                    <div class="col-md-2">
+                        <mat-form-field appearance="outline" style="width: 210px;">
                             <mat-label>Referencia</mat-label>
                             <input matInput formControlName="txtReferenciaOt" maxlength="20">
                         </mat-form-field>
                     </div>
-                    <div class="col-md-6 " align="left">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ingrese una fecha</mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="txtFechaOt">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                    <div class="col-md-2">
+                        <mat-form-field appearance="outline" style="width: 210px;">
+                            <mat-label>Fecha de creación</mat-label>
+                            <input matInput [matDatepicker]="pickerCreacion" formControlName="txtFechaOt">
+                            <mat-datepicker-toggle matSuffix [for]="pickerCreacion"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerCreacion></mat-datepicker>
                         </mat-form-field>
 
                     </div>
+                    <div class="col-md-2">
+                        <mat-form-field appearance="outline" style="width: 210px;">
+                            <mat-label>Primera facturación</mat-label>
+                            <input matInput [matDatepicker]="pickerFacturacion" formControlName="txtFechaFacturacionOt">
+                            <mat-datepicker-toggle matSuffix [for]="pickerFacturacion"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerFacturacion></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field appearance="outline" style="width: 210px;">
+                            <mat-label>Fecha término</mat-label>
+                            <input matInput [matDatepicker]="pickerTermino" formControlName="txtFechaEstimacionTerminoOt">
+                            <mat-datepicker-toggle matSuffix [for]="pickerTermino"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerTermino></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+                    <!-- <div class="col-md-2" align="left"></div> -->
 
                 </div>
 
@@ -256,7 +275,7 @@
 
                             <ng-container matColumnDef="tipoCobro">
                                 <mat-header-cell *matHeaderCellDef> Tipo cobro </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.maq_TipoUltKmHm}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.maq_TipoValorMinArriendo}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="acciones">

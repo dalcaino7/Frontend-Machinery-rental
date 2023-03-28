@@ -130,7 +130,7 @@
                                 <button type="button" class="btn badge btn-without-focus" [ngClass]="{
                                     'tbl-estado-naranja' : element.otr_Estado == 'Iniciada',
                                     'tbl-estado-azul' : element.otr_Estado == 'En Progreso',
-                                    'tbl-estado-rojo' : element.otr_Estado == 'Vencida',
+                                    'tbl-estado-rojo' : element.otr_Estado.startsWith('Vencida'),
                                     'tbl-estado-verde' : element.otr_Estado == 'Finalizada',
                                     'tbl-estado-gris' : element.otr_Estado == 'Anulada'
                                 }">

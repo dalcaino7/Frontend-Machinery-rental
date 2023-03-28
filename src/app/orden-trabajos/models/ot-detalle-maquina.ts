@@ -9,9 +9,12 @@ export class OtDetalleMaquina {
     odm_ValorMinArriendo: string="";
     odm_TipoValorMinArriendo: string="";
     odm_ValorArriendo: string="";
-    odm_NivelEstanqueSalida: string="";
-    otr_Traslado: string="";
+    odm_Combustible: string="";
+    odm_Traslado: string="";
     odm_CilindroGas: string="";
+    odm_MedioTraslado: string="";
+    odm_CostoTraslado: string="";
+    odm_NombreChofer: string="";
     odm_NombreContacto: string="";
     odm_TelefonoContacto: string="";
     odm_EmailContacto: string="";

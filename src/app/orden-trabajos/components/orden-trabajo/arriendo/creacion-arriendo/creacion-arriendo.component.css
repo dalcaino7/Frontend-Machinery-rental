@@ -33,6 +33,16 @@
     font-size: 14px !important;
 }
 
+
+/* .col-md-2 {
+    width: 19.6%;
+} */
+
+.col-md-2 {
+    flex: 0 0 auto;
+    width: 19.666667%;
+}
+
 #busqueda-filter {
     width: 450px;
 }
@@ -56,7 +66,7 @@
 }
 
 #fila-busqueda-ot {
-    max-width: 80%;
+    max-width: 100%;
     /*Da la separacion entre input */
 }
 
@@ -251,14 +261,18 @@ mat-row {
     .card {
         bottom: 5px;
     }
+    .col-md-2 {
+        flex: 0 0 auto;
+        width: 52%;
+    }
     #card-ot {
-        height: 250px;
+        height: 364px;
     }
     #card-cliente {
-        height: 845px;
+        height: 740px;
     }
     #card-maquinaria {
-        height: 620px;
+        height: 502px;
     }
     .btn-formulario-cabecera {
         left: 25px;

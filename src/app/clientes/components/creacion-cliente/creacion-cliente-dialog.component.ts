@@ -24,6 +24,7 @@ import Swal from 'sweetalert2';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
 import { ComunasRegiones } from '../../../models/comunasRegiones';
 
+
 @Component({
   selector: 'app-creacion-cliente',
   templateUrl: './creacion-cliente-dialog.component.html',
@@ -112,6 +113,7 @@ export class CreacionClienteDialogComponent implements OnInit {
       txtObservacionCli: [''],
 
       /* VARIABLES DE CONTACTO DE CLIENTE */
+      txtResponsable: [''],
       txtTelefonoCli: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]], //pattern SOLO NUMEROS
       txtEmailCli: ['', Validators.email],
       selPaisCli: ['',Validators.required],
@@ -193,6 +195,9 @@ export class CreacionClienteDialogComponent implements OnInit {
     this.cli.cli_Nombre = this.clienteForm.value['txtNombreCli'];
     this.cli.cli_Apellidos = this.clienteForm.value['txtApellidosCli'];
     this.cli.cli_Observacion = this.clienteForm.value['txtObservacionCli'];
+    
+    this.cli.cli_Responsable = this.clienteForm.value['txtResponsable'];
+
     this.cli.cli_Telefono = this.clienteForm.value['txtTelefonoCli'];
     this.cli.cli_Email = this.clienteForm.value['txtEmailCli'];
     this.cli.cli_Pais = this.clienteForm.value['selPaisCli'];

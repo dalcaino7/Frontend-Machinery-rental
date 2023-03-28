@@ -8,6 +8,7 @@ export class Cliente {
     cli_RazonSocial:string="";
     cli_Nombre:string="";
     cli_Apellidos:string="";
+    cli_Responsable:string="";
     cli_Telefono:string="";
     cli_Email:string="";
     cli_Direccion:string="";

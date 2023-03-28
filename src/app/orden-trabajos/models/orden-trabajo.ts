@@ -9,6 +9,8 @@ export class OrdenTrabajo {
     otr_Referencia: string="";
     otr_Tipo: string="";
     otr_FechaHoraCreacionOt: string="";
+    otr_FechaHoraFacturacionOt: string="";
+    otr_FechaHoraEstimacionTerminoOt: string="";
     otr_FechaHoraTerminoOt: string="";
     otr_Estado: string="";
     otr_Impuesto: string="";

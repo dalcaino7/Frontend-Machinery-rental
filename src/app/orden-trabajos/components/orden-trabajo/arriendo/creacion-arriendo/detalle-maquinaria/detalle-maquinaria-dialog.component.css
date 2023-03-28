@@ -3,10 +3,6 @@
     font-size: 0.75em;
 }
 
-#busqueda-filter {
-    width: 100px;
-}
-
 .card-footer {
     background-color: #e9eef7;
     bottom: 100%;
@@ -14,6 +10,12 @@
     padding-top: 16px;
     padding-left: 22%;
     border-top: 0px;
+}
+
+.card-header {
+    padding-bottom: 0%;
+    background-color: #e9eef7;
+    border: none;
 }
 
 .btn-formulario-cabecera {
@@ -26,29 +28,34 @@
  */
 }
 
+mat-header-row {
+    min-height: 15px;
+}
+
 
 /*redimension de columnas OT y CLIENTE de la tabla*/
 
-.mat-column-operario {
-    flex: 0 0 240px;
+.mat-column-tipoArriendo {
+    flex: 0 0 153px;
     padding-left: 0px;
 }
 
 .mat-column-valor {
-    flex: 0 0 140px;
+    flex: 0 0 105px;
     padding-left: 0px;
 }
 
 .mat-column-precio {
-    flex: 0 0 140px;
+    flex: 0 0 124px;
     padding-left: 0px;
 }
 
-.mat-column-combustible {
-    padding-left: 0px;
-}
 
-.mat-column-precio {
-    flex: 0 0 140px;
+/* .mat-column-combustible {
+    padding-left: 0px;
+} */
+
+.mat-column-operario {
+    flex: 0 0 225px;
     padding-left: 0px;
 }
