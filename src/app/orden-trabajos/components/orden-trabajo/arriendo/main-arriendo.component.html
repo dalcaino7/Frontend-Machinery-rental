@@ -1,3 +1,6 @@
+<!-- <a target="_blank" routerLink="/main-maquina">
+    </a> -->
+
 <div class="container">
 
     <!--     <form [formGroup]="rangeFormGroup">
@@ -68,16 +71,16 @@
                     <mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="tabla-mat">
 
                         <ng-container matColumnDef="otr_Id">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> N°. </mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> 
+                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas" (click)="viewDetalleArriendo(element.otr_Id)"> 
                                     {{element.otr_Id}} 
                                 </a>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="otr_NumeroOrden">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> No. Orden </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> N°. Orden </mat-header-cell>
                             <mat-cell *matCellDef="let element">
                                 <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> 
                                     {{element.otr_NumeroOrden}} 

@@ -203,6 +203,7 @@ export class MainMaquinaComponent implements AfterViewInit {
     this.maquina.maq_Id = id;
     this.openDialog('ver');
   }
+  
   modificar() {
     this.openDialog('mod');
   }
