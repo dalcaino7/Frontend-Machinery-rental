@@ -11,6 +11,8 @@ import {
   FormControl,
 } from '@angular/forms';
 import { ResumenArriendoDialogComponent } from './creacion-arriendo/resumen-arriendo/resumen-arriendo-dialog.component';
+import { IngresoDetalleArriendoDialogComponent } from './detalle-arriendo/ingreso-detalle-arriendo/ingreso-detalle-arriendo-dialog.component';
+
 import { OrdenTrabajoService } from '../../../services/orden-trabajo.service';
 import { OrdenTrabajo } from '../../../models/orden-trabajo';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
@@ -88,8 +90,6 @@ export class ArriendoComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.listArriendo();
-
-
 
   }
 
@@ -255,7 +255,7 @@ export class ArriendoComponent implements AfterViewInit {
 
   finalizar() {
     if (confirm('¿Está seguro de finalizar esta orden de Arriendo?'))
-      this.openDialog();
+      this.openDialog('finalizar');
   }
 
   anular(idx: any) {
@@ -302,10 +302,25 @@ export class ArriendoComponent implements AfterViewInit {
     
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, { panelClass: 'custom-dialog-container-medium' });
-    dialogRef.afterClosed().subscribe((result) => {
-    });
+  viewDetalleArriendo(id: string) {
+    this.ot.otr_Id = id;
+    this.openDialog('detalle');
+
+    
+  }
+
+  openDialog(state: string) {
+
+   /* if(state == 'finalizar'){
+      const dialogRef = this.dialog.open(ResumenArriendoDialogComponent, { panelClass: 'custom-dialog-container-medium' });
+      dialogRef.afterClosed().subscribe((result) => {});
+    }*/
+
+    if(state == 'detalle'){
+      const dialogRef = this.dialog.open(IngresoDetalleArriendoDialogComponent, { panelClass: 'custom-dialog-container-medium' });
+      dialogRef.afterClosed().subscribe((result) => {});
+    }
+    
   }
 
   

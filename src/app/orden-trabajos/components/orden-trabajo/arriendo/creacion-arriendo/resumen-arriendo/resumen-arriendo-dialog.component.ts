@@ -4,6 +4,10 @@ import {
   FormGroup
 } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HorometroPDFService } from '../../../../../services/horometro-pdf.service';
+import { HorometroResponse } from '../../../../../models/horometro-response';
+import { HorometroOtRequest } from '../../../../../models/horometro-ot-request';
+import { HorometroRequest } from '../../../../../models/horometro-request';
 
 
 @Component({
@@ -26,7 +30,6 @@ export class ResumenArriendoDialogComponent implements OnInit {
   cliRegionOt: string = "";
 
   
-
   
 
   listMaq: Array<Maq> = [];
@@ -152,6 +155,8 @@ export class ResumenArriendoDialogComponent implements OnInit {
 
 
   setResumenArriendo() {
+    
+
     this.closeDialog();
 
   }

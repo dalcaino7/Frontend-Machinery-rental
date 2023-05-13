@@ -60,6 +60,7 @@ import { VerMaquinaDialogComponent } from './maquinas/components/main-maquina/ve
 import { VerClienteDialogComponent } from './clientes/components/main-cliente/ver-cliente/ver-cliente-dialog.component';
 import { CreacionClienteDialogComponent } from './clientes/components/creacion-cliente/creacion-cliente-dialog.component';
 import { FormatoNumeroMonedaPipe } from './pipes/FormatoNumeroMoneda.pipe';
+import { PdfViewerComponent } from './shared/util/pdf-viewer/pdf-viewer.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -92,7 +93,8 @@ export const MY_FORMATS = {
     VerMaquinaDialogComponent,
     VerClienteDialogComponent,
     CreacionClienteDialogComponent,
-    FormatoNumeroMonedaPipe    
+    FormatoNumeroMonedaPipe,
+    PdfViewerComponent    
   ],
   imports: [
     BrowserModule,

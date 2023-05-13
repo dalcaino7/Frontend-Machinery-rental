@@ -49,7 +49,7 @@
 
                     <mat-table [dataSource]="dataSource" matSort class="tabla-mat">
 
-                        !-- Position Column -->
+                        <!-- Position Column -->
                         <ng-container matColumnDef="codigo">
                             <mat-header-cell *matHeaderCellDef> Codigo </mat-header-cell>
                             <mat-cell *matCellDef="let element"> <a routerLink="/main-maquina" (click)="viewCliente(element.maq_Id)"> {{element.maq_Codigo}} </a></mat-cell>

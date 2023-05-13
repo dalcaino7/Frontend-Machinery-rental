@@ -35,6 +35,10 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { forEach } from 'lodash';
 import { DetalleArriendoComponent } from '../detalle-arriendo/detalle-arriendo.component';
 import Swal from 'sweetalert2';
+import { HorometroPDFService } from 'src/app/orden-trabajos/services/horometro-pdf.service';
+import { HorometroRequest } from 'src/app/orden-trabajos/models/horometro-request';
+import { HorometroResponse } from 'src/app/orden-trabajos/models/horometro-response';
+import { PdfViewerComponent } from 'src/app/shared/util/pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'app-creacion-arriendo',
@@ -49,6 +53,9 @@ import Swal from 'sweetalert2';
 })
 export class CreacionArriendoComponent implements OnInit {
   ot:OrdenTrabajo = new OrdenTrabajo;
+//  fileURL: any;
+  pdfSrc!: Uint8Array;
+
   //detOt:OtDetalleMaquina = new OtDetalleMaquina;
 
   detOtList: Array<OtDetalleMaquina> = [];
@@ -66,8 +73,12 @@ export class CreacionArriendoComponent implements OnInit {
 
   formUbicacion!: FormGroup;
 
+  hr: HorometroRequest = new HorometroRequest;
+
+
   public toggle_mostrarMapa = false;
 
+  
   // Configuración de Google Maps
   map = null;
   center: any;
@@ -126,7 +137,8 @@ export class CreacionArriendoComponent implements OnInit {
     private rgnService: RegionComunaChileService,
     private cliService: ClienteService,
     private maqService: MaquinaService,
-    private otService: OrdenTrabajoService
+    private otService: OrdenTrabajoService,
+    private horometroService: HorometroPDFService
   ) {
     this.formUbicacion = formBuilder.group({
       select_region: '',
@@ -496,6 +508,7 @@ export class CreacionArriendoComponent implements OnInit {
     
 
       this.ot.otr_Odm_Id.push({
+      
         odm_Id: "0",
         odm_NombreOperario:jsonDetMaqOt.operario,
         odm_ValorMinArriendo:jsonDetMaqOt.valorMinimo,
@@ -555,7 +568,47 @@ export class CreacionArriendoComponent implements OnInit {
     this.ot.otr_Cli_Id.cli_Rut = this.dataSourceCliente.filteredData[0].cli_Rut;
     this.ot.otr_Cli_Id.cli_Comuna = '';
 
+   // console.log("this.data.idOt: ",this.data.idOt);
+   // console.log("this.data.idOt: ",this.data.idOt);
+
+
+    
     this.otService.createOt(this.ot).subscribe((ot)=>{
+
+      console.log("ot.otr_Id: ",ot.otr_Id);
+
+      this.hr.listOt.push({
+        ot: ot.otr_Id
+      });
+
+
+
+
+ this.horometroService.createHorometroPDF(this.hr).subscribe((doc: HorometroResponse)=>{
+
+          console.log("ot: ",doc.ot);
+          console.log("fileName: ",doc.fileName);
+          console.log("document: ",doc.document);
+
+       const dialogRef = this.dialog.open(PdfViewerComponent, {
+          panelClass: 'custom-dialog-container-big-2',
+          data:{
+            docHoromet: doc.document
+           
+          }
+
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+  
+          setInterval(function () {
+            location.reload();
+          }, 500); //actualiza la pagina a los 2seg
+  
+        });
+
+      });
+
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -563,13 +616,23 @@ export class CreacionArriendoComponent implements OnInit {
         showConfirmButton: false,
         timer: 2300,
       });
-      // setInterval(function () {
-      //   location.reload();
-      // }, 2000); //actualiza la pagina a los 2seg
+     
     console.log("OT FINAL INSERTADO: ",ot);
     
     });
   }
+
+  dataURItoBlob(dataURI:any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'application/pdf' });
+    return blob;
+ }
+
 
   openDialog(definition: string, x: any) {
     console.log("open dialog: (definition): ", definition);
@@ -581,12 +644,16 @@ export class CreacionArriendoComponent implements OnInit {
         panelClass: 'custom-dialog-container-medium',
         data:{
           idOt: this.otForm.value.txtNumeroOt
+         
         }
       });
 
       dialogRef.afterClosed().subscribe((result) => {
-        console.log(`Dialog result: ${result}`);
         this.insertarOt();
+        console.log(" salio de insertar --- this.hr: ",this.hr);
+
+
+
       });
     } else {        
         const dialogRef = this.dialog.open(DetalleMaquinariaDialogComponent, {
