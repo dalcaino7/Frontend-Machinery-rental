@@ -24,7 +24,7 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Rut</mat-label>
-                                    <input matInput formControlName="txtRutCli" [(ngModel)]="this.cli.cli_Rut">
+                                    <input matInput formControlName="txtRutCli">
                                 </mat-form-field>
                             </div>
                             <span class="form-text text-danger" id="validate_Rut" *ngIf="validaciones('txtRutCli')">
@@ -33,7 +33,7 @@
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline" style="width: 269px;">
                                     <mat-label>Razón Social</mat-label>
-                                    <input matInput formControlName="txtRazonSocialCli" [(ngModel)]="cli.cli_RazonSocial">
+                                    <input matInput formControlName="txtRazonSocialCli">
                                 </mat-form-field>
                             </div>
 
@@ -44,7 +44,7 @@
                             <div class="col-md-4" align="left">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Nombre</mat-label>
-                                    <input matInput formControlName="txtNombreCli" [(ngModel)]="cli.cli_Nombre">
+                                    <input matInput formControlName="txtNombreCli">
                                 </mat-form-field>
                                 <span class="form-text text-danger" id="validate_Nombre" *ngIf="validaciones('txtNombreCli')">
                                    Requerido, mín. 2 caracteres
@@ -54,7 +54,7 @@
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline" style="width: 269px;">
                                     <mat-label>Apellidos</mat-label>
-                                    <input matInput formControlName="txtApellidosCli" [(ngModel)]="cli.cli_Apellidos">
+                                    <input matInput formControlName="txtApellidosCli">
                                 </mat-form-field>
                                 <span class="form-text text-danger" id="validate_Apellidos" *ngIf="validaciones('txtApellidosCli')">
                                     Requerido, mín. 2 caracteres
@@ -65,7 +65,7 @@
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline" style="width: 500px;">
                                     <mat-label>Observación</mat-label>
-                                    <input matInput formControlName="txtObservacionCli" [(ngModel)]="cli.cli_Observacion">
+                                    <input matInput formControlName="txtObservacionCli">
 
                                 </mat-form-field>
                             </div>
@@ -92,19 +92,31 @@
                     <div class="col-md-8" align="left">
 
                         <div class="row">
+                            <div class="col-md-12" align="left">
+                                <mat-form-field appearance="outline" style="width: 434px;">
+                                    <mat-label>Nombre contacto responsable</mat-label>
+                                    <input matInput formControlName="txtResponsable" maxlength="50">
+                                </mat-form-field>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Teléfono</mat-label>
-                                    <input matInput formControlName="txtTelefonoCli" [(ngModel)]="cli.cli_Telefono">
+                                    <input matInput formControlName="txtTelefonoCli">
                                 </mat-form-field>
                                 <span class="form-text text-danger" id="validate_Telefono" *ngIf="validaciones('txtTelefonoCli')">
                                     Requerido, solo números
                                 </span>
                             </div>
                             <div class="col-md-8">
-                                <mat-form-field appearance="outline" style="width: 330px;">
+                                <mat-form-field appearance="outline" style="width: 432px;">
                                     <mat-label>Email</mat-label>
-                                    <input matInput formControlName="txtEmailCli" [(ngModel)]="cli.cli_Email">
+                                    <input matInput formControlName="txtEmailCli" maxlength="70">
                                 </mat-form-field>
                                 <span class="form-text text-danger" id="validate_Email" *ngIf="validaciones('txtEmailCli')">
                                     Email inválido
@@ -116,7 +128,7 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>País</mat-label>
-                                    <mat-select formControlName="selPaisCli" [(ngModel)]="cli.cli_Pais">
+                                    <mat-select formControlName="selPaisCli">
                                         <mat-option *ngFor="let pais of paises" [value]="pais.viewValue">
                                             {{pais.viewValue}}
                                         </mat-option>
@@ -129,7 +141,7 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Región</mat-label>
-                                    <mat-select formControlName="selRegionCli" [(ngModel)]="cli.cli_Region" (selectionChange)="regionFilter($any($event))">
+                                    <mat-select formControlName="selRegionCli" (selectionChange)="regionFilter($any($event))">
                                         <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre">
                                             {{rgn.nombre}}
                                         </mat-option>
@@ -142,7 +154,7 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Comuna</mat-label>
-                                    <mat-select formControlName="selComunaCli" [(ngModel)]="cli.cli_Comuna">
+                                    <mat-select formControlName="selComunaCli">
                                         <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
                                             {{cmn.nombre}}
                                         </mat-option>
@@ -156,9 +168,9 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <mat-form-field appearance="outline" style="width: 431px;">
+                                <mat-form-field appearance="outline" style="width: 99%;">
                                     <mat-label>Dirección</mat-label>
-                                    <input matInput formControlName="txtDireccionCli" [(ngModel)]="cli.cli_Direccion">
+                                    <input matInput formControlName="txtDireccionCli" maxlength="100">
                                 </mat-form-field>
                                 <span class="form-text text-danger" id="validate_Direccion" *ngIf="validaciones('txtDireccionCli')">
                                     Dirección es requerida
@@ -178,8 +190,6 @@
                 <div class="col-md-2"> <button mat-raised-button color="primary" type="submit" class="btn-formulario-cabecera" [disabled]="clienteForm.invalid">{{nombreBoton}}</button>
                 </div>
             </div>
-
-            <span>cli.cli_Region: {{cli.cli_Region.nombre}}</span>
         </div>
     </form>
 </div>

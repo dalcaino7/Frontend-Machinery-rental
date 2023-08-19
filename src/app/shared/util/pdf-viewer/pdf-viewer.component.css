@@ -1,0 +1,7 @@
+.pdfobject-container {
+    max-width: 100%;
+    width: 1500px;
+    height: 600px;
+    border: 10px solid rgba(0, 0, 0, 0.2);
+    margin: 0;
+}

@@ -22,7 +22,7 @@ export class MaquinaService {
       .pipe(map((response) => response as Maquina[]));
   }
 
-  getMaquina(id: number): Observable<Maquina> {
+  getMaquina(id: string): Observable<Maquina> {
     return this.http.get<Maquina>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         console.log("Error Servicio",e.error.mensaje);

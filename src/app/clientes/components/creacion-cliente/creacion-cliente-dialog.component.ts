@@ -22,16 +22,21 @@ import { RegionComunaChileService } from '../../../services/region-comuna-chile.
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash'; //paquete para el manejo de matrices
+import { ComunasRegiones } from '../../../models/comunasRegiones';
+
 
 @Component({
   selector: 'app-creacion-cliente',
   templateUrl: './creacion-cliente-dialog.component.html',
   styleUrls: ['./creacion-cliente-dialog.component.css'],
 })
+
 export class CreacionClienteDialogComponent implements OnInit {
-  selectedValueRegion: string = ''; //guarda el nombre de la region
-  selectedValueComuna: string = ''; // guarda el nombre de la comuna
-  estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
+  strIntoObj: Region[] = [];
+
+  // selectedValueRegion: string = ''; //guarda el nombre de la region
+  // selectedValueComuna: string = ''; // guarda el nombre de la comuna
+  // estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
   regionSelect: any[] = []; //Muestra la lista del select en el template
   comunaSelect: any[] = [];
 
@@ -70,13 +75,14 @@ export class CreacionClienteDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.validateShowDataDialog();
 //console.log("1 cli.cli_Region: ",this.cli.cli_Region);
 
     if(this.stateMainCliente.modeDialog == 'mod'){//si es mod entra a consultar comuna para mostrar
       /* MUESTRA TABLA FILTRADA */
-       this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-        this.regionSelect = rgn;
+       this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      //  this.regionSelect = rgn.rcsDescripcion;
         console.log("1-> lleno el selector (this.regionSelect): ",this.regionSelect);
 
           for (let rg of this.regionSelect) {
@@ -107,6 +113,7 @@ export class CreacionClienteDialogComponent implements OnInit {
       txtObservacionCli: [''],
 
       /* VARIABLES DE CONTACTO DE CLIENTE */
+      txtResponsable: [''],
       txtTelefonoCli: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]], //pattern SOLO NUMEROS
       txtEmailCli: ['', Validators.email],
       selPaisCli: ['',Validators.required],
@@ -117,9 +124,10 @@ export class CreacionClienteDialogComponent implements OnInit {
   }
 
   listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-      this.regionSelect = rgn;      
-    });
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
   }
 
   regionFilter($event: any) {
@@ -130,11 +138,15 @@ export class CreacionClienteDialogComponent implements OnInit {
       }
   }
 
+ 
   listComuna(cod: string) {
-    this.rgnService.getListComunas(cod).subscribe((cmn: Comuna[]) => {
-      this.comunaSelect = cmn;
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
     });
   }
+
+
 
   validateShowDataDialog() {
     if (this.stateMainCliente.modeDialog == 'add') {
@@ -183,6 +195,9 @@ export class CreacionClienteDialogComponent implements OnInit {
     this.cli.cli_Nombre = this.clienteForm.value['txtNombreCli'];
     this.cli.cli_Apellidos = this.clienteForm.value['txtApellidosCli'];
     this.cli.cli_Observacion = this.clienteForm.value['txtObservacionCli'];
+    
+    this.cli.cli_Responsable = this.clienteForm.value['txtResponsable'];
+
     this.cli.cli_Telefono = this.clienteForm.value['txtTelefonoCli'];
     this.cli.cli_Email = this.clienteForm.value['txtEmailCli'];
     this.cli.cli_Pais = this.clienteForm.value['selPaisCli'];
@@ -196,7 +211,7 @@ export class CreacionClienteDialogComponent implements OnInit {
     this.cli.cli_Estado_Pago = 'Sin Registro';
 
     this.cliService.createCliente(this.cli).subscribe((resp) => {
-      this.rou.navigate(['main-cliente']);
+      //this.rou.navigate(['main-cliente']);
       Swal.fire({
         position: 'center',
         icon: 'success',

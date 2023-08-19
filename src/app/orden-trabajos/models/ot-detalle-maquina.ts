@@ -4,15 +4,42 @@ import { Maquina } from '../../maquinas/models/maquina';
 
 export class OtDetalleMaquina {
 
-    id: number=0;
-    fechaHrInicio: string="";  
-    controlInicio: number=0;  
-    fechaHrTermino: string="";  
-    controlTermino: number=0;  
-    firmaUsuario: string="";  
+    odm_Id: string="";
+    odm_NombreOperario: string="";
+    odm_ValorMinArriendo: string="";
+    odm_TipoValorMinArriendo: string="";
+    odm_ValorArriendo: string="";
+    odm_Combustible: string="";
+    odm_Traslado: string="";
+    odm_CilindroGas: string="";
+    odm_MedioTraslado: string="";
+    odm_CostoTraslado: string="";
+    odm_NombreChofer: string="";
+    odm_NombreContacto: string="";
+    odm_TelefonoContacto: string="";
+    odm_EmailContacto: string="";
+    odm_RegionTrabajo: string="";
+    odm_ComunaTrabajo: string="";
+    odm_DireccionTrabajo: string="";
+    odm_FechaHoraInicio: string ="";
+    odm_ControlInicio: string="";
+    odm_FechaHoraTermino: string ="";
+    odm_ControlTermino: string="";
+    odm_NombreUsuario: string="";
+    odm_Observacion: string = "";
+    odm_Maq_Id: Maquina = new Maquina;
 
-    /* RELACION ENTRE CLASES */
-    maquina: Maquina = new Maquina;
+
+
+    // odm_Id: number=0;
+    // odm_FechaHrInicio: string="";  
+    // odm_ControlInicio: number=0;  
+    // odm_FechaHrTermino: string="";  
+    // odm_ControlTermino: number=0;  
+    // odm_NombreUsuario: string="";  
+    // odm_Operario: String="";
+    // /* RELACION ENTRE CLASES */
+    // odm_Maq_Id: Maquina = new Maquina;
     
 
 }

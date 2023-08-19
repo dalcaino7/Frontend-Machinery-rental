@@ -1,6 +1,10 @@
+<!-- <a target="_blank" routerLink="/main-maquina">
+    </a> -->
+
 <div class="container">
 
-
+    <!--     <form [formGroup]="rangeFormGroup">
+ -->
 
     <div class="container">
         <div class="row cabecera">
@@ -17,11 +21,13 @@
 
     <div class="card">
         <div class="card-body">
+            <!--             <form [formGroup]="rangeFormGroup">
+ -->
             <div class="row">
                 <div class="col-md-1" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>Estado</mat-label>
-                        <mat-select [(ngModel)]="selectedValue" name="state">
+                        <mat-select [(ngModel)]="selectedValue" name="state" (selectionChange)="estadoFilter($any($event))">
                             <mat-option *ngFor="let state of estados" [value]="state.value">
                                 {{state.viewValue}}
                             </mat-option>
@@ -31,92 +37,134 @@
                 <div class="col-md-7" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>N°/ Cliente/ Máquina</mat-label>
-                        <input matInput>
+                        <input matInput (keyup)="otClienteMaquinaFilter($any($event.target).value)">
                     </mat-form-field>
                 </div>
                 <div class="col-md-3" align="right">
                     <mat-form-field appearance="outline">
                         <mat-label>Ingrese un rango de fechas</mat-label>
-                        <mat-date-range-input [rangePicker]="picker">
-                            <input matStartDate placeholder="Start date">
-                            <input matEndDate placeholder="End date">
+                        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Fecha inicio" #dateRangeStart>
+                            <input matEndDate formControlName="end" placeholder="Fecha término" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
                         </mat-date-range-input>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matSuffix (click)="clearStartDate()">
+                            <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                        </mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
+                        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha inicio inválida</mat-error>
+                        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha término inválida</mat-error>
                     </mat-form-field>
                 </div>
+
                 <div class="col-md-1" align="right">
                     <button mat-mini-fab color="primary" aria-label="descarga">
                         <mat-icon>download</mat-icon>
                     </button>
                 </div>
             </div>
-
-
-
+            <!--             </form>
+ -->
             <div class="mat-elevation-z2">
                 <div class="table-responsive">
 
-                    <mat-table [dataSource]="dataSource" matSort class="tabla-mat">
+                    <mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="tabla-mat">
 
-                        !-- Position Column -->
-                        <ng-container matColumnDef="ot">
-                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> <a routerLink="/detallearriendo"> {{element.ot}} </a></mat-cell>
+                        <ng-container matColumnDef="otr_Id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> N°. </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas" (click)="viewDetalleArriendo(element.otr_Id)"> 
+                                    {{element.otr_Id}} 
+                                </a>
+                            </mat-cell>
                         </ng-container>
 
-                        <!-- Name Column -->
+                        <ng-container matColumnDef="otr_NumeroOrden">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> N°. Orden </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <a routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas"> 
+                                    {{element.otr_NumeroOrden}} 
+                                </a>
+                            </mat-cell>
+                        </ng-container>
+
                         <ng-container matColumnDef="cliente">
                             <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.cliente}} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <span *ngIf="element.otr_Cli_Id.cli_RazonSocial">
+                                        {{element.otr_Cli_Id.cli_RazonSocial}}
+                                    </span>
+                                <span *ngIf="!element.otr_Cli_Id.cli_RazonSocial">
+                                        {{element.otr_Cli_Id.cli_Nombre}} {{element.otr_Cli_Id.cli_Apellidos}} 
+                                </span>
+
+
+                            </mat-cell>
                         </ng-container>
 
-                        <!-- Weight Column -->
-                        <ng-container matColumnDef="comuna">
+                        <ng-container matColumnDef="cli_Comuna">
                             <mat-header-cell *matHeaderCellDef> Comuna </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.comuna}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.otr_ComunaTrabajo}} </mat-cell>
                         </ng-container>
 
-                        <!-- Symbol Column -->
                         <ng-container matColumnDef="maquina">
                             <mat-header-cell *matHeaderCellDef> Maquina </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.maquina}} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <div class="container-fluid p-0">
+
+                                    <div class="row button-box" *ngFor="let maq of element.otr_Odm_Id; let i=index">
+
+                                        <div class="col">
+                                            <button type="button" class="btn badge btn-without-focus" id="tbl-list-maquina-cian">
+                                                {{maq.odm_Maq_Id.maq_Nombre }}
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="estado">
-                            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                        <ng-container matColumnDef="otr_Estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado Arriendo</mat-header-cell>
                             <mat-cell *matCellDef="let element">
 
-                                <button type="button" class="btn badge" [ngClass]="{
-                                    'tbl-estado-naranja' : element.estado == 'Adeudada',
-                                    'tbl-estado-azul' : element.estado == 'En Terreno',
-                                    'tbl-estado-rojo' : element.estado == 'Sin Retorno',
-                                    'tbl-estado-verde' : element.estado == 'Finalizada',
-                                    'tbl-estado-gris' : element.estado == 'Anulada'
+                                <button type="button" class="btn badge btn-without-focus" [ngClass]="{
+                                    'tbl-estado-naranja' : element.otr_Estado == 'Iniciada',
+                                    'tbl-estado-azul' : element.otr_Estado == 'En Progreso',
+                                    'tbl-estado-rojo' : element.otr_Estado.startsWith('Vencida'),
+                                    'tbl-estado-verde' : element.otr_Estado == 'Finalizada',
+                                    'tbl-estado-gris' : element.otr_Estado == 'Anulada'
                                 }">
-                                    {{ element.estado }}
+                                    {{ element.otr_Estado }}
                                 </button>
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="fecha">
-                            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                        <ng-container matColumnDef="otr_FechaHoraCreacionOt">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> Fecha Creación </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                {{element.otr_FechaHoraCreacionOt | date : 'dd/MM/YYYY'}}
+
+
+                            </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="accion">
                             <mat-header-cell *matHeaderCellDef>Acción </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <button type="button" class="btn  " routerLink="/detallearriendo">
+                            <mat-cell *matCellDef="let element; let idx = index">
+                                <button type="button" class="btn  " routerLink="/detallearriendo" matTooltip="Agregar detalle de máquinas">
                                     <mat-icon>add</mat-icon>
                                 </button>
-                                <button type="button" class="btn  ">
+                                <button type="button" class="btn  " matTooltip="Editar Orden de Arriendo">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button type="button" class="btn  " (click)="finalizar()">
+                                <button type="button" class="btn  " (click)="finalizar()" matTooltip="Finalizar Orden de Arriendo">
                                     <mat-icon>done</mat-icon>
                                 </button>
-                                <button type="button" class="btn  " (click)="anular()">
+                                <button type="button" class="btn  " (click)="anular(idx)" matTooltip="Anular Orden de Arriendo">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                             </mat-cell>
@@ -128,6 +176,8 @@
                     </mat-table>
 
                 </div>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
             </div>
 
@@ -136,6 +186,6 @@
         </div>
     </div>
 
-
+    <!-- </form> -->
 
 </div>

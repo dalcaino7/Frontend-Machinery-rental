@@ -1,4 +1,3 @@
-import { CurrencyPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -6,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FormatoNumeroMonedaPipe implements PipeTransform {
 
-  transform(valor: any, tipo:string = 'numero'): string {
+  transform(valor: any, tipo: string = 'numero'): string {
 
     if(tipo === 'moneda'){
       var retorno = '';
@@ -21,9 +20,7 @@ export class FormatoNumeroMonedaPipe implements PipeTransform {
       while(i>0) retorno += ((i%3===0&&i!=valorStr.length)?'.':'')+valorStr.substring(i--,i);
       return retorno;
     }
-    
 
-    
 
   }
 

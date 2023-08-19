@@ -88,3 +88,108 @@
     top: 208px;
     color: #757575;
 }
+
+
+/*VALIDACIONES FORM*/
+
+#validate_Nombre {
+    position: absolute;
+    top: 23%;
+    left: 36%;
+}
+
+#validate_Descripcion {
+    position: absolute;
+    top: 23%;
+    left: 58%;
+}
+
+#validate_Marca {
+    position: absolute;
+    top: 51%;
+    left: 36%;
+}
+
+#validate_Modelo {
+    position: absolute;
+    top: 51%;
+    left: 58%;
+}
+
+#validate_TipoMaquina {
+    position: absolute;
+    top: 23%;
+    left: 80%;
+}
+
+#validate_Anio {
+    position: absolute;
+    top: 51%;
+    left: -12%;
+}
+
+#validate_Codigo {
+    position: absolute;
+    top: 23%;
+    left: 36%;
+}
+
+#validate_EstadoMaquina {
+    position: absolute;
+    top: 23%;
+    left: 80%;
+}
+
+#validate_MedidaMantencion {
+    position: absolute;
+    top: 51%;
+    left: 80%;
+}
+
+#validate_TipoRenovacion {
+    position: absolute;
+    top: 79%;
+    left: 80%;
+}
+
+#validate_PrecioArriendo {
+    position: absolute;
+    top: 40%;
+    left: 58%;
+}
+
+#validate_TipoCobroArriendo {
+    position: absolute;
+    top: 40%;
+    left: 80%;
+}
+
+#validate_TipoValMinArriendo {
+    position: absolute;
+    top: 62%;
+    left: 80%;
+}
+
+#validate_TipoRegistro {
+    position: absolute;
+    top: 84%;
+    left: 80%;
+}
+
+#cdk-overlay-pane {
+    width: 446px;
+    top: 253.575px;
+    left: 310.562px;
+}
+
+#cdk-overlay-0 {
+    width: 446px;
+    top: 253.575px;
+    left: 310.562px;
+}
+
+#option-cliente-list {
+    width: 446px;
+    top: 253.575px;
+    left: 310.562px;
+}

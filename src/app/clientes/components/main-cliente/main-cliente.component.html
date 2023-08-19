@@ -10,14 +10,13 @@
             </div>
         </div>
     </div>
-
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3" align="left">
                     <mat-form-field appearance="outline">
                         <mat-label>Región</mat-label>
-                        <mat-select [(ngModel)]="selectedValueRegion" name="region" (selectionChange)="regionFilter($any($event))">
+                        <mat-select name="region" (selectionChange)="regionFilter($any($event))">
                             <mat-option value="Todos" (click)="estadoSelectorComuna = true">Todos</mat-option>
                             <mat-option *ngFor="let rgn of regionSelect" [value]="rgn.nombre" (click)="estadoSelectorComuna = false">
                                 {{rgn.nombre}}
@@ -28,7 +27,7 @@
                 <div class="col-md-1" align="left">
                     <mat-form-field appearance="outline">
                         <mat-label>Comuna</mat-label>
-                        <mat-select [(ngModel)]="selectedValueComuna" name="comuna" (selectionChange)="comunaFilter($any($event))" [disabled]="estadoSelectorComuna">
+                        <mat-select name="comuna" (selectionChange)="comunaFilter($any($event))" [disabled]="estadoSelectorComuna">
                             <mat-option value="Todos">Todos</mat-option>
                             <mat-option *ngFor="let cmn of comunaSelect" [value]="cmn.nombre">
                                 {{cmn.nombre}}
@@ -38,7 +37,7 @@
                 </div>
                 <div class="col-md-7" align="right">
                     <mat-form-field appearance="outline">
-                        <mat-label>Rut/ nombre cliente</mat-label>
+                        <mat-label>Rut/ Razón social/ nombre cliente</mat-label>
                         <input matInput (keyup)="nombreRutFilter($any($event.target).value)">
                     </mat-form-field>
                 </div>
@@ -51,7 +50,6 @@
             </div>
 
 
-
             <div class="mat-elevation-z2">
                 <div class="table-responsive">
 
@@ -61,6 +59,20 @@
                         <ng-container matColumnDef="rut">
                             <mat-header-cell *matHeaderCellDef> Rut </mat-header-cell>
                             <mat-cell *matCellDef="let element"> <a routerLink="/main-cliente" (click)="viewCliente(element.cli_Id)"> {{element.cli_Rut}} </a></mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="razonSocial">
+                            <mat-header-cell *matHeaderCellDef> Razon Social </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <span *ngIf="!element.cli_RazonSocial">
+                                    Sin dato
+                                </span>
+                                <span *ngIf="element.cli_RazonSocial">
+                                    {{element.cli_RazonSocial}} 
+                                </span>
+
+                            </mat-cell>
                         </ng-container>
 
                         <!-- Name Column -->

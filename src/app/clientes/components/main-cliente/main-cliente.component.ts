@@ -14,6 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { RegionComunaChileService } from '../../../services/region-comuna-chile.service';
 import { Region } from 'src/app/models/region';
 import { Comuna } from 'src/app/models/comuna';
+import { ComunasRegiones } from '../../../models/comunasRegiones';
 
 @Component({
   selector: 'app-cliente',
@@ -21,6 +22,8 @@ import { Comuna } from 'src/app/models/comuna';
   styleUrls: ['./main-cliente.component.css'],
 })
 export class ClienteComponent implements AfterViewInit {
+  strIntoObj: Region[] = [];
+
   selectedValueRegion: string = ''; //guarda el nombre de la region
   selectedValueComuna: string = ''; // guarda el nombre de la comuna
   estadoSelectorComuna: boolean = true; // Para des/habilitar selector Comuna
@@ -40,6 +43,7 @@ export class ClienteComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Cliente>(this.clientes);
   displayedColumns: string[] = [
     'rut',
+    'razonSocial',
     'nombre',
     'region',
     'comuna',
@@ -56,19 +60,22 @@ export class ClienteComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
+
     this.listClientes();
     this.listRegiones();
   }
 
   listRegiones() {
-    this.rgnService.getListRegiones().subscribe((rgn: Region[]) => {
-      this.regionSelect = rgn;
-    });
+    this.rgnService.getListRegiones().subscribe((rgn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(rgn.rcsDescripcion);
+      this.regionSelect = this.strIntoObj;
+    }); 
   }
 
   listComuna(cod: string) {
-    this.rgnService.getListComunas(cod).subscribe((cmn: Comuna[]) => {
-      this.comunaSelect = cmn;
+    this.rgnService.getListComunas(cod).subscribe((cmn: ComunasRegiones) => {
+      this.strIntoObj = JSON.parse(cmn.rcsDescripcion);
+      this.comunaSelect = this.strIntoObj;
     });
   }
 
@@ -78,6 +85,8 @@ export class ClienteComponent implements AfterViewInit {
       this.listClientesTabla = cli;
       this.dataSource.data = cli;
     });
+    this.dataSource._updateChangeSubscription();
+
 
     this.filtroBusquedaTable();
   }
@@ -97,9 +106,18 @@ export class ClienteComponent implements AfterViewInit {
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase();
       var nombreCompleto = nombre.concat(' '.concat(apellido));
+
+      var rsocial = data.cli_RazonSocial
+      .toString()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+
       return (
         data.cli_Rut.toString().toLowerCase().includes(filter) ||
-        nombreCompleto.includes(filter)
+        nombreCompleto.includes(filter) || 
+        rsocial.includes(filter)
       );
     };
   }
@@ -113,13 +131,13 @@ export class ClienteComponent implements AfterViewInit {
   openDialog(state: string) {
     if (state == 'add') {
       const dialogRef = this.dialog.open(CreacionClienteDialogComponent, {
-        panelClass: 'custom-dialog-container-big-2',
+        panelClass: 'custom-dialog-container-big-3',
         data: { modeDialog: state},
       });
     }
     if (state == 'mod') {
       const dialogRef = this.dialog.open(CreacionClienteDialogComponent, {
-        panelClass: 'custom-dialog-container-big-2',
+        panelClass: 'custom-dialog-container-big-3',
         data: { modeDialog: state, idClienteDialog: this.cliente.cli_Id },
       });
 
@@ -158,7 +176,7 @@ export class ClienteComponent implements AfterViewInit {
         this.cliService.getCliente(this.cliente.cli_Id).subscribe((cli) => {
           this.cliente = cli;
           this.cliente.cli_Estado = 'Inactivo';
-          this.cliService.updateCliente(this.cliente).subscribe((rs) => {
+          this.cliService.updateCliente(this.cliente).subscribe(() => {
             Swal.fire({
               title: 'Eliminado!',
               text: 'El cliente ha sido eliminado.',
@@ -186,6 +204,7 @@ export class ClienteComponent implements AfterViewInit {
   }
 
   regionFilter($event: any) {
+    
     if ($event.value.toLowerCase() === 'todos') {
       let filteredData = _.filter(this.listClientesTabla, (item) => {
         return item;
@@ -201,6 +220,7 @@ export class ClienteComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
       for (let rg of this.regionSelect) {
         if (rg.nombre === $event.value) {
+          console.log("TABLA FILTRADA",rg.codigo);
           this.listComuna(rg.codigo);
         }
       }
@@ -220,4 +240,12 @@ export class ClienteComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
     }
   }
+
+ /* unicodeToChar(text:any) {
+    return text.replace(/\\u[\dA-F]{4}/gi, 
+           function (match:any) {
+                return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+           });
+ }*/
+ 
 }

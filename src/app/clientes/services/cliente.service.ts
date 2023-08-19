@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class ClienteService {
-  private urlEndPoint: string = 'http://localhost:8080/api/clientes/';
+  private urlEndPoint: string = 'http://localhost:8080/api/clientes';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
@@ -28,7 +28,8 @@ export class ClienteService {
         console.log(e.error.mensaje);
         swal.fire('Error al obtener clientes', e.error.mensaje, 'error');
         return throwError(e);
-      })
+      }
+      )
     );
   }
 

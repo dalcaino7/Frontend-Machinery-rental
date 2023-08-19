@@ -25,6 +25,28 @@
     display: block;
 }
 
+.mat-autocomplete {
+    width: 100px;
+}
+
+.mat-option {
+    font-size: 14px !important;
+}
+
+
+/* .col-md-2 {
+    width: 19.6%;
+} */
+
+.col-md-2 {
+    flex: 0 0 auto;
+    width: 19.666667%;
+}
+
+#busqueda-filter {
+    width: 450px;
+}
+
 #boton-finalizar {
     padding-right: 25px;
     height: 10px;
@@ -44,13 +66,14 @@
 }
 
 #fila-busqueda-ot {
-    max-width: 80%;
+    max-width: 100%;
     /*Da la separacion entre input */
 }
 
-#fila-busqueda-cliente {
+
+/* #fila-busqueda-cliente {
     max-width: 80%;
-}
+} */
 
 #fila-tabla-cliente {
     padding-bottom: 10px;
@@ -179,15 +202,19 @@ mat-row {
 /*redimension de columnas de tabla*/
 
 .mat-column-rut {
-    flex: 0 0 220px;
+    flex: 0 0 160px;
+}
+
+.mat-column-razonSocial {
+    flex: 0 0 250px;
 }
 
 .mat-column-nombre {
-    flex: 0 0 350px;
+    flex: 0 0 260px;
 }
 
 .mat-column-comuna {
-    flex: 0 0 300px;
+    flex: 0 0 235px;
 }
 
 .mat-column-deleteAction {
@@ -234,14 +261,18 @@ mat-row {
     .card {
         bottom: 5px;
     }
+    .col-md-2 {
+        flex: 0 0 auto;
+        width: 52%;
+    }
     #card-ot {
-        height: 250px;
+        height: 364px;
     }
     #card-cliente {
-        height: 845px;
+        height: 740px;
     }
     #card-maquinaria {
-        height: 620px;
+        height: 502px;
     }
     .btn-formulario-cabecera {
         left: 25px;

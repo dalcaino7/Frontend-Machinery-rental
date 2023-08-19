@@ -62,10 +62,13 @@
                             <mat-label>Año: </mat-label>
                             <mat-label>{{maquina.maq_Anio}}</mat-label>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5" *ngIf="maquina.maq_Combustible">
                             <mat-label>Combustible: </mat-label>
                             <mat-label>{{maquina.maq_Combustible}}</mat-label>
-
+                        </div>
+                        <div class="col-md-5" *ngIf="!maquina.maq_Combustible">
+                            <mat-label>Combustible: </mat-label>
+                            <mat-label> Sin datos</mat-label>
                         </div>
 
                         <div class="col-md-3" align="left">
@@ -99,13 +102,21 @@
                             <mat-label>Codigo: </mat-label>
                             <mat-label>{{maquina.maq_Codigo}}</mat-label>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5" *ngIf="maquina.maq_NumMotorSerie">
                             <mat-label>N° Motor: </mat-label>
                             <mat-label>{{maquina.maq_NumMotorSerie}}</mat-label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-5" *ngIf="!maquina.maq_NumMotorSerie">
+                            <mat-label>N° Motor: </mat-label>
+                            <mat-label> Sin datos</mat-label>
+                        </div>
+                        <div class="col-md-3" *ngIf="maquina.maq_Patente">
                             <mat-label>Patente: </mat-label>
                             <mat-label>{{maquina.maq_Patente}}</mat-label>
+                        </div>
+                        <div class="col-md-3" *ngIf="!maquina.maq_Patente">
+                            <mat-label>Patente: </mat-label>
+                            <mat-label>Sin datos</mat-label>
                         </div>
 
                         <!--  <div class="col-md-3">Foto</div> -->
@@ -117,11 +128,14 @@
                             <mat-label>{{maquina.maq_Ema_Id.ema_Descripcion}}</mat-label>
 
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" *ngIf="maquina.maq_FechaAdquisicion">
                             <mat-label>Fecha adquisición: </mat-label>
                             <mat-label>{{maquina.maq_FechaAdquisicion | date: 'dd/MM/yyyy'}}</mat-label>
                         </div>
-
+                        <div class="col-md-8" *ngIf="!maquina.maq_FechaAdquisicion">
+                            <mat-label>Fecha adquisición: </mat-label>
+                            <mat-label> Sin datos</mat-label>
+                        </div>
 
                     </div>
 
@@ -134,26 +148,65 @@
                             <mat-label>Hm. Actual: </mat-label>
                             <mat-label>{{maquina.maq_UltKmHm | FormatoNumeroMoneda}} Hm</mat-label>
                         </div>
+                        <div class="col-md-4" *ngIf="maquina.maq_UltKmHm ==='' || maquina.maq_UltKmHm ==='0' || !maquina.maq_TipoUltKmHm">
+                            <mat-label>Hm. Actual: </mat-label>
+                            <mat-label> Sin datos</mat-label>
+                        </div>
 
-                        <div class="col-md-8">
+
+                        <div class="col-md-8" *ngIf="maquina.maq_LimiteMantencion =='1' ">
+                            <mat-label>Mantención: </mat-label>
+                            <mat-label>Cada {{maquina.maq_LimiteMantencion | FormatoNumeroMoneda}} {{maquina.maq_TiempoMantencion}} </mat-label>
+                        </div>
+                        <div class="col-md-8" *ngIf=" maquina.maq_LimiteMantencion != '0' && maquina.maq_LimiteMantencion != '1'">
                             <mat-label>Mantención: </mat-label>
                             <mat-label>A los {{maquina.maq_LimiteMantencion | FormatoNumeroMoneda}} {{maquina.maq_TiempoMantencion}} </mat-label>
-
-
                         </div>
+                        <div class="col-md-4" *ngIf="maquina.maq_LimiteMantencion ==='0' || maquina.maq_LimiteMantencion === '' || !maquina.maq_TiempoMantencion">
+                            <mat-label>Mantención: </mat-label>
+                            <mat-label>Sin datos</mat-label>
+                        </div>
+
+
+
+
+
+                        <!-- <div class="col-md-8" *ngIf="maquina.maq_ValorMinArriendo == '1'">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>{{maquina.maq_ValorMinArriendo | FormatoNumeroMoneda}} {{maquina.maq_Tcm_Id.tcm_Descripcion}}</mat-label>
+                        </div>
+                        <div class="col-md-8" *ngIf=" maquina.maq_ValorMinArriendo != '0' && maquina.maq_ValorMinArriendo != '1'">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>{{maquina.maq_ValorMinArriendo | FormatoNumeroMoneda}} {{maquina.maq_Tcm_Id.tcm_Descripcion}}s</mat-label>
+                        </div>
+                        <div class="col-md-8" *ngIf="!maquina.maq_ValorMinArriendo || maquina.maq_ValorMinArriendo ==='0'">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>Sin datos</mat-label>
+                        </div> -->
+
+
+
+
+
+
 
                     </div>
 
                     <div class="row">
 
-                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion !== 'Fecha'">
+                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion && maquina.maq_MedidaRenovacion !== 'Fecha' && maquina.maq_ValorRenovacion !=='0'">
                             <mat-label>Renovación: </mat-label>
                             <mat-label>A los {{ maquina.maq_ValorRenovacion | FormatoNumeroMoneda }} {{maquina.maq_MedidaRenovacion }}</mat-label>
 
                         </div>
-                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion === 'Fecha'">
+                        <div class="col-md-12" *ngIf="maquina.maq_MedidaRenovacion === 'Fecha' && maquina.maq_FechaRenovacion !==''">
                             <mat-label>Renovación: </mat-label>
                             <mat-label>{{ maquina.maq_FechaRenovacion | date: 'dd/MM/yyyy'}} </mat-label>
+
+                        </div>
+                        <div class="col-md-12" *ngIf="maquina.maq_FechaRenovacion ==='' && maquina.maq_ValorRenovacion ==='0' || maquina.maq_ValorRenovacion === '' || !maquina.maq_MedidaRenovacion">
+                            <mat-label>Renovación: </mat-label>
+                            <mat-label> Sin datos</mat-label>
 
                         </div>
                     </div>
@@ -181,13 +234,22 @@
 
                     <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" *ngIf="maquina.maq_PrecioCompra && maquina.maq_PrecioCompra !=='0' ">
                             <mat-label>Precio Compra: </mat-label>
                             <mat-label> {{ maquina.maq_PrecioCompra | FormatoNumeroMoneda : 'moneda'}}</mat-label>
                         </div>
-                        <div class="col-md-8">
+
+                        <div class="col-md-4" *ngIf="!maquina.maq_PrecioCompra || maquina.maq_PrecioCompra ==='0'  ">
+                            <mat-label>Precio Compra: </mat-label>
+                            <mat-label>Sin datos</mat-label>
+                        </div>
+                        <div class="col-md-8" *ngIf="maquina.maq_PrecioVenta && maquina.maq_PrecioVenta !=='0' ">
                             <mat-label>Precio Venta: </mat-label>
                             <mat-label> {{ maquina.maq_PrecioVenta | FormatoNumeroMoneda: 'moneda'}}</mat-label>
+                        </div>
+                        <div class="col-md-4" *ngIf="!maquina.maq_PrecioVenta || maquina.maq_PrecioVenta ==='0' ">
+                            <mat-label>Precio Venta: </mat-label>
+                            <mat-label>Sin datos</mat-label>
                         </div>
 
                     </div>
@@ -196,12 +258,17 @@
                             <mat-label>Precio Arriendo: </mat-label>
                             <mat-label>{{ maquina.maq_ValorArriendo | FormatoNumeroMoneda: 'moneda'}} por {{maquina.maq_Tcm_Id.tcm_Descripcion}}</mat-label>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" *ngIf="maquina.maq_ValorMinArriendo == '1'">
                             <mat-label>Valor Mínimo Arriendo: </mat-label>
                             <mat-label>{{maquina.maq_ValorMinArriendo | FormatoNumeroMoneda}} {{maquina.maq_Tcm_Id.tcm_Descripcion}}</mat-label>
-                            <!--  <mat-label>  A los 300.000 Kms </mat-label>
-                            <mat-label>  A los 15.000 Hrs</mat-label>
- -->
+                        </div>
+                        <div class="col-md-8" *ngIf=" maquina.maq_ValorMinArriendo != '0' && maquina.maq_ValorMinArriendo != '1'">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>{{maquina.maq_ValorMinArriendo | FormatoNumeroMoneda}} {{maquina.maq_Tcm_Id.tcm_Descripcion}}s</mat-label>
+                        </div>
+                        <div class="col-md-8" *ngIf="!maquina.maq_ValorMinArriendo || maquina.maq_ValorMinArriendo ==='0'">
+                            <mat-label>Valor Mínimo Arriendo: </mat-label>
+                            <mat-label>Sin datos</mat-label>
                         </div>
 
                     </div>

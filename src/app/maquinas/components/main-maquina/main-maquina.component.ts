@@ -17,6 +17,7 @@ import { CreacionMaquinaDialogComponent } from '../creacion-maquina/creacion-maq
 import { VerMaquinaDialogComponent } from './ver-maquina/ver-maquina-dialog.component';
 import { MaquinaService } from '../../services/maquina.service';
 import { Maquina } from '../../models/maquina';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-main-maquina',
@@ -70,15 +71,27 @@ export class MainMaquinaComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.MaqService.getListMaquinas().subscribe((maq: Maquina[]) => {
       this.listMaquinasTabla = maq;
+      for(let i=0; i < this.listMaquinasTabla.length; i++ ){
+
+        if(this.listMaquinasTabla[i].maq_LimiteMantencion === null ){
+          this.listMaquinasTabla[i].maq_LimiteMantencion = '';
+        }
+        if(this.listMaquinasTabla[i].maq_ValorRenovacion === null  ){
+          this.listMaquinasTabla[i].maq_ValorRenovacion = '';
+        }
+        if(this.listMaquinasTabla[i].maq_ValorMinArriendo === null){
+          this.listMaquinasTabla[i].maq_ValorMinArriendo = '';
+        }
+        if(this.listMaquinasTabla[i].maq_UltKmHm === null ){
+          this.listMaquinasTabla[i].maq_UltKmHm = '';
+        }
+      }
       this.dataSource.data = maq;
     });
 
-
-
-   // this.filtroBusquedaTable();
   }
 
-  updateMaquina(id: number) {
+  updateMaquina(id: string) {
     this.maquina.maq_Id = id;
     this.openDialog('mod');
   }
@@ -93,7 +106,7 @@ export class MainMaquinaComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  regionFilter($event: any) {
+  estadoFilter($event: any) {
     if ($event.value.toLowerCase() === 'todos') {
       let filteredData = _.filter(this.listMaquinasTabla, (item) => {
         return item;
@@ -101,9 +114,9 @@ export class MainMaquinaComponent implements AfterViewInit {
       this.dataSource.data = filteredData;
     } else {
       /* FILTRO DE BUSQUEDA DE ESTADO EN TABLA */
-      let filteredData = _.filter(this.listMaquinasTabla, (item) => {
+      let filteredData = _.filter(this.listMaquinasTabla, (item) => { // Itera sobre la tabla del modulo main y retorna el arreglo en item
         this.selectedValueEstado;
-        return item.ema_Id.ema_Descripcion.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
+        return item.maq_Ema_Id.ema_Descripcion.toLowerCase() == $event.value.toLowerCase(); // BUSCA SI EXISTE EN LA TABLA EL VALOR SELECCIONADO
       });
       /* MUESTRA TABLA FILTRADA */
       this.dataSource.data = filteredData;
@@ -111,14 +124,14 @@ export class MainMaquinaComponent implements AfterViewInit {
   }
 
 
-  applyFilter(filterValue: string) {
+ /*  applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
+  } */
 
-  addDetalleArriendo() {}
-
+ /*  addDetalleArriendo() {}
+ */
   addMaquina() {
     this.openDialog('add');
   }
@@ -154,10 +167,43 @@ export class MainMaquinaComponent implements AfterViewInit {
     }
   }
 
-  viewCliente(id: number) {
+  deleteMaquina(id: string) {
+    Swal.fire({
+      title: '¿Estás Seguro de eliminar esta maquinaria?',
+      text: 'No podrás revertirlo...',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.maquina.maq_Id = id;
+        this.MaqService.getMaquina(this.maquina.maq_Id).subscribe((maq) => {
+          this.maquina = maq;
+          this.maquina.maq_Estado = 'Inactivo';
+          this.MaqService.updateMaquina(this.maquina).subscribe(() => {
+            Swal.fire({
+              title: 'Eliminado!',
+              text: 'La Maquina ha sido eliminada.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1800,
+            });
+            setInterval(function () {
+              location.reload();
+            }, 2000); //actualiza la pagina a los 2seg
+          });
+        });
+      }
+    });
+  }
+
+  viewCliente(id: string) {
     this.maquina.maq_Id = id;
     this.openDialog('ver');
   }
+  
   modificar() {
     this.openDialog('mod');
   }
@@ -172,90 +218,3 @@ interface EstadoMaquina {
   value: string;
   viewValue: string;
 }
-
-export interface maquina {
-  codigo: number;
-  nombre: string;
-  marca: string;
-  tipoCobro: string;
-  estado: string;
-  mantencion: string;
-  accion: string;
-}
-
-const ELEMENT_DATA: maquina[] = [
-  {
-    codigo: 234,
-    nombre: 'Grua 01',
-    marca: 'Ford',
-    tipoCobro: 'Hora',
-    estado: 'Arrendada',
-    mantencion: 'cada 300 hrs',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 342,
-    nombre: 'Camión remolque 02',
-    marca: 'Nissan',
-    tipoCobro: 'Día',
-    estado: 'Disponible',
-    mantencion: 'cada 10.000 KM',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 2077,
-    nombre: 'Tractor 04',
-    marca: 'Yamaha',
-    tipoCobro: 'Hectaria',
-    estado: 'Reparación',
-    mantencion: 'cada 2 años',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 1004,
-    nombre: 'Brazo rastra 01',
-    marca: 'Suzu',
-    tipoCobro: 'día',
-    estado: 'Mantención',
-    mantencion: 'Cada 1 año',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 234,
-    nombre: 'Grua 02',
-    marca: 'Ford',
-    tipoCobro: 'Hora',
-    estado: 'Arrendada',
-    mantencion: 'cada 300 hrs',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 342,
-    nombre: 'Camión remolque 02',
-    marca: 'Nissan',
-    tipoCobro: 'Día',
-    estado: 'Disponible',
-    mantencion: 'cada 10.000 KM',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 1001,
-    nombre: 'Tractor 04',
-    marca: 'Yamaha',
-    tipoCobro: 'Hectaria',
-    estado: 'Reparación',
-    mantencion: 'cada 2 años',
-    accion: 'Eliminar',
-  },
-  {
-    codigo: 1004,
-    nombre: 'Brazo rastra 01',
-    marca: 'Suzu',
-    tipoCobro: 'día',
-    estado: 'Mantención',
-    mantencion: 'Cada 1 año',
-    accion: 'Eliminar',
-  },
-];
-
-
