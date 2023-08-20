@@ -10,7 +10,7 @@ import { TipoCobroMaquina } from '../models/tipo-cobro-maquina';
 })
 export class TipoCobroMaquinaService {
 
-  private urlEndPoint: string = 'http://localhost:8080/api/tipoCobroMaquina/';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/tipoCobroMaquina/';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
