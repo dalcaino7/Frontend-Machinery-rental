@@ -11,7 +11,7 @@ import { HorometroResponse } from '../models/horometro-response';
 })
 export class HorometroPDFService {
 
-  private urlEndPoint: string = 'http://localhost:8080/api/generarPDF/planilla-horas';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/generarPDF/planilla-horas';
   
 
   private http_Headers = new HttpHeaders({
