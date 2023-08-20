@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
   providedIn: 'root'
 })
 export class MaquinaService {
-  private urlEndPoint: string = 'http://localhost:8080/api/maquinas';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/maquinas';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
