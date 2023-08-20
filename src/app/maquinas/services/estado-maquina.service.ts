@@ -10,7 +10,7 @@ import { EstadoMaquina } from '../models/estado-maquina';
   providedIn: 'root'
 })
 export class EstadoMaquinaService {
-  private urlEndPoint: string = 'http://localhost:8080/api/estadoMaquina/';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/estadoMaquina/';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
