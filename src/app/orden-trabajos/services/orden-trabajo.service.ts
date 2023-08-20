@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
 })
 export class OrdenTrabajoService {
 
-  private urlEndPoint: string = 'http://localhost:8080/api/ot';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/ot';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
