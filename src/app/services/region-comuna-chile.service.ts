@@ -15,8 +15,8 @@ import { ComunasRegiones } from '../models/comunasRegiones';
 export class RegionComunaChileService {
 
   //private urlEndPoint: string = 'https://apis.digital.gob.cl/dpa/regiones';
-  private urlEndPointRegiones: string = 'http://localhost:8080/api/regiones';
-  private urlEndPointComunas: string = 'http://localhost:8080/api/comunas';
+  private urlEndPointRegiones: string = 'https://giant-guide-production.up.railway.app/api/regiones';
+  private urlEndPointComunas: string = 'https://giant-guide-production.up.railway.app/api/comunas';
 
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
