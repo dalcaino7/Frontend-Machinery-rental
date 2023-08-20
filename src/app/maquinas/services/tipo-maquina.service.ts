@@ -9,7 +9,7 @@ import { TipoMaquina } from '../models/tipo-maquina';
   providedIn: 'root'
 })
 export class TipoMaquinaService {
-  private urlEndPoint: string = 'http://localhost:8080/api/tipoMaquina';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/tipoMaquina';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
