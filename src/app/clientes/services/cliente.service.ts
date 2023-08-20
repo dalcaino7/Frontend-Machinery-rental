@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class ClienteService {
-  private urlEndPoint: string = 'http://localhost:8080/api/clientes';
+  private urlEndPoint: string = 'https://giant-guide-production.up.railway.app/api/clientes';
   private http_Headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
